@@ -1,25 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
+import { RootState, AppDispatch } from './redux/store';
+import Navigation from './components/Menus/Navigation';
+import Home from './Pages/Home';
+import About from './Pages/About';
+import Theme from './Pages/Theme';
 
-function App() {
+const App: React.FC = () => {
+  const theme = useSelector((state: RootState) => state.theme);
+
+  useEffect(() => { 
+    document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
+    document.documentElement.style.setProperty('--secondary-color', theme.secondaryColor);
+    document.documentElement.style.setProperty('--background-color', theme.backgroundColor);
+    document.documentElement.style.setProperty('--text-color', theme.textColor);
+  }, [theme]);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navigation></Navigation>
+      <div className='contanier mt-4'>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/theme' element={<Theme />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
