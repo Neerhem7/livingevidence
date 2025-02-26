@@ -25,14 +25,14 @@ const Navigation: React.FC<Props> = () => {
                     <div className="nav-header">
                         <img src="/logo.png" alt="Logo" className="logo" />
                         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-                            {menuOpen ? <FaTimes size={24} className="icon" /> : <FaBars size={24} className="icon"/>}
+                            {menuOpen ? <i className="fa-solid fa-xmark icon"></i> :<i className="fa-solid fa-list icon"></i>}
                         </button>
                     </div>
 
                     {/* Sidebar Menu */}
                     <div className={`sidebar ${menuOpen ? 'open' : ''}`}>
                         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-                        <FaTimes size={24} className="icon" />
+                        <i className="fa-solid fa-xmark icon"></i>
 
                         </button>
                         <ul>
@@ -47,7 +47,7 @@ const Navigation: React.FC<Props> = () => {
                         <li className="nav-item"><Link className="nav-link" to="/about">About</Link></li>
                     </ul>
                     <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
-                        {mode === 'dark' ? <FaSun size={24} className="icon" /> : <FaMoon size={24} className='icon'/>}
+                        {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}
                     </button>
                 </>}
         </nav>

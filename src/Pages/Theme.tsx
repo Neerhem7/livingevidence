@@ -16,9 +16,9 @@ const Theme: React.FC<Props> = () => {
     return (
         <div className="container mt-4">
        
-       <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
+       {/* <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <FaSun size={24} color="#f8f9fa" /> : <FaMoon size={24} />}
-                    </button>
+                    </button> */}
       </div>
 
     );
