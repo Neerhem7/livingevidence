@@ -1,0 +1,103 @@
+/* Desktop Navbar */
+.navbar {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    border-bottom: 1px solid var(--text-color);
+
+}
+
+.navbar-nav{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.nav-item{
+    border-right: 1px solid var(--text-color);
+}
+
+/* Mobile Navbar */
+.mobile-navbar {
+    position: relative;
+    padding: 10px;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 150px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    transition: right 0.3s ease-in-out;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.open {
+    right: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    color: #f8b400;
+}
+
+.icon {
+    fill: var(--text-color) !important;  
+    cursor: pointer;
+    transition: fill 0.3s ease;
+}
+
+.icon:hover {
+    fill: var(--primary-color);  
+}
+
+
+.logo {
+    width: 100px;   
+    height: auto;  
+    object-fit: contain; 
+}
