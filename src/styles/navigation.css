@@ -87,6 +87,7 @@
 
 .icon {
     fill: var(--text-color) !important;  
+    color:var(--text-color);
     cursor: pointer;
     transition: fill 0.3s ease;
 }
