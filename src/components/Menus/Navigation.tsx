@@ -37,14 +37,14 @@ const Navigation: React.FC<Props> = () => {
                         </button>
                         <ul>
                             <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-                            <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
+                            <li><Link to="/concept" onClick={() => setMenuOpen(false)}>Concept</Link></li>
                         </ul>
                     </div>
                 </div> 
                 : <>
                     <ul className="navbar-nav">
                         <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li> 
-                        <li className="nav-item"><Link className="nav-link" to="/about">About</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/concept">Concept</Link></li>
                     </ul>
                     <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}

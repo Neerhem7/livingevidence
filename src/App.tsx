@@ -6,7 +6,7 @@ import './App.css';
 import { RootState, AppDispatch } from './redux/store';
 import Navigation from './components/Menus/Navigation';
 import Home from './Pages/Home';
-import About from './Pages/About';
+import Concept from './Pages/Concept';
 import Theme from './Pages/Theme';
 
 const App: React.FC = () => {
@@ -26,7 +26,7 @@ const App: React.FC = () => {
       <div className='contanier mt-4'>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/about' element={<About />} />
+          <Route path='/concept' element={<Concept />} />
           <Route path='/theme' element={<Theme />} />
         </Routes>
       </div>
