@@ -8,6 +8,7 @@ import Navigation from './components/Menus/Navigation';
 import Home from './Pages/Home';
 import Concept from './Pages/Concept';
 import Theme from './Pages/Theme';
+import Prisma from './Pages/Prisma';
 
 const App: React.FC = () => {
   const theme = useSelector((state: RootState) => state.theme);
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route path='/' element={<Home />} />
           <Route path='/concept' element={<Concept />} />
           <Route path='/theme' element={<Theme />} />
+          <Route path='/prisma' element={<Prisma />} />
         </Routes>
       </div>
     </Router>

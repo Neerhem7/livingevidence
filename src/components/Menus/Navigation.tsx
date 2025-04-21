@@ -38,6 +38,7 @@ const Navigation: React.FC<Props> = () => {
                         <ul>
                             <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
                             <li><Link to="/concept" onClick={() => setMenuOpen(false)}>Concept</Link></li>
+                            <li><Link to="/prsima" onClick={() => setMenuOpen(false)}>Prisma</Link></li>
                         </ul>
                     </div>
                 </div> 
@@ -45,6 +46,7 @@ const Navigation: React.FC<Props> = () => {
                     <ul className="navbar-nav">
                         <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li> 
                         <li className="nav-item"><Link className="nav-link" to="/concept">Concept</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/prisma">Prisma</Link></li>
                     </ul>
                     <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}
