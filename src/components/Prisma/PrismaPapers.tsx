@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { Card, Container, Row, Col, Modal, Button, Spinner } from 'react-bootstrap';
+import { Card, Container, Row, Col, Modal, Button, Spinner, Badge } from 'react-bootstrap';
 import './prisma.css'
 import {
   fetchCurrentPapers,
@@ -146,6 +146,8 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab }) => {
 
                     <div className="flex-grow-1 mx-3 ">
                       <span className="paper-title text-truncate-2">{paper.title}</span>
+                      <Badge bg="secondary">Full text publications</Badge> <Badge bg="success">Abstracts presentations</Badge>
+                       
                     </div>
 
                     <div className='btn btn-primary'>
@@ -212,11 +214,11 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab }) => {
           {selectedPaper && (
             <>
               <h5>{selectedPaper.title}</h5>
-              <p className="text-muted small"><strong>Authors:</strong> {selectedPaper.authors}</p>
-              <p className="text-muted small"><strong>Publish Date:</strong> {selectedPaper.publish_date}</p>
-              <p className="text-muted small"><strong>Decision:</strong> {selectedPaper.decision}</p>
-              <p className="text-muted small"><strong>Source:</strong> {selectedPaper.upload_source}</p>
-              <p className="text-secondary"><strong>Abstract:</strong><br /> {selectedPaper.abstract}</p>
+              <p className=" small"><strong>Authors:</strong> {selectedPaper.authors}</p>
+              <p className="small"><strong>Publish Date:</strong> {selectedPaper.publish_date}</p>
+              <p className=" small"><strong>Decision:</strong> {selectedPaper.decision}</p>
+              <p className="small"><strong>Source:</strong> {selectedPaper.upload_source}</p>
+              <p className=""><strong>Abstract:</strong><br /> {selectedPaper.abstract}</p>
             </>
           )}
         </Modal.Body>

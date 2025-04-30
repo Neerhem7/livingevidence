@@ -101,7 +101,6 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
     }
      else if (activeTab === "Living Search") {
       setLiving(livingStats);
-      console.info("living stats active", living);
     }
 
   }, [activeTab, currentStats, initialStats, livingStats])

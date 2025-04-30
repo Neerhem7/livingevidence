@@ -59,8 +59,9 @@ export const prisma_data = {
     ],
     living_state_nodes: [
         { id: 'living', label: PRISMA_NODES.AUTO_UPDATE, x: 0, y: 0, styleType: 'main', clickAble:false },
-        { id: 'duplicate', label: PRISMA_NODES.DUPLICATES, x: 240, y: 70, styleType: 'main', clickAble:false },
-        { id: 'unique', label: PRISMA_NODES.AFTER_DUPLICATES, x: 0, y: 130, styleType: 'main' , clickAble:false},
+        // { id: 'manual', label: PRISMA_NODES.MANUAL_UPDATE, x: 240, y: 0, styleType: 'secondary', clickAble:false },
+        { id: 'duplicate', label: PRISMA_NODES.DUPLICATES, x: 240, y: 90, styleType: 'main', clickAble:false },
+        { id: 'unique', label: PRISMA_NODES.AFTER_DUPLICATES, x: 0, y: 140, styleType: 'main' , clickAble:false},
         { id: 'screened', label: PRISMA_NODES.SCREENED, x: 0, y: 250, styleType: 'main', clickAble:false },
         { id: 'fulltext_review', label: PRISMA_NODES.FULL_TEXT, x: 0, y: 420, styleType: 'main', clickAble:false },
         { id: 'excluded_by_title', label: PRISMA_NODES.EXCLUDED_TITLE, x: 240, y: 290, styleType: 'main', clickAble:false },
@@ -71,6 +72,7 @@ export const prisma_data = {
     ],
     living_state_connections: [
         { from: 'living', to: 'unique', type: 'straight' },
+        { from: 'manual', to: 'unique', type: 'left-to-center-right' },
         { from: 'living', to: 'duplicate', type: 'left-to-center-right' },
         { from: 'unique', to: 'screened', type: 'straight' },
         { from: 'screened', to: 'fulltext_review', type: 'straight' },
