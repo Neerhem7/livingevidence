@@ -125,15 +125,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab }) => {
                     style={{ width: '100px', height: '100px', color: '#4F959D' }}
                   />
                 </div>
-              ) : papers && papers.length === 0 ? (
-                <div className="text-center">
-                  <div className="p-4 border rounded shadow-sm" style={{ backgroundColor: '#f8f9fa' }}>
-                    <i className="bi bi-info-circle" style={{ fontSize: '2rem', color: '#6c757d' }}></i>
-                    <h5 className="mt-3" style={{ color: '#6c757d' }}>No papers found</h5>
-                    {/* <p className="text-muted">Try changing filters or check back later.</p> */}
-                  </div>
-                </div>
-              ) : (
+              )  : papers && papers.length > 0 ?(
                 Array.isArray(papers) && papers.map((paper) => (
                   <div
                     key={paper.id}
@@ -159,6 +151,14 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab }) => {
                     </div>
                   </div>
                 ))
+              ):  (
+                <div className="text-center">
+                  <div className="p-4 border rounded shadow-sm" style={{ backgroundColor: '#f8f9fa' }}>
+                    <i className="bi bi-info-circle" style={{ fontSize: '2rem', color: '#6c757d' }}></i>
+                    <h5 className="mt-3" style={{ color: '#6c757d' }}>No papers found</h5>
+                    {/* <p className="text-muted">Try changing filters or check back later.</p> */}
+                  </div>
+                </div>
               )}
             </Card.Body>
 

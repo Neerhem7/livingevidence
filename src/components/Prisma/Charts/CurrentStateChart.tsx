@@ -49,7 +49,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
 
   const nodeData = nodeList.map(node => ({
     ...node,
-    ...(node.clickAble && { onClick: () => handleNodeClick(node.id) }),
+  onClick: () => handleNodeClick(node.id),
   }));
 
   const handleOpenModal = () => {
@@ -63,7 +63,10 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
   const handleNodeClick = (nodeId: string) => {
     const clickableNodes = ['analysis', 'include', 'manual'];
   
-    if (clickableNodes.includes(nodeId)) {
+    if(nodeId === 'excluded_by_fulltext'){
+      handleOpenModal()
+    }
+    else {
       if (activeTab === "Current State") {
         dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10 }));
       } else if (activeTab === "Initial Search") {
@@ -71,9 +74,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
       } else if (activeTab === "Living Search") {
         dispatch(fetchLivingPapers({ stage: nodeId, month: currentYearMonth, page: 1, size: 10 }));
       }
-    }
-    else if(nodeId === 'excluded_by_fulltext'){
-      handleOpenModal()
     }
     console.log("Clicked node:", activeTab, nodeId);
   };

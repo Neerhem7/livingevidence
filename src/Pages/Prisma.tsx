@@ -32,11 +32,11 @@ const Prisma: React.FC = () => {
     const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const currentYearMonth = `${currentYear}-${currentMonth}`;
 
-    dispatch(fetchCurrentPapers({ stage:'include',page: 1, size: 10 }));
+    dispatch(fetchCurrentPapers({ stage:'total',page: 1, size: 10 }));
     dispatch(fetchCurrentStats());
-    dispatch(fetchInitialPapers({ stage:'include',page: 1, size: 10 }));
+    dispatch(fetchInitialPapers({ stage:'total',page: 1, size: 10 }));
     dispatch(fetchInitialStats());
-    dispatch(fetchLivingPapers({stage:'include', month: currentYearMonth, page: 1, size: 10 }));
+    dispatch(fetchLivingPapers({stage:'total', month: currentYearMonth, page: 1, size: 10 }));
     dispatch(fetchLivingStats(currentYearMonth));
 
   }, []);
