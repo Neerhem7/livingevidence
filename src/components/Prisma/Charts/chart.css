@@ -1,0 +1,137 @@
+.org-chart{
+  height: 700px !important;
+  
+}
+
+.org-chart-wrapper {
+  position: relative;
+}
+
+.org-node {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
+  min-width: 200px !important;
+  min-height: 60px !important;
+  max-width: 80px !important;
+  transition: all 0.4s ease;
+  overflow: 'hidden';
+  z-index: 2;
+  border-radius: 2px;
+}
+
+.org-node:hover {
+  box-shadow: 0 12px 20px var(--primary-color);
+  transform: translateY(-6px) scale(1.03);
+  z-index: 5;
+}
+
+
+.node-main .card-body {
+  border: 1px solid var(--primary-color) !important;
+}
+
+
+.node-secondary .card-body{
+  border: 1px solid var(--secondary-color) !important;
+  background-color: var(--third-color) !important;
+}
+
+
+.org-container {
+    height: 300px;
+    position: relative;
+  }
+  
+  .node-box {
+    padding: 12px 24px;
+    background-color: #f8f9fa;
+    border: 2px solid #343a40;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+  }
+  
+
+  .org-chart-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 600px; /* match your chart height */
+    z-index: 1;
+    pointer-events: none; /* allows clicks to go through */
+  }
+
+
+  .animated-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw-path 2s ease-out forwards;
+  }
+  
+  @keyframes draw-path {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+
+
+
+
+  .org-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  .org-lines line {
+    stroke: #000;
+    stroke-width: 2;
+  }
+
+
+  .node {
+    padding: 12px 24px;
+    background-color: #f8f9fa;
+    border: 2px solid #000;
+    border-radius: 8px;
+    display: inline-block;
+    position: relative;
+    font-weight: 600;
+    z-index: 2;
+  }
+  
+  .connector.vertical {
+    width: 2px;
+    height: 30px;
+    background-color: black;
+    margin: 0 auto;
+  }
+  
+  .connector.down-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 12px solid black;
+    margin: auto;
+  }
+  
+  .horizontal-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: black;
+    z-index: 1;
+  }
+  
+  

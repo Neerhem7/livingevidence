@@ -1,0 +1,136 @@
+.papers-body {
+    max-height: 700px;
+    min-height: 700px;
+    overflow-y: auto;
+  }
+  
+.papers-footer{
+    height: 50px;
+    background-color:  var(--background-color);
+}
+
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: 2.8em;
+}
+
+
+
+.paper-title {
+    color: var(--secondary-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+  
+.paper-row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .date-circle {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 50%;
+    background-color: var(--third-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--text-color);
+  }
+
+  .calendar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    max-height: 700px;
+    overflow-y: auto;
+  }
+  
+  .header-row {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .year-cell, .month-cell {
+    padding: 5px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    height: 25px;
+  }
+  
+  .year-cell {
+    width: 60px;
+    text-align: center;
+  }
+  
+  .month-cell {
+    width: 30px;
+  }
+  
+  .year-row {
+    display: flex;
+    margin-bottom: 5px;
+  }
+  
+  
+  .data-cell {
+    width: 30px;  
+    height: 40px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+    font-size: 8px; 
+    transition: background-color 0.3s, transform 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .data-cell:hover {
+    background-color: var(--third-color);
+    transform: scale(1.05);
+  }
+  
+  .empty-cell {
+    cursor: default;
+    background-color: #fffffffc;
+    transform: none;
+    
+  }
+  .empty-cell:hover {
+    background-color: inherit;
+
+  }
+
+  .data-cell div {
+    margin: 2px;
+  }
+  
+  .data-cell div:nth-child(1) {
+    font-size: 12px;
+    font-weight: bolder;
+    height: 15px;
+    color: #333;
+    
+  }
+  
+  .data-cell div:nth-child(2) {
+    font-size: 8px;
+    color: #666;
+    font-weight: bold;
+  }
+  
+  .empty-cell {
+    background-color: #e0e0e0;
+  }
+  

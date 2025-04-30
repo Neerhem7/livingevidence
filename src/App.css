@@ -1,6 +1,8 @@
 :root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
+  --primary-color: #205781;
+  --secondary-color: #4F959D;
+  --third-color: #98D2C0;
+  --forth-color: #F6F8D5;
   --background-color: #f8f9fa;
   --text-color: #212529;
 }
@@ -28,11 +30,27 @@ div{
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  background-color: var(--secondary-color) !important;
+  border-color: var(--primary-color) !important;
 }
 
 .btn-secondary {
-  background-color: var(--secondary-color);
-  border-color: var(--secondary-color);
+  background-color: var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
+}
+
+.card-header{
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+}
+
+.card-body{
+  background-color: var(--background-color) !important;
+  padding: auto;
+  color: var(--text-color) !important;
+}
+
+.card-footer{
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
 }

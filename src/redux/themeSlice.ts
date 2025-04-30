@@ -5,14 +5,18 @@ interface ThemeState {
     mode: 'dark' | 'light',
     primaryColor: string,
     secondaryColor: string,
+    thirdColor: string,
+    forthCcolor: string,
     backgroundColor: string,
     textColor: string
 }
 
 const initialState: ThemeState = {
     mode : 'light',
-    primaryColor: '#007bff',
-    secondaryColor: '#6c757d',
+    primaryColor: '#4F959D',
+    secondaryColor: '#205781',
+    thirdColor: '#98D2C0',
+    forthCcolor: '#F6F8D5',
     backgroundColor: '#f8f9fa',
     textColor: '#212529',
 }

@@ -1,0 +1,17 @@
+export const PRISMA_NODES = {
+    INITIAL_SEARCH: 'Initial search \nfrom databases\n($initial$ references)',
+    AUTO_UPDATE: 'Records identified through automatic update\n($living$ references)',
+    MANUAL_UPDATE: 'Records identified through manual update\n($manual$ references)',
+    TOTAL_IDENTIFIED: 'Total Records Identified\n($total$ references)',
+    DUPLICATES: 'Duplicates Records($duplicate$ references)',
+    AFTER_DUPLICATES: 'Records after removing duplicates\n ($unique$ references)',
+    SCREENED: 'Records screened ($screened$ references)',
+    CURRENTLY_SCREENING: 'Currently screening ($unscreened$ references)',
+    EXCLUDED_TITLE: 'Excluded by title ($excluded_by_title$ references)',
+    EXCLUDED_ABSTRACT: 'Excluded by abstract ($excluded_by_abstract$ references)',
+    FULL_TEXT: 'Full-text assessed for eligibility ($fulltext_review$ references)',
+    EXCLUDED_FULL_TEXT: 'Excluded by full text review ($excluded_by_fulltext$ references)',
+    CURRENTLY_SCREENING_FULL_TEXT: 'Currently screening ($unscreened_fulltext$ references)',
+    SYSTEMATIC_REVIEW: 'Studies included in systematic review \n(n=10) ($analysis$ references)',
+    META_ANALYSIS: 'Studies included in meta-analysis (n=10) ($include$ references)',
+}

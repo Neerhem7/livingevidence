@@ -1,9 +1,10 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import { RootState, AppDispatch } from './redux/store';
+import { RootState} from './redux/store';
+import { setProjectParams } from './redux/projectSlice';
 import Navigation from './components/Menus/Navigation';
 import Home from './Pages/Home';
 import Concept from './Pages/Concept';
@@ -12,10 +13,20 @@ import Prisma from './Pages/Prisma';
 
 const App: React.FC = () => {
   const theme = useSelector((state: RootState) => state.theme);
+  const { projectId, cqId } = useParams();
+  const dispatch = useDispatch();
 
-  useEffect(() => { 
+  useEffect(() => {
+    if (projectId && cqId) {
+      dispatch(setProjectParams({ projectId, cqId }));
+    }
+  }, [projectId, cqId, dispatch]);
+
+  useEffect(() => {
     document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
     document.documentElement.style.setProperty('--secondary-color', theme.secondaryColor);
+    document.documentElement.style.setProperty('--third-color', theme.thirdColor);
+    document.documentElement.style.setProperty('--forth-color', theme.forthCcolor);
     document.documentElement.style.setProperty('--background-color', theme.backgroundColor);
     document.documentElement.style.setProperty('--text-color', theme.textColor);
   }, [theme]);
@@ -26,10 +37,11 @@ const App: React.FC = () => {
       <Navigation></Navigation>
       <div className='contanier mt-4'>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/concept' element={<Concept />} />
-          <Route path='/theme' element={<Theme />} />
-          <Route path='/prisma' element={<Prisma />} />
+          <Route path="/project/:projectId/cq/:cqId" element={<Home />} />
+          <Route path="/project/:projectId/cq/:cqId/concept" element={<Concept />} />
+          <Route path="/project/:projectId/cq/:cqId/theme" element={<Theme />} />
+          <Route path="/project/:projectId/cq/:cqId/prisma" element={<Prisma />} />
+          {/* <Route path="/" element={<Navigate to="/project/1/cq/1" />} /> */}
         </Routes>
       </div>
     </Router>
