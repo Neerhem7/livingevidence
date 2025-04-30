@@ -1,6 +1,6 @@
 .papers-body {
-    max-height: 700px;
-    min-height: 700px;
+    max-height: 780px;
+    min-height: 780px;
     overflow-y: auto;
   }
   
@@ -52,7 +52,7 @@
     align-items: center;
     width: 100%;
     font-family: Arial, sans-serif;
-    max-height: 700px;
+    max-height: 780px;
     overflow-y: auto;
   }
   
@@ -95,6 +95,13 @@
     transition: background-color 0.3s, transform 0.2s ease;
     cursor: pointer;
   }
+  
+  .active-cell {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+  }
+
   
   .data-cell:hover {
     background-color: var(--third-color);

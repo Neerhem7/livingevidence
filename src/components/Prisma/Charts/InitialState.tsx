@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useAppDispatch } from '../../../redux/store';
+import {  Modal} from 'react-bootstrap';
 import './chart.css';
 import CustomNode from './CustomeNode';
+import {
+  fetchCurrentPapers,
+  fetchInitialPapers,
+  fetchLivingPapers,
+} from "../../../redux/prismaPaperSlice";
 
 type PrismaStats = {
   total: 0,
@@ -22,15 +29,56 @@ type PrismaStats = {
 };
 
 interface InitialStateChartProps {
+  activeTab: string,
   nodeList: Array<any>;
   connections: Array<any>;
   stats?: PrismaStats;
 }
 
-const InitialStateChart: React.FC<InitialStateChartProps> = ({ connections, nodeList, stats }) => {
+const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connections, nodeList, stats }) => {
+  const dispatch = useAppDispatch();
+  const [showModal, setShowModal] = useState(false);
+
   const nodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [paths, setPaths] = useState<string[]>([]);
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const currentYearMonth = `${currentYear}-${currentMonth}`;
+
+  
+  const nodeData = nodeList.map(node => ({
+    ...node,
+    ...(node.clickAble && { onClick: () => handleNodeClick(node.id) }),
+  }));
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleNodeClick = (nodeId: string) => {
+    const clickableNodes = ['analysis', 'include', 'manual'];
+  
+    if (clickableNodes.includes(nodeId)) {
+      if (activeTab === "Current State") {
+        dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10 }));
+      } else if (activeTab === "Initial Search") {
+        dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10 }));
+      } else if (activeTab === "Living Search") {
+        dispatch(fetchLivingPapers({ stage: nodeId, month: currentYearMonth, page: 1, size: 10 }));
+      }
+    }
+    else if(nodeId === 'excluded_by_fulltext'){
+      handleOpenModal()
+    }
+    console.log("Clicked node:", activeTab, nodeId);
+  };
+
 
   useEffect(() => {
     const svg = svgRef.current;
@@ -122,6 +170,7 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({ connections, node
   }, []);
 
   return (
+    <>
     <div className="org-chart-wrapper position-relative w-100 h-100">
       <svg ref={svgRef} className="org-chart-lines position-absolute w-100 h-100" style={{
 
@@ -133,7 +182,7 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({ connections, node
 
       <div className="org-chart container text-center">
         <div className="justify-content-center position-relative w-100 h-100">
-          {nodeList.map((node) => {
+          {nodeData.map((node) => {
             const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
               const value = stats?.[key as keyof PrismaStats];
               return value !== undefined ? String(value) : `$${key}$`;
@@ -148,12 +197,23 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({ connections, node
                 x={node.x}
                 y={node.y}
                 styleType={node.styleType}
+                onClick={node.onClick}
               />
             );
           })}
         </div>
       </div>
     </div>
+    <Modal show={showModal} onHide={handleCloseModal} size="sm">
+        <Modal.Header closeButton>
+          <Modal.Title>Excluded by full text review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Full-text articles were excluded by the following reasons:
+        </Modal.Body>
+       
+      </Modal>
+    </>
   );
 };
 

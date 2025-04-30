@@ -78,13 +78,13 @@ const initialState: PrismaPaperState = {
 
 
 
-const BASE_URL = "https://app.lisr.org/backend/api/v1/staging_prisma/prisma/papers?project_id=8&stage=total";
+const BASE_URL = "https://app.lisr.org/backend/api/v1/staging_prisma/prisma/papers?project_id=8";
 
 export const fetchCurrentPapers = createAsyncThunk(
   "prisma/fetchCurrent",
-  async ({ page, size }: { page: number; size: number }, thunkAPI) => {
+  async ({ stage, page, size }: { stage:string,page: number; size: number }, thunkAPI) => {
     const res = await axios.get(
-      `${BASE_URL}&source=all&page=${page}&limit=${size}`
+      `${BASE_URL}&stage=${stage}&source=all&page=${page}&limit=${size}`
     );
     return res.data;
   }
@@ -92,9 +92,9 @@ export const fetchCurrentPapers = createAsyncThunk(
 
 export const fetchInitialPapers = createAsyncThunk(
   "prisma/fetchInitial",
-  async ({ page, size }: { page: number; size: number }, thunkAPI) => {
+  async ({ stage, page, size }: { stage:string,page: number; size: number }, thunkAPI) => {
     const res = await axios.get(
-      `${BASE_URL}&source=initial&page=${page}&limit=${size}`
+      `${BASE_URL}&stage=${stage}&source=initial&page=${page}&limit=${size}`
     );
     return res.data;
   }
@@ -102,9 +102,9 @@ export const fetchInitialPapers = createAsyncThunk(
 
 export const fetchLivingPapers = createAsyncThunk(
   "prisma/fetchLiving",
-  async ({month, page, size }: { month: string, page: number; size: number }, thunkAPI) => {
+  async ({stage, month, page, size }: { stage:string,month: string, page: number; size: number }, thunkAPI) => {
     const res = await axios.get(
-      `${BASE_URL}&source=living&page=${page}&limit=${size}&date=${month}`
+      `${BASE_URL}&stage=${stage}&source=living&page=${page}&limit=${size}&date=${month}`
     );
     return res.data;
   }

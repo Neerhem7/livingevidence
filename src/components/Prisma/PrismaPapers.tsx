@@ -63,11 +63,9 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab }) => {
     if (activeTab === "Current State") {
       setPapers(current.papers);
       setPagination(current.pagination);
-      console.info("state current ", papers);
     } else if (activeTab === "Initial Search") {
       setPagination(initial.pagination);
       setPapers(initial.papers);
-      console.info("state initial ", initial);
     } else if (activeTab === "Living Search") {
       setPagination(living.pagination);
       setPapers(living.papers);
@@ -81,28 +79,28 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab }) => {
     if (pagination) {
       if (page === 1) {
         if (activeTab === "Current State") {
-          dispatch(fetchCurrentPapers({ page: 1, size: pagination.pageSize }));
+          dispatch(fetchCurrentPapers({stage:'include', page: 1, size: pagination.pageSize }));
         } else if (activeTab === "Initial Search") {
-          dispatch(fetchInitialPapers({ page: 1, size: pagination.pageSize }));
+          dispatch(fetchInitialPapers({stage:'include', page: 1, size: pagination.pageSize }));
         } else if (activeTab === "Living Search") {
-          dispatch(fetchLivingPapers({ month: currentYearMonth, page: 1, size: pagination.pageSize }));
+          dispatch(fetchLivingPapers({stage:'include', month: currentYearMonth, page: 1, size: pagination.pageSize }));
         }
       } else if (page === pagination.totalPages) {
         if (activeTab === "Current State") {
-          dispatch(fetchCurrentPapers({ page: pagination.totalPages, size: pagination.pageSize }));
+          dispatch(fetchCurrentPapers({stage:'include', page: pagination.totalPages, size: pagination.pageSize }));
         } else if (activeTab === "Initial Search") {
           console.info("state initial search ", papers, pagination);
-          dispatch(fetchInitialPapers({ page: pagination.totalPages, size: pagination.pageSize }));
+          dispatch(fetchInitialPapers({ stage:'include',page: pagination.totalPages, size: pagination.pageSize }));
         } else if (activeTab === "Living Search") {
-          dispatch(fetchLivingPapers({ month: currentYearMonth, page: pagination.totalPages, size: pagination.pageSize }));
+          dispatch(fetchLivingPapers({stage:'include', month: currentYearMonth, page: pagination.totalPages, size: pagination.pageSize }));
         }
       } else {
         if (activeTab === "Current State") {
-          dispatch(fetchCurrentPapers({ page, size: pagination.pageSize }));
+          dispatch(fetchCurrentPapers({stage:'include', page, size: pagination.pageSize }));
         } else if (activeTab === "Initial Search") {
-          dispatch(fetchInitialPapers({ page, size: pagination.pageSize }));
+          dispatch(fetchInitialPapers({stage:'include', page, size: pagination.pageSize }));
         } else if (activeTab === "Living Search") {
-          dispatch(fetchLivingPapers({ month: currentYearMonth, page, size: pagination.pageSize }));
+          dispatch(fetchLivingPapers({stage:'include', month: currentYearMonth, page, size: pagination.pageSize }));
         }
       }
     }

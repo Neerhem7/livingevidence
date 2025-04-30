@@ -18,7 +18,7 @@
 
 
 .tab-body{
-    height: 750px;
+    height: 810px;
     display: flex;
     border: 1px solid  var(--primary-color);
 }

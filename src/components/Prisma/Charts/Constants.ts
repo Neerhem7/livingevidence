@@ -11,7 +11,7 @@ export const PRISMA_NODES = {
     EXCLUDED_ABSTRACT: 'Excluded by abstract ($excluded_by_abstract$ references)',
     FULL_TEXT: 'Full-text assessed for eligibility ($fulltext_review$ references)',
     EXCLUDED_FULL_TEXT: 'Excluded by full text review ($excluded_by_fulltext$ references)',
-    CURRENTLY_SCREENING_FULL_TEXT: 'Currently screening ($unscreened_fulltext$ references)',
-    SYSTEMATIC_REVIEW: 'Studies included in systematic review \n(n=10) ($analysis$ references)',
-    META_ANALYSIS: 'Studies included in meta-analysis (n=10) ($include$ references)',
+    CURRENTLY_SCREENING_FULL_TEXT: 'Currently screening Full-text ($unscreened_fulltext$ references)',
+    SYSTEMATIC_REVIEW: 'Studies included in systematic review \n(n=$analysis_n$) ($analysis$ references)',
+    META_ANALYSIS: 'Studies included in meta-analysis (n=$include_n$) ($include$ references)',
 }

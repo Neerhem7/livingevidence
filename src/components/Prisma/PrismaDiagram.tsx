@@ -66,6 +66,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
     {
       label: "Current State",
       content: <CurrentStateChart 
+      activeTab={activeTab}
       nodeList={prisma_data.current_state_nodes} 
       connections={prisma_data.current_state_connections}
       stats={stats} />,
@@ -74,6 +75,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
     {
       label: "Initial Search",
       content: <InitialStateChart 
+      activeTab={activeTab}
       nodeList={prisma_data.initial_state_nodes} 
       connections={prisma_data.initial_state_connections}
       stats={stats}/>,
@@ -81,7 +83,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
     },
     {
       label: "Living Search",
-      content: <Living stats={living} />,
+      content: <Living activeTab={activeTab} stats={living} />,
       onClick: () => onTabChange?.("Living Search"),
     }
   ];
@@ -89,7 +91,6 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
   useEffect(() => {
     setStats(currentStats);
     setLiving(livingStats);
-    console.info("living stats useefect active",livingStats, living);
   }, []);
 
   useEffect(() => {

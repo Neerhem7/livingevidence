@@ -53,10 +53,11 @@ const defaultStats: PrismaStats = {
 };
 
 interface LivingProps {
+  activeTab: string,
   stats: PrismaLivingStats[];
 }
 
-const Living: React.FC<LivingProps> = ({ stats }) => {
+const Living: React.FC<LivingProps> = ({ activeTab, stats }) => {
   const dispatch = useAppDispatch();
   const { livingStatsByMonth } = useSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
@@ -64,10 +65,10 @@ const Living: React.FC<LivingProps> = ({ stats }) => {
   const [calendarData, setCalendarData] = useState<CalendarData>({});
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const currentYearMonth = `${currentYear}-${currentMonth}`;
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const currentYearMonth = `${currentYear}-${currentMonth}`;
 
   useEffect(() => {
     const data = generateCalendarData("2021-06-01", new Date());
@@ -95,10 +96,10 @@ const Living: React.FC<LivingProps> = ({ stats }) => {
 
   const showStats = (month: string) => {
 
-    console.info("hello click", month)
     dispatch(fetchLivingStatsByMonth(month));
-    dispatch(fetchLivingPapers({ month:month, page: 1, size: 10 }))
+    dispatch(fetchLivingPapers({ stage: 'include', month: month, page: 1, size: 10 }))
     setShowMonthStats(true)
+    setSelectedMonth(month)
   };
 
   return (
@@ -117,11 +118,13 @@ const Living: React.FC<LivingProps> = ({ stats }) => {
             {calendarData[parseInt(year)].map((cell, idx) => (
               <>
                 {cell ? (
-                  <div className="data-cell" key={idx} onClick={() => showStats(cell.month)}
-                   >
-                    <div   
-                    >
-                      {cell.count >0 && <>{cell.count}</>}
+                  <div
+                    className={`data-cell ${cell.month === selectedMonth ? 'active-cell' : ''}`}
+                    key={idx}
+                    onClick={() => showStats(cell.month)}
+                  >
+                    <div>
+                      {cell.count > 0 && <>{cell.count}</>}
                     </div>
                     <div>{cell.total_papers}</div>
                   </div>
@@ -132,14 +135,15 @@ const Living: React.FC<LivingProps> = ({ stats }) => {
             ))}
           </div>
         ))}
-        <div>
+        <div className='mt-4'>
           {
             showMonthStats && <InitialStateChart
-            nodeList={prisma_data.living_state_nodes}
-            connections={prisma_data.living_state_connections}
-            stats={livingStatsByMonth} />
+              activeTab={activeTab}
+              nodeList={prisma_data.living_state_nodes}
+              connections={prisma_data.living_state_connections}
+              stats={livingStatsByMonth} />
           }
-          
+
         </div>
       </div>
     </div>
