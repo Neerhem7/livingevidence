@@ -15,8 +15,8 @@ export const prisma_data = {
         { id: 'excluded_by_abstract', label: PRISMA_NODES.EXCLUDED_ABSTRACT, x: 400, y: 390, styleType: 'main' , clickAble:false},
         { id: 'excluded_by_fulltext', label: PRISMA_NODES.EXCLUDED_FULL_TEXT, x: 400, y: 540, styleType: 'secondary', clickAble:true },
         { id: 'unscreened_fulltext', label: PRISMA_NODES.CURRENTLY_SCREENING_FULL_TEXT, x: 400, y: 460, styleType: 'main', clickAble:false },
-        { id: 'analysis', label: PRISMA_NODES.SYSTEMATIC_REVIEW, x: 150, y: 580, styleType: 'secondary' , clickAble:true},
-        { id: 'include', label: PRISMA_NODES.META_ANALYSIS, x: 150, y: 700, styleType: 'secondary' , clickAble:true},
+        { id: 'analysis', label: PRISMA_NODES.SYSTEMATIC_REVIEW, x: 150, y: 560, styleType: 'secondary' , clickAble:true},
+        { id: 'include', label: PRISMA_NODES.META_ANALYSIS, x: 150, y: 680, styleType: 'secondary' , clickAble:true},
     ],
     current_state_connections: [
         { from: 'initial', to: 'total', type: 'left-right-bottom' },
