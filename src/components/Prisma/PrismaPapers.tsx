@@ -68,28 +68,28 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
     if (pagination) {
       if (page === 1) {
         if (activeTab === "Current State") {
-          dispatch(fetchCurrentPapers({ stage: 'include', page: 1, size: pagination.pageSize }));
+          dispatch(fetchCurrentPapers({ stage: activeState, page: 1, size: pagination.pageSize }));
         } else if (activeTab === "Initial Search") {
-          dispatch(fetchInitialPapers({ stage: 'include', page: 1, size: pagination.pageSize }));
+          dispatch(fetchInitialPapers({ stage: activeState, page: 1, size: pagination.pageSize }));
         } else if (activeTab === "Living Search") {
-          dispatch(fetchLivingPapers({ stage: 'include', month: currentYearMonth, page: 1, size: pagination.pageSize }));
+          dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page: 1, size: pagination.pageSize }));
         }
       } else if (page === pagination.totalPages) {
         if (activeTab === "Current State") {
-          dispatch(fetchCurrentPapers({ stage: 'include', page: pagination.totalPages, size: pagination.pageSize }));
+          dispatch(fetchCurrentPapers({ stage: activeState, page: pagination.totalPages, size: pagination.pageSize }));
         } else if (activeTab === "Initial Search") {
           console.info("state initial search ", papers, pagination);
-          dispatch(fetchInitialPapers({ stage: 'include', page: pagination.totalPages, size: pagination.pageSize }));
+          dispatch(fetchInitialPapers({ stage: activeState, page: pagination.totalPages, size: pagination.pageSize }));
         } else if (activeTab === "Living Search") {
-          dispatch(fetchLivingPapers({ stage: 'include', month: currentYearMonth, page: pagination.totalPages, size: pagination.pageSize }));
+          dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page: pagination.totalPages, size: pagination.pageSize }));
         }
       } else {
         if (activeTab === "Current State") {
-          dispatch(fetchCurrentPapers({ stage: 'include', page, size: pagination.pageSize }));
+          dispatch(fetchCurrentPapers({ stage: activeState, page, size: pagination.pageSize }));
         } else if (activeTab === "Initial Search") {
-          dispatch(fetchInitialPapers({ stage: 'include', page, size: pagination.pageSize }));
+          dispatch(fetchInitialPapers({ stage: activeState, page, size: pagination.pageSize }));
         } else if (activeTab === "Living Search") {
-          dispatch(fetchLivingPapers({ stage: 'include', month: currentYearMonth, page, size: pagination.pageSize }));
+          dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page, size: pagination.pageSize }));
         }
       }
     }
@@ -102,7 +102,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
     } else if (activeTab === "Initial Search") {
       dispatch(fetchInitialPapers({ stage: activeState, page: 1, size: pageSize, searchKey:searchText }));
     } else if (activeTab === "Living Search") {
-      dispatch(fetchLivingPapers({ stage: activeState, month: currentYearMonth, page: 1, size: pageSize, searchKey:searchText }));
+      dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page: 1, size: pageSize, searchKey:searchText }));
     }
   }
   const closeSearch=()=>{
@@ -112,7 +112,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
     } else if (activeTab === "Initial Search") {
       dispatch(fetchInitialPapers({ stage: activeState, page: 1, size: pageSize }));
     } else if (activeTab === "Living Search") {
-      dispatch(fetchLivingPapers({ stage: activeState, month: currentYearMonth, page: 1, size: pageSize }));
+      dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page: 1, size: pageSize }));
     }
   }
 
