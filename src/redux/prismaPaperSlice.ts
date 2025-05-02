@@ -82,30 +82,66 @@ const BASE_URL = "https://app.lisr.org/backend/api/v1/staging_prisma/prisma/pape
 
 export const fetchCurrentPapers = createAsyncThunk(
   "prisma/fetchCurrent",
-  async ({ stage, page, size }: { stage:string,page: number; size: number }, thunkAPI) => {
-    const res = await axios.get(
-      `${BASE_URL}&stage=${stage}&source=all&page=${page}&limit=${size}`
-    );
+  async (
+    {
+      searchKey,
+      stage,
+      page,
+      size,
+    }: { searchKey?: string; stage: string; page: number; size: number },
+    thunkAPI
+  ) => {
+    const params = new URLSearchParams({
+      stage,
+      source: "all",
+      page: page.toString(),
+      limit: size.toString(),
+    });
+
+    if (searchKey) {
+      params.append("search", searchKey);
+    }
+
+    const res = await axios.get(`${BASE_URL}&${params.toString()}`);
     return res.data;
   }
 );
 
+
 export const fetchInitialPapers = createAsyncThunk(
   "prisma/fetchInitial",
-  async ({ stage, page, size }: { stage:string,page: number; size: number }, thunkAPI) => {
-    const res = await axios.get(
-      `${BASE_URL}&stage=${stage}&source=initial&page=${page}&limit=${size}`
-    );
+  async ({searchKey, stage, page, size }: {searchKey?:string, stage:string,page: number; size: number }, thunkAPI) => {
+    const params = new URLSearchParams({
+      stage,
+      source: "initial",
+      page: page.toString(),
+      limit: size.toString(),
+    });
+
+    if (searchKey) {
+      params.append("search", searchKey);
+    }
+    const res = await axios.get(`${BASE_URL}&${params.toString()}`);
     return res.data;
   }
 );
 
 export const fetchLivingPapers = createAsyncThunk(
   "prisma/fetchLiving",
-  async ({stage, month, page, size }: { stage:string,month: string, page: number; size: number }, thunkAPI) => {
-    const res = await axios.get(
-      `${BASE_URL}&stage=${stage}&source=living&page=${page}&limit=${size}&date=${month}`
-    );
+  async ({searchKey, stage, month, page, size }: {searchKey?:string, stage:string,month: string, page: number; size: number }, thunkAPI) => {
+    const params = new URLSearchParams({
+      stage,
+      source: "living",
+      page: page.toString(),
+      limit: size.toString(),
+      date:month
+    });
+
+    if (searchKey) {
+      params.append("search", searchKey);
+    }
+
+    const res = await axios.get(`${BASE_URL}&${params.toString()}`);
     return res.data;
   }
 );

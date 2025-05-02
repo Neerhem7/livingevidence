@@ -55,13 +55,18 @@ const defaultStats: PrismaStats = {
 interface LivingProps {
   activeTab: string,
   stats: PrismaLivingStats[];
+  onMonthChange?: (selectedMonth: string) => void;
+  selectedMonth: string;
+  onStateChange?: (activeState: string) => void;
+  onStateTextChange?: (stateText: string) => void;
+  activeState: string;
 }
 
-const Living: React.FC<LivingProps> = ({ activeTab, stats }) => {
+const Living: React.FC<LivingProps> = ({ activeTab, stats, selectedMonth, onMonthChange, activeState, onStateChange, onStateTextChange }) => {
   const dispatch = useAppDispatch();
   const { livingStatsByMonth } = useSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState('');
+  // const [selectedMonth, setSelectedMonth] = useState('');
   const [calendarData, setCalendarData] = useState<CalendarData>({});
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -73,7 +78,7 @@ const Living: React.FC<LivingProps> = ({ activeTab, stats }) => {
   useEffect(() => {
     const data = generateCalendarData("2021-06-01", new Date());
     fetchCalendarData(data, stats);
-    setSelectedMonth(currentYearMonth);
+    onMonthChange?.(currentYearMonth);
   }, [stats]);
 
   const fetchCalendarData = async (calendar: CalendarData, stats: PrismaLivingStats[]) => {
@@ -99,7 +104,7 @@ const Living: React.FC<LivingProps> = ({ activeTab, stats }) => {
     dispatch(fetchLivingStatsByMonth(month));
     dispatch(fetchLivingPapers({ stage: 'include', month: month, page: 1, size: 10 }))
     setShowMonthStats(true)
-    setSelectedMonth(month)
+    onMonthChange?.(month)
   };
 
   return (
@@ -107,7 +112,7 @@ const Living: React.FC<LivingProps> = ({ activeTab, stats }) => {
       <div>
         <div className="header-row">
           <div className="year-cell"></div>
-          {monthNames.slice(5).concat(monthNames.slice(0, 5)).map(m => (
+          {monthNames.map(m => (
             <div key={m} className="month-cell">{m}</div>
           ))}
         </div>
@@ -139,9 +144,13 @@ const Living: React.FC<LivingProps> = ({ activeTab, stats }) => {
           {
             showMonthStats && <InitialStateChart
               activeTab={activeTab}
+              activeState={activeState}
+              onStateChange={onStateChange}
+              onStateTextChange={onStateTextChange}
               nodeList={prisma_data.living_state_nodes}
               connections={prisma_data.living_state_connections}
-              stats={livingStatsByMonth} />
+              stats={livingStatsByMonth}
+              activeMonth={selectedMonth} />
           }
 
         </div>

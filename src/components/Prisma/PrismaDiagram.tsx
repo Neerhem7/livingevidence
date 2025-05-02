@@ -6,6 +6,7 @@ import InitialStateChart from './Charts/InitialState';
 import Living from './Living';
 import { prisma_data } from './Charts/Prisma_Data';
 import { RootState } from '../../redux/store';
+import { PRISMA_NODES } from './Charts/Constants';
 
 type PrismaLivingStats = {
   month: string;
@@ -53,10 +54,15 @@ const defaultStats: PrismaStats = {
 
 interface PrismaDiagramProps {
   onTabChange?: (activeTab: string) => void;
-  activeTab: string
+  onMonthChange?: (selectedMonth: string) => void;
+  onStateChange?: (activeState:string)=> void;
+  onStateTextChange?: (stateText: string)=> void;
+  activeState: string;
+  selectedMonth: string;
+  activeTab: string;
 }
 
-const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab }) => {
+const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth, activeState, onMonthChange,onTabChange,onStateChange, onStateTextChange }) => {
 
   const { currentStats, initialStats, livingStats } = useSelector((state: RootState) => state.prismaDiagram);
   const [stats, setStats] = useState<PrismaStats>(defaultStats);
@@ -67,6 +73,9 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
       label: "Current State",
       content: <CurrentStateChart 
       activeTab={activeTab}
+      activeState={activeState}
+      onStateChange={onStateChange}
+      onStateTextChange={onStateTextChange}
       nodeList={prisma_data.current_state_nodes} 
       connections={prisma_data.current_state_connections}
       stats={stats} />,
@@ -76,6 +85,9 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
       label: "Initial Search",
       content: <InitialStateChart 
       activeTab={activeTab}
+      activeState={activeState}
+      onStateChange={onStateChange}
+      onStateTextChange={onStateTextChange}
       nodeList={prisma_data.initial_state_nodes} 
       connections={prisma_data.initial_state_connections}
       stats={stats}/>,
@@ -83,7 +95,11 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
     },
     {
       label: "Living Search",
-      content: <Living activeTab={activeTab} stats={living} />,
+      content: <Living  
+      activeState={activeState}
+      onStateChange={onStateChange}
+      onStateTextChange={onStateTextChange}
+      selectedMonth={selectedMonth} onMonthChange={onMonthChange} activeTab={activeTab} stats={living} />,
       onClick: () => onTabChange?.("Living Search"),
     }
   ];
@@ -102,6 +118,11 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ onTabChange, activeTab })
      else if (activeTab === "Living Search") {
       setLiving(livingStats);
     }
+    const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+      const value = stats?.[key as keyof PrismaStats];
+      return value !== undefined ? String(value) : `$${key}$`;
+    });
+    onStateTextChange?.(parsedLabel);
 
   }, [activeTab, currentStats, initialStats, livingStats])
 

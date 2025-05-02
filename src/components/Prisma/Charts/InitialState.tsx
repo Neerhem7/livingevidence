@@ -33,9 +33,13 @@ interface InitialStateChartProps {
   nodeList: Array<any>;
   connections: Array<any>;
   stats?: PrismaStats;
+  activeMonth?:string;
+  onStateChange?: (activeState:string)=> void;
+  onStateTextChange?: (stateText: string)=> void;
+  activeState: string;
 }
 
-const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connections, nodeList, stats }) => {
+const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connections, nodeList, stats, activeMonth, activeState, onStateChange, onStateTextChange }) => {
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
 
@@ -50,7 +54,7 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
   
   const nodeData = nodeList.map(node => ({
     ...node,
-    ...(node.clickAble && { onClick: () => handleNodeClick(node.id) }),
+    onClick: () => handleNodeClick(node.id, node.label),
   }));
 
   const handleOpenModal = () => {
@@ -60,25 +64,29 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
-  const handleNodeClick = (nodeId: string) => {
+  const handleNodeClick = (nodeId: string, nodeLabel: string) => {
     const clickableNodes = ['analysis', 'include', 'manual'];
-  
-    if (clickableNodes.includes(nodeId)) {
+    const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+      const value = stats?.[key as keyof PrismaStats];
+      return value !== undefined ? String(value) : `$${key}$`;
+    });
+    if (nodeId === 'excluded_by_fulltext') {
+      handleOpenModal()
+    }
+    else {
       if (activeTab === "Current State") {
+
         dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10 }));
       } else if (activeTab === "Initial Search") {
         dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10 }));
       } else if (activeTab === "Living Search") {
-        dispatch(fetchLivingPapers({ stage: nodeId, month: currentYearMonth, page: 1, size: 10 }));
+        dispatch(fetchLivingPapers({ stage: nodeId, month: activeMonth?activeMonth:currentMonth, page: 1, size: 10 }));
       }
     }
-    else if(nodeId === 'excluded_by_fulltext'){
-      handleOpenModal()
-    }
-    console.log("Clicked node:", activeTab, nodeId);
+    onStateChange?.(nodeId);
+    onStateTextChange?.(parsedLabel);
+    console.info("onStateChange", nodeId, nodeLabel, parsedLabel)
   };
-
 
   useEffect(() => {
     const svg = svgRef.current;

@@ -15,15 +15,27 @@ export const generateCalendarData = (startDate: string | Date, endDate: Date): C
   const end = new Date(endDate);
   const calendar: CalendarData = {};
 
-  while (start <= end) {
-    const year = start.getFullYear();
-    const month = start.getMonth(); // 0-indexed
+  const startYear = start.getFullYear();
+  const endYear = end.getFullYear();
+
+  for (let year = startYear; year <= endYear; year++) {
+    calendar[year] = Array(12).fill(null);
+  }
+
+  const iter = new Date(start);
+  iter.setDate(1); // start from beginning of the month
+
+  while (iter <= end) {
+    const year = iter.getFullYear();
+    const month = iter.getMonth(); // 0-indexed
 
     if (!calendar[year]) calendar[year] = Array(12).fill(null);
-    calendar[year][month] = { month:'', total_papers: 0, count: 0 };
+    calendar[year][month] = { month: '', total_papers: 0, count: 0 };
 
-    start.setMonth(start.getMonth() + 1);
+    iter.setMonth(iter.getMonth() + 1);
   }
 
   return calendar;
 };
+
+
