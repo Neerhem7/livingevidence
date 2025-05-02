@@ -120,7 +120,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
     }
     const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
-      return value !== undefined ? String(value) : `$${key}$`;
+      return value !== undefined ? String(value) : `0`;
     });
     onStateTextChange?.(parsedLabel);
 

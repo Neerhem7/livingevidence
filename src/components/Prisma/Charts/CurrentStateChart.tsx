@@ -68,7 +68,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
     const clickableNodes = ['analysis', 'include', 'manual'];
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
-      return value !== undefined ? String(value) : `$${key}$`;
+      return value !== undefined ? String(value) : `0`;
     });
     if (nodeId === 'excluded_by_fulltext') {
       handleOpenModal()
@@ -183,7 +183,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
   useEffect(() => {
     const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
-      return value !== undefined ? String(value) : `$${key}$`;
+      return value !== undefined ? String(value) : `0`;
     });
     onStateTextChange?.(parsedLabel);
     createSVGPath();
@@ -205,7 +205,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
             {nodeData.map((node) => {
               const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
                 const value = stats?.[key as keyof PrismaStats];
-                return value !== undefined ? String(value) : `$${key}$`;
+                return value !== undefined ? String(value) : `0`;
               });
 
               return (

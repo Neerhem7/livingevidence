@@ -68,7 +68,7 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
     const clickableNodes = ['analysis', 'include', 'manual'];
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
-      return value !== undefined ? String(value) : `$${key}$`;
+      return value !== undefined ? String(value) : `0`;
     });
     if (nodeId === 'excluded_by_fulltext') {
       handleOpenModal()
@@ -193,7 +193,7 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
           {nodeData.map((node) => {
             const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
               const value = stats?.[key as keyof PrismaStats];
-              return value !== undefined ? String(value) : `$${key}$`;
+              return value !== undefined ? String(value) : `0`;
             });
 
             return (
