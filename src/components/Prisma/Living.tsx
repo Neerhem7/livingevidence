@@ -60,13 +60,14 @@ interface LivingProps {
   onStateChange?: (activeState: string) => void;
   onStateTextChange?: (stateText: string) => void;
   activeState: string;
+  startDate:string;
 }
 
-const Living: React.FC<LivingProps> = ({ activeTab, stats, selectedMonth, onMonthChange, activeState, onStateChange, onStateTextChange }) => {
+const Living: React.FC<LivingProps> = ({ 
+  activeTab, stats,startDate, selectedMonth, onMonthChange, activeState, onStateChange, onStateTextChange }) => {
   const dispatch = useAppDispatch();
   const { livingStatsByMonth } = useSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
-  // const [selectedMonth, setSelectedMonth] = useState('');
   const [calendarData, setCalendarData] = useState<CalendarData>({});
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -76,7 +77,7 @@ const Living: React.FC<LivingProps> = ({ activeTab, stats, selectedMonth, onMont
   const currentYearMonth = `${currentYear}-${currentMonth}`;
 
   useEffect(() => {
-    const data = generateCalendarData("2021-06-01", new Date());
+    const data = generateCalendarData(startDate, new Date());
     fetchCalendarData(data, stats);
     onMonthChange?.(currentYearMonth);
   }, [stats]);

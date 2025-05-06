@@ -26,6 +26,10 @@ type PrismaStats = {
   include_n: 0,
   analysis_n: 0
 };
+type ExcludeReason = {
+  reason: string;
+  count: number;
+};
 
 interface PrismaLivingStats {
   month: string;
@@ -34,10 +38,12 @@ interface PrismaLivingStats {
 }
 
 interface PrismaStatsState {
+  projectCreationDate: string;
   currentStats: PrismaStats;
   initialStats: PrismaStats;
   livingStats: PrismaLivingStats[];
   livingStatsByMonth: PrismaStats;
+  fullTextExclusionReasions: ExcludeReason[],
   loading: boolean;
 }
 
@@ -61,9 +67,11 @@ const emptyStats: PrismaStats = {
 };
 
 const initialState: PrismaStatsState = {
+  projectCreationDate:'',
   currentStats: { ...emptyStats },
   initialStats: { ...emptyStats },
   livingStatsByMonth: { ...emptyStats},
+  fullTextExclusionReasions:[],
   livingStats: [],
   loading: false,
 };
@@ -104,7 +112,9 @@ export const fetchLivingStats = createAsyncThunk(
     const res = await axios.get(
       `${BE_Endpoints.BASE_URL_PRISMA}/monthly-included?project_id=${projectId}&clinical_question_id=${cqId}&start_date=2021-06&end_date=${endDate}`
     );
-    return res.data.monthly_counts;
+    console.info(" action.payload.livingStatsByMonth",  res.data.monthly_counts)
+    return {"livingStatsByMonth":res.data.monthly_counts, "projectCreationDate":res.data.project_created_at};
+   
   }
 );
 
@@ -117,8 +127,22 @@ export const fetchLivingStatsByMonth = createAsyncThunk(
     const res = await axios.get(
       `${BE_Endpoints.BASE_URL_PRISMA}?project_id=${projectId}&source=living&clinical_question_id=${cqId}&date=${month}`
     );
-    console.info("living stats", res.data)
     return res.data;
+  }
+);
+
+export const fetchFullTextExcludeReasons = createAsyncThunk(
+  "prisma/fetchFullTextExcludeReasons",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState() as { project: ProjectState };
+    const { projectId, cqId } = state.project;
+
+    const res = await axios.get(
+      `${BE_Endpoints.BASE_URL_PRISMA}/exclusion-reasons?project_id=${projectId}&clinical_question_id=${cqId}
+      `
+    );
+    console.log("etchFullTextExcludeReasons",res.data)
+    return res.data.data;
   }
 );
 
@@ -135,10 +159,15 @@ const prismaStatslice = createSlice({
         state.initialStats = action.payload;
       })
       .addCase(fetchLivingStats.fulfilled, (state, action) => {
-        state.livingStats = action.payload;
+        state.livingStats = action.payload.livingStatsByMonth;
+        state.projectCreationDate = action.payload.projectCreationDate;
       })
       .addCase(fetchLivingStatsByMonth.fulfilled, (state, action) => {
         state.livingStatsByMonth = action.payload;
+        
+      })
+      .addCase(fetchFullTextExcludeReasons.fulfilled, (state, action) => {
+        state.fullTextExclusionReasions= action.payload;
       });
   },
 });

@@ -9,6 +9,7 @@ import {
   fetchInitialPapers,
   fetchLivingPapers,
 } from "../../../redux/prismaPaperSlice";
+import { fetchFullTextExcludeReasons } from '../../../redux/prismaDiagramSlice';
 
 type PrismaStats = {
   total: 0,
@@ -29,6 +30,11 @@ type PrismaStats = {
   analysis_n: 0
 };
 
+type ExcludeReason = {
+  reason: string;
+  count: number;
+};
+
 interface CurrentStateChartProps {
   activeTab: string,
   nodeList: Array<any>;
@@ -37,10 +43,13 @@ interface CurrentStateChartProps {
   onStateTextChange?: (stateText: string) => void;
   activeState: string;
   stats?: PrismaStats;
+  fullTextExcludeReason: ExcludeReason[];
 }
 
-const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connections, nodeList, stats, onStateChange, onStateTextChange }) => {
+const CurrentStateChart: React.FC<CurrentStateChartProps> = (
+  { activeTab, connections, nodeList, stats, onStateChange, onStateTextChange, fullTextExcludeReason }) => {
   const dispatch = useAppDispatch();
+
   const [showModal, setShowModal] = useState(false);
 
   const nodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -65,13 +74,15 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
   };
 
   const handleNodeClick = (nodeId: string, nodeLabel: string) => {
-    const clickableNodes = ['analysis', 'include', 'manual'];
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
       return value !== undefined ? String(value) : `0`;
     });
     if (nodeId === 'excluded_by_fulltext') {
-      handleOpenModal()
+      dispatch(fetchFullTextExcludeReasons());
+
+
+      handleOpenModal();
     }
     else {
       if (activeTab === "Current State") {
@@ -224,15 +235,22 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({ activeTab, connec
           </div>
         </div>
       </div>
-      <Modal show={showModal} onHide={handleCloseModal} size="sm">
-        <Modal.Header closeButton>
-          <Modal.Title>Excluded by full text review</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Full-text articles were excluded by the following reasons:
-        </Modal.Body>
+      <Modal show={showModal} onHide={handleCloseModal} dialogClassName="custom-modal-width">
+  <Modal.Header closeButton>
+    <Modal.Title>Excluded by full text review</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <p>Full-text articles were excluded by the following reasons:</p>
+    <ul style={{ paddingLeft: '20px' }}>
+      {fullTextExcludeReason.map((item, index) => (
+        <li key={index}>
+          <strong>{item.reason}</strong>: {item.count}
+        </li>
+      ))}
+    </ul>
+  </Modal.Body>
+</Modal>
 
-      </Modal>
     </>
   );
 };

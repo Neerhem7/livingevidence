@@ -64,7 +64,7 @@ interface PrismaDiagramProps {
 
 const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth, activeState, onMonthChange,onTabChange,onStateChange, onStateTextChange }) => {
 
-  const { currentStats, initialStats, livingStats } = useSelector((state: RootState) => state.prismaDiagram);
+  const { currentStats, initialStats, livingStats, fullTextExclusionReasions, projectCreationDate } = useSelector((state: RootState) => state.prismaDiagram);
   const [stats, setStats] = useState<PrismaStats>(defaultStats);
   const [living, setLiving] = useState<PrismaLivingStats[]>([]);
 
@@ -78,6 +78,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
       onStateTextChange={onStateTextChange}
       nodeList={prisma_data.current_state_nodes} 
       connections={prisma_data.current_state_connections}
+      fullTextExcludeReason={fullTextExclusionReasions}
       stats={stats} />,
       onClick: () => onTabChange?.("Current State"),
     },
@@ -96,6 +97,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
     {
       label: "Living Search",
       content: <Living  
+      startDate={projectCreationDate}
       activeState={activeState}
       onStateChange={onStateChange}
       onStateTextChange={onStateTextChange}
