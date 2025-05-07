@@ -21,4 +21,5 @@
     height: 810px;
     display: flex;
     border: 1px solid  var(--primary-color);
+    background-color: var(--background-color);
 }

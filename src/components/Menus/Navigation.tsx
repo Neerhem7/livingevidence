@@ -46,6 +46,7 @@ const Navigation: React.FC<Props> = () => {
                         <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/`}>Home</Link></li> 
                         <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/concept`}>Concept</Link></li>
                         <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/prisma`}>Prisma</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/itable`}>ITable</Link></li>
                     </ul>
                     <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}

@@ -5,12 +5,27 @@
   --forth-color: #F6F8D5;
   --background-color: #f8f9fa;
   --text-color: #212529;
+  --body-color: #EEEEEE;
+  --font-family: 'Arial', sans-serif
 }
 
 body {
-  background-color: var(--background-color) !important;
+  font-family: var(--font-family);
+  background-color: var(--body-color) !important;
   color: var(--text-color);
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+p {
+  font-family: var(--font-family);
+  color: var(--text-color);
+  font-weight: 400;
+}
+
 
 .root {
   background-color: var(--background-color) !important;
@@ -30,13 +45,13 @@ div{
 }
 
 .btn-primary {
-  background-color: var(--secondary-color) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--third-color) !important;
 }
 
 .btn-secondary {
   background-color: var(--secondary-color) !important;
-  border-color: var(--secondary-color) !important;
+  border-color: var(--third-color) !important;
 }
 
 .btn-close{
@@ -69,4 +84,13 @@ div{
 
 .text-muted{
   color: var(--text-color) !important;
+}
+
+
+.icon-20 {
+  font-size: 20px;
+}
+
+.icon-30 {
+  font-size: 30px;
 }

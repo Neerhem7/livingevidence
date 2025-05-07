@@ -10,6 +10,8 @@ import Home from './Pages/Home';
 import Concept from './Pages/Concept';
 import Theme from './Pages/Theme';
 import Prisma from './Pages/Prisma';
+import ITable from './Pages/ITable';
+import { Container } from 'react-bootstrap';
 
 const App: React.FC = () => {
   const theme = useSelector((state: RootState) => state.theme);
@@ -29,21 +31,23 @@ const App: React.FC = () => {
     document.documentElement.style.setProperty('--forth-color', theme.forthCcolor);
     document.documentElement.style.setProperty('--background-color', theme.backgroundColor);
     document.documentElement.style.setProperty('--text-color', theme.textColor);
+    document.documentElement.style.setProperty('--body-color', theme.bodyColor);
   }, [theme]);
 
 
   return (
     <Router>
       <Navigation></Navigation>
-      <div className='contanier mt-4'>
+      <Container fluid className='mt-4'>
         <Routes>
           <Route path="/project/:projectId/cq/:cqId" element={<Home />} />
           <Route path="/project/:projectId/cq/:cqId/concept" element={<Concept />} />
           <Route path="/project/:projectId/cq/:cqId/theme" element={<Theme />} />
           <Route path="/project/:projectId/cq/:cqId/prisma" element={<Prisma />} />
+          <Route path="/project/:projectId/cq/:cqId/itable" element={<ITable />} />
           {/* <Route path="/" element={<Navigate to="/project/1/cq/1" />} /> */}
         </Routes>
-      </div>
+      </Container>
     </Router>
   );
 }

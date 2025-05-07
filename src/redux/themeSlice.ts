@@ -8,7 +8,8 @@ interface ThemeState {
     thirdColor: string,
     forthCcolor: string,
     backgroundColor: string,
-    textColor: string
+    textColor: string,
+    bodyColor: string
 }
 
 const initialState: ThemeState = {
@@ -19,6 +20,7 @@ const initialState: ThemeState = {
     forthCcolor: '#F6F8D5',
     backgroundColor: '#f8f9fa',
     textColor: '#212529',
+    bodyColor:'#EEEEEE',
 }
 
 const themeSlice = createSlice({
@@ -33,10 +35,12 @@ const themeSlice = createSlice({
                 state.mode = 'dark';
                 state.backgroundColor = '#212529';
                 state.textColor = '#f8f9fa';
+                state.bodyColor ='#393E46'
             } else {
                 state.mode = 'light';
                 state.backgroundColor = '#f8f9fa';
                 state.textColor = '#212529';
+                state.bodyColor ='#EEEEEE';
             }
         },
     }
