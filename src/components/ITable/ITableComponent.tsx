@@ -47,7 +47,43 @@ const ITableFromItems: React.FC<Props> = ({ items,headerRows,selectedHeaderKeys,
        
         <div>
         <Dropdown drop="down">
-            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+            <Dropdown.Toggle variant="info" id="dropdown-basic">
+              Select Filters
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu as="div" className="p-3 column-selector-dropdown" popperConfig={{ modifiers: [{ name: 'flip', enabled: false }] }}>
+              {/* <ColumnSelectorPanel
+                nodes={headerRoots}
+                selectedHeaderKeys={selectedHeaderKeys}
+                setSelectedHeaderKeys={setSelectedHeaderKeys}
+                toggleHeaderKey={toggleHeaderKey}
+                toggleParent={toggleParent}
+                isParentChecked={isParentChecked}
+              /> */}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div>
+        <Dropdown drop="down">
+            <Dropdown.Toggle variant="info" id="dropdown-basic">
+              Select Filters
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu as="div" className="p-3 column-selector-dropdown" popperConfig={{ modifiers: [{ name: 'flip', enabled: false }] }}>
+              {/* <ColumnSelectorPanel
+                nodes={headerRoots}
+                selectedHeaderKeys={selectedHeaderKeys}
+                setSelectedHeaderKeys={setSelectedHeaderKeys}
+                toggleHeaderKey={toggleHeaderKey}
+                toggleParent={toggleParent}
+                isParentChecked={isParentChecked}
+              /> */}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div>
+        <Dropdown drop="down">
+            <Dropdown.Toggle variant="info" id="dropdown-basic">
               Select Filters
             </Dropdown.Toggle>
 
@@ -90,7 +126,7 @@ const ITableFromItems: React.FC<Props> = ({ items,headerRows,selectedHeaderKeys,
                 (node) => selectedHeaderKeys.has(node.id)
               );
               return (
-                <tr key={item.paper_id}>
+                <tr key={item.paper_id} onClick={()=>{console.info("items", item.paper_id)}}>
                   {selectedHeaderKeys.size > 0 ? (
                     leafNodes.map((leaf) => (
                       <td

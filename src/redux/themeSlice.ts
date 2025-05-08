@@ -17,7 +17,7 @@ const initialState: ThemeState = {
     primaryColor: '#4F959D',
     secondaryColor: '#205781',
     thirdColor: '#98D2C0',
-    forthCcolor: '#F6F8D5',
+    forthCcolor: '#F1EFEC',
     backgroundColor: '#f8f9fa',
     textColor: '#212529',
     bodyColor:'#EEEEEE',

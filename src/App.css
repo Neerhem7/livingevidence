@@ -2,7 +2,7 @@
   --primary-color: #205781;
   --secondary-color: #4F959D;
   --third-color: #98D2C0;
-  --forth-color: #F6F8D5;
+  --forth-color: #F1EFEC;
   --background-color: #f8f9fa;
   --text-color: #212529;
   --body-color: #EEEEEE;
@@ -51,6 +51,12 @@ div{
 
 .btn-secondary {
   background-color: var(--secondary-color) !important;
+  border-color: var(--third-color) !important;
+}
+
+
+.btn-info {
+  background-color: var(--forth-color) !important;
   border-color: var(--third-color) !important;
 }
 

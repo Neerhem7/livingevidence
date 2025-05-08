@@ -7,8 +7,6 @@ import { ExtractionNode, Item } from '../components/ITable/type';
 import ColumnSelectorPanel from '../components/ITable/ColumnSelectorPanel';
 
 
-
-
 const ITable = () => {
   const items: Item[] = extractionResults.items;
   const [selectedHeaderKeys, setSelectedHeaderKeys] = useState<Set<number>>(new Set());
@@ -17,7 +15,16 @@ const ITable = () => {
   const [panelCollapsed, setPanelCollapsed] = useState(true);
   const [parentAbbreviations, setParentAbbreviations] = useState<string[]>([]);
 
+  const extractAbbreviations = (nodes: ExtractionNode[]) => {
+    const abbreviations = nodes
+      .filter(node => node.parent_id === null)
+      .map(node => node.name.split(/\s+/)
+        .map(word => word[0])
+        .join('')
+        .toUpperCase());
 
+    setParentAbbreviations(abbreviations);
+  };
 
 
   const buildTree = (nodes: ExtractionNode[]): ExtractionNode[] => {
@@ -91,15 +98,11 @@ const ITable = () => {
     return tree.flatMap(getLeafNodes);
   };
 
-
-
-
-
   useEffect(() => {
     if (!items.length) return;
     const roots = buildTree(items[0].extraction_results);
     setHeaderRoots(roots);
-    console.info("headerroort", roots)
+    extractAbbreviations(roots); 
     const allLeafs = roots.flatMap(getLeafNodes);
     setSelectedHeaderKeys(new Set(allLeafs.map(node => node.id)));
   }, [items]);
@@ -121,7 +124,7 @@ const ITable = () => {
           <h1>Interactive Table</h1>
         </Col>
       </Row>
-      <div  className='d-flex gap-2 w-100'>
+      <div className='d-flex gap-2 w-100'>
 
         <ColumnSelectorPanel
           nodes={headerRoots}
