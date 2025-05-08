@@ -149,12 +149,12 @@ const ColumnSelectorPanel: React.FC<Props> = ({
             <i className="fa-solid fa-table-list"></i>
           </Button>
 
-          {/* <i
+          <i
             className="fa-solid fa-person-military-to-person icon-30"
-          ></i> */}
-          {parentAbbreviations.map((value, index) => (
+          ></i>
+          {/* {parentAbbreviations.map((value, index) => (
             <span key={index}>{value}</span>
-          ))}
+          ))} */}
         </div>
 
         : < >
