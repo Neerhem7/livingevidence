@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExtractionNode } from './ITableComponent';
+import { ExtractionNode } from './type';
 import { Col, Button } from 'react-bootstrap';
 
 interface Props {
@@ -61,15 +61,15 @@ const ColumnSelectorPanel: React.FC<Props> = ({
       case 0:
         return 'fw-semibold';
       case 1:
-        return 'fw-normal fst-italic'; // Font-weight 400 (normal)
+        return 'fw-normal fst-italic'; 
       case 2:
-        return 'fw-light'; // Font-weight 300 (light)
+        return 'fw-light'; 
       case 3:
-        return 'fw-bold'; // Font-weight 700 (bold)
+        return 'fw-bold'; 
       case 4:
-        return 'fw-normal'; // Font-weight 400 (normal) and italic
+        return 'fw-normal'; 
       default:
-        return 'fw-normal'; // Font-weight 400 for other levels
+        return 'fw-normal';
     }
   };
 

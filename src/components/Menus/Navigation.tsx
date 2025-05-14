@@ -43,10 +43,10 @@ const Navigation: React.FC<Props> = () => {
                 </div> 
                 : <>
                     <ul className="navbar-nav">
-                        <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/`}>Home</Link></li> 
-                        <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/concept`}>Concept</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/prisma`}>Prisma</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to={`/project/${projectId}/cq/${cqId}/itable`}>ITable</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/`}>Home</Link></li> 
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/concept`}>Concept</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/prisma`}>Prisma</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/itable`}>ITable</Link></li>
                     </ul>
                     <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}

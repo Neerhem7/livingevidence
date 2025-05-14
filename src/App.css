@@ -44,25 +44,55 @@ div{
   color: var(--text-color) !important;
 }
 
+.hover-nav:hover {
+  background-color: #aad6ff1c;
+  color: var(--secondary-color)!important;               /* Bootstrap primary color */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--third-color) !important;
+  color: #fff;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
+
 
 .btn-secondary {
   background-color: var(--secondary-color) !important;
   border-color: var(--third-color) !important;
+  color: #fff;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-
+.btn-secondary:hover {
+  border-color: var(--third-color) !important;
+}
 .btn-info {
   background-color: var(--forth-color) !important;
   border-color: var(--third-color) !important;
+}
+.btn-info:hover {
+  border-color: var(--secondary-color) !important;
 }
 
 .btn-close{
   color: var(--third-color) !important;
 }
+
+
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-info:hover,
+.btn-info:hover,
+.btn-close:hover{
+  filter: brightness(1.45);
+}
+
+
 
 .card-header{
   background-color: var(--background-color) !important;

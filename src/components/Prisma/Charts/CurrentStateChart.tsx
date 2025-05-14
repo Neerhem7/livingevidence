@@ -236,20 +236,20 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
         </div>
       </div>
       <Modal show={showModal} onHide={handleCloseModal} dialogClassName="custom-modal-width">
-  <Modal.Header closeButton>
-    <Modal.Title>Excluded by full text review</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <p>Full-text articles were excluded by the following reasons:</p>
-    <ul style={{ paddingLeft: '20px' }}>
-      {fullTextExcludeReason.map((item, index) => (
-        <li key={index}>
-          <strong>{item.reason}</strong>: {item.count}
-        </li>
-      ))}
-    </ul>
-  </Modal.Body>
-</Modal>
+        <Modal.Header closeButton>
+          <Modal.Title>Excluded by full text review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Full-text articles were excluded by the following reasons:</p>
+          <ul style={{ paddingLeft: '20px' }}>
+            {fullTextExcludeReason.map((item, index) => (
+              <li key={index}>
+                <strong>{item.reason}</strong>: {item.count}
+              </li>
+            ))}
+          </ul>
+        </Modal.Body>
+      </Modal>
 
     </>
   );

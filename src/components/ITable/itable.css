@@ -14,15 +14,18 @@
 
 }
 
-/* .custom-table td {
+.custom-table td {
     padding: 10px;
     text-align: left;
-    border: 2px solid #007bff;
-    background-color: #e9ecef;
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
+    border: 1px solid var(--secondary-color) !important;
   }
-   */
+  
 
-
+.table-toolbar{
+  background-color: var(--background-color);
+}
 
 
 .column-selector {
@@ -43,18 +46,71 @@
 }
 
 
+
 .checkbox-level-0 input[type="checkbox"] {
   accent-color: var(--primary-color);
+  cursor: pointer;
 }
 
 .checkbox-level-1 input[type="checkbox"] {
   accent-color: var(--secondary-color);
+  cursor: pointer;
 }
 
 .checkbox-level-2 input[type="checkbox"] {
   accent-color: var(--third-color);
+  cursor: pointer;
 }
 
 .checkbox-level-3 input[type="checkbox"] {
   accent-color: var(--forth-color);
+  cursor: pointer;
+}
+
+
+.custom-modal-width {
+  max-width: 800px !important;
+}
+
+.list-level-0 {
+  border-left: 4px solid var(--primary-color);
+  padding: 8px 12px;
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 4px;
+}
+
+.list-level-1 {
+  border-left: 4px solid var(--secondary-color);
+  padding: 8px 20px;
+  background: rgba(108, 117, 125, 0.05);
+  border-radius: 4px;
+}
+
+.list-level-2 {
+  border-left: 4px solid var(--third-color);
+  padding: 8px 28px;
+  background: rgba(255, 193, 7, 0.05);
+  border-radius: 4px;
+}
+
+.list-level-3 {
+  border-left: 4px solid var(--forth-color);
+  padding: 8px 36px;
+  background: rgba(40, 167, 69, 0.05);
+  border-radius: 4px;
+}
+
+li {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

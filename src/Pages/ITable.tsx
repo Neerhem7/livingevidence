@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import ITableComponent from '../components/ITable/ITableComponent';
+import ITableTable from '../components/ITable/ITableTable';
 import { extractionResults } from '../components/ITable/test';
 import { Col, Row } from 'react-bootstrap';
 import { ExtractionNode, Item } from '../components/ITable/type';
 import ColumnSelectorPanel from '../components/ITable/ColumnSelectorPanel';
+import TableToolBar from '../components/ITable/TableToolBar';
 
 
 const ITable = () => {
@@ -14,17 +15,6 @@ const ITable = () => {
   const [headerRows, setHeaderRows] = useState<any[][]>([]);
   const [panelCollapsed, setPanelCollapsed] = useState(true);
   const [parentAbbreviations, setParentAbbreviations] = useState<string[]>([]);
-
-  const extractAbbreviations = (nodes: ExtractionNode[]) => {
-    const abbreviations = nodes
-      .filter(node => node.parent_id === null)
-      .map(node => node.name.split(/\s+/)
-        .map(word => word[0])
-        .join('')
-        .toUpperCase());
-
-    setParentAbbreviations(abbreviations);
-  };
 
 
   const buildTree = (nodes: ExtractionNode[]): ExtractionNode[] => {
@@ -102,7 +92,6 @@ const ITable = () => {
     if (!items.length) return;
     const roots = buildTree(items[0].extraction_results);
     setHeaderRoots(roots);
-    extractAbbreviations(roots); 
     const allLeafs = roots.flatMap(getLeafNodes);
     setSelectedHeaderKeys(new Set(allLeafs.map(node => node.id)));
   }, [items]);
@@ -125,7 +114,6 @@ const ITable = () => {
         </Col>
       </Row>
       <div className='d-flex gap-2 w-100'>
-
         <ColumnSelectorPanel
           nodes={headerRoots}
           selectedHeaderKeys={selectedHeaderKeys}
@@ -137,12 +125,14 @@ const ITable = () => {
         <div className='table-wrapper' style={{
           width: panelCollapsed ? '95.83%' : '80.33%',
         }}>
-          <ITableComponent
+          <TableToolBar/>
+          <ITableTable
             items={items}
             getLeafNodesFromItem={getLeafNodesFromItem}
             selectedHeaderKeys={selectedHeaderKeys}
-            headerRows={headerRows} />
-
+            headerRows={headerRows}
+            headerRoots={headerRoots} />
+            
         </div>
       </div>
     </>
