@@ -1,15 +1,20 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Col, Row, Card } from 'react-bootstrap';
+import { useAppDispatch, RootState } from "../redux/store";
 import ITableTable from '../components/ITable/ITableTable';
-import { extractionResults } from '../components/ITable/test';
-import { Col, Row } from 'react-bootstrap';
 import { ExtractionNode, Item } from '../components/ITable/type';
 import ColumnSelectorPanel from '../components/ITable/ColumnSelectorPanel';
 import TableToolBar from '../components/ITable/TableToolBar';
-
+import {
+  fetchITableData
+} from "../redux/itableSlice";
 
 const ITable = () => {
-  const items: Item[] = extractionResults.items;
+  const dispatch = useAppDispatch();
+
+  const { items, filters, pageInfo } = useSelector((state: RootState) => state.itable);
   const [selectedHeaderKeys, setSelectedHeaderKeys] = useState<Set<number>>(new Set());
   const [headerRoots, setHeaderRoots] = useState<ExtractionNode[]>([]);
   const [headerRows, setHeaderRows] = useState<any[][]>([]);
@@ -89,6 +94,10 @@ const ITable = () => {
   };
 
   useEffect(() => {
+    dispatch(fetchITableData({}));
+  }, []);
+
+  useEffect(() => {
     if (!items.length) return;
     const roots = buildTree(items[0].extraction_results);
     setHeaderRoots(roots);
@@ -113,28 +122,32 @@ const ITable = () => {
           <h1>Interactive Table</h1>
         </Col>
       </Row>
-      <div className='d-flex gap-2 w-100'>
-        <ColumnSelectorPanel
-          nodes={headerRoots}
-          selectedHeaderKeys={selectedHeaderKeys}
-          setSelectedHeaderKeys={setSelectedHeaderKeys}
-          togglePanel={() => setPanelCollapsed(!panelCollapsed)}
-          panelCollapsed={panelCollapsed}
-          parentAbbreviations={parentAbbreviations}
-        />
-        <div className='table-wrapper' style={{
-          width: panelCollapsed ? '95.83%' : '80.33%',
-        }}>
-          <TableToolBar/>
-          <ITableTable
-            items={items}
-            getLeafNodesFromItem={getLeafNodesFromItem}
+      <Row className="m-4" style={{ height: '800px' }}>
+        <Col sm={3} className="overflow-auto" style={{ height: '100%' }}>
+          <ColumnSelectorPanel
+            nodes={headerRoots}
             selectedHeaderKeys={selectedHeaderKeys}
-            headerRows={headerRows}
-            headerRoots={headerRoots} />
-            
-        </div>
-      </div>
+            setSelectedHeaderKeys={setSelectedHeaderKeys}
+            togglePanel={() => setPanelCollapsed(!panelCollapsed)}
+            panelCollapsed={panelCollapsed}
+            parentAbbreviations={parentAbbreviations}
+          />
+        </Col>
+        <Col sm={9} className="d-flex flex-column gap-4 overflow-auto" style={{ height: '100%' }}>
+          <Card><TableToolBar filters={filters} /></Card>
+          <Card className=" flex-grow-1 overflow-auto">
+            <ITableTable
+              items={items}
+              getLeafNodesFromItem={getLeafNodesFromItem}
+              selectedHeaderKeys={selectedHeaderKeys}
+              headerRows={headerRows}
+              headerRoots={headerRoots}
+              pagination={pageInfo}
+            />
+          </Card>
+        </Col>
+      </Row>
+
     </>
   );
 }

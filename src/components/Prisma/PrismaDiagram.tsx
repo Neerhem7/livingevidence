@@ -129,9 +129,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
   }, [activeTab, currentStats, initialStats, livingStats])
 
   return (
-    <div>
       <Tabs tabs={tabData} />
-    </div>
   );
 };
 

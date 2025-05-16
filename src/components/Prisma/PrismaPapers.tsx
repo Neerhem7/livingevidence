@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { Card, Container, Row, Col, Modal, Button, Spinner, Badge } from 'react-bootstrap';
+import { Card, Row, Col, Modal, Button, Spinner, Badge } from 'react-bootstrap';
+import Pagination from 'react-bootstrap/Pagination';
 import './prisma.css'
 import {
   fetchCurrentPapers,
@@ -37,7 +38,7 @@ interface PrismaPapersProps {
   activeStateText: string;
 }
 
-const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, activeState , activeStateText}) => {
+const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, activeState, activeStateText }) => {
   const dispatch = useAppDispatch();
 
   const { current, initial, living, loading } = useSelector((state: RootState) => state.prismaPaper);
@@ -95,20 +96,20 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
     }
   };
 
-  const searchPaper =()=>{
+  const searchPaper = () => {
     const pageSize = pagination?.pageSize || 10;
     if (activeTab === "Current State") {
-      dispatch(fetchCurrentPapers({ stage: activeState, page: 1, size: pageSize , searchKey:searchText}));
+      dispatch(fetchCurrentPapers({ stage: activeState, page: 1, size: pageSize, searchKey: searchText }));
     } else if (activeTab === "Initial Search") {
-      dispatch(fetchInitialPapers({ stage: activeState, page: 1, size: pageSize, searchKey:searchText }));
+      dispatch(fetchInitialPapers({ stage: activeState, page: 1, size: pageSize, searchKey: searchText }));
     } else if (activeTab === "Living Search") {
-      dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page: 1, size: pageSize, searchKey:searchText }));
+      dispatch(fetchLivingPapers({ stage: activeState, month: selectedMonth, page: 1, size: pageSize, searchKey: searchText }));
     }
   }
-  const closeSearch=()=>{
+  const closeSearch = () => {
     const pageSize = pagination?.pageSize || 10;
     if (activeTab === "Current State") {
-      dispatch(fetchCurrentPapers({ stage: activeState, page: 1, size: pageSize}));
+      dispatch(fetchCurrentPapers({ stage: activeState, page: 1, size: pageSize }));
     } else if (activeTab === "Initial Search") {
       dispatch(fetchInitialPapers({ stage: activeState, page: 1, size: pageSize }));
     } else if (activeTab === "Living Search") {
@@ -135,19 +136,19 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
 
 
   return (
-    <Container className="mt-4">
+    <>
       <Row>
         <Col>
           <Card className="shadow-sm">
             <Card.Header className="d-flex align-items-center">
-              <strong>Study List | </strong>
+              <strong className='border-end border-end-2 pe-1 border-black'>Study List </strong>
               <span className="ms-2">{activeStateText}</span>
 
               <div className="ms-auto d-flex align-items-center">
                 {showSearch && (
                   <div className="input-group me-2" style={{ width: '220px' }}>
-                    <span className="input-group-text" style={{cursor:'pointer'}}>
-                      <i className="fa-solid fa-magnifying-glass"  onClick={()=>{
+                    <span className="input-group-text" style={{ cursor: 'pointer' }}>
+                      <i className="fa-solid fa-magnifying-glass" onClick={() => {
                         searchPaper()
                       }}></i>
                     </span>
@@ -213,52 +214,59 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
               ) : (
                 <div className="text-center">
                   <div className="p-4 border rounded shadow-sm" style={{ backgroundColor: '#f8f9fa' }}>
-                    {/* <i className="bi bi-info-circle" style={{ fontSize: '2rem', color: '#6c757d' }}></i> */}
                     <h5 className="mt-3" style={{ color: '#6c757d' }}>No papers found</h5>
-                    {/* <p className="text-muted">Try changing filters or check back later.</p> */}
                   </div>
                 </div>
               )}
             </Card.Body>
 
             <Card.Footer className="d-flex align-items-center justify-content-between papers-footer">
-              <div className="">
-                {pagination && (
-                  <>
-                    <Button
-                      variant="link"
-                      disabled={!pagination.hasPrevious}
-                      onClick={() => changePage(1)}
-                    >
-                      First
-                    </Button>
-                    <Button
-                      variant="link"
-                      disabled={!pagination.hasPrevious}
-                      onClick={() => changePage(pagination.currentPage - 1)}
-                    >
-                      Previous
-                    </Button>
-                    <span>
-                      Page {pagination.totalPages > 0 ? pagination.currentPage : 0} of {pagination.totalPages}
-                    </span>
-                    <Button
-                      variant="link"
-                      disabled={!pagination.hasNext}
-                      onClick={() => changePage(pagination.currentPage + 1)}
-                    >
-                      Next
-                    </Button>
-                    <Button
-                      variant="link"
-                      disabled={!pagination.hasNext}
-                      onClick={() => changePage(pagination.totalPages)}
-                    >
-                      Last
-                    </Button>
-                  </>
-                )}
-              </div>
+            {pagination && (
+              <Pagination className='mb-0'>
+                <Pagination.First disabled={!pagination.hasPrevious}  onClick={() => changePage(1)}/>
+                <Pagination.Prev  disabled={!pagination.hasPrevious} onClick={() => changePage(pagination.currentPage - 1)}/>
+                <Pagination.Item disabled>Page</Pagination.Item>
+                <Pagination.Item disabled>{pagination.totalPages > 0 ? pagination.currentPage : 0}</Pagination.Item>
+                <Pagination.Item disabled> of</Pagination.Item>
+                <Pagination.Item disabled>{pagination.totalPages}</Pagination.Item>
+                <Pagination.Next disabled={!pagination.hasNext}  onClick={() => changePage(pagination.currentPage + 1)}/>
+                <Pagination.Last disabled={!pagination.hasNext}  onClick={() => changePage(pagination.totalPages)}/>
+              </Pagination>)}
+              {/* {pagination && (
+                <>
+                  <Button
+                    variant="link"
+                    disabled={!pagination.hasPrevious}
+                    onClick={() => changePage(1)}
+                  >
+                    First
+                  </Button>
+                  <Button
+                    variant="link"
+                    disabled={!pagination.hasPrevious}
+                    onClick={() => changePage(pagination.currentPage - 1)}
+                  >
+                    Previous
+                  </Button>
+                  <span>
+                    Page {pagination.totalPages > 0 ? pagination.currentPage : 0} of {pagination.totalPages}
+                  </span>
+                  <Button
+                    variant="link"
+                    disabled={!pagination.hasNext}
+                    onClick={() => changePage(pagination.currentPage + 1)}
+                  >
+                    Next
+                  </Button>
+                  <Button
+                    variant="link"
+                    disabled={!pagination.hasNext}
+                    onClick={() => changePage(pagination.totalPages)}
+                  >
+                    Last
+                  </Button>
+                </>
+              )} */}
             </Card.Footer>
           </Card>
         </Col>
@@ -287,7 +295,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({ activeTab, selectedMonth, a
           </Button>
         </Modal.Footer>
       </Modal>
-    </Container>
+    </>
   );
 };
 

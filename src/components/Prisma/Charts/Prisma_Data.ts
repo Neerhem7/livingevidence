@@ -2,9 +2,9 @@ import { PRISMA_NODES } from "./Constants"
 
 export const prisma_data = {
     current_state_nodes: [
-        { id: 'initial', label: PRISMA_NODES.INITIAL_SEARCH, x: 20, y: 0, styleType: 'main', clickAble:false },
-        { id: 'living', label: PRISMA_NODES.AUTO_UPDATE, x: 240, y: 0, styleType: 'main', clickAble:false },
-        { id: 'manual', label: PRISMA_NODES.MANUAL_UPDATE, x: 460, y: 0, styleType: 'secondary', clickAble:true },
+        { id: 'initial', label: PRISMA_NODES.INITIAL_SEARCH, x: 0, y: 0, styleType: 'main', clickAble:false },
+        { id: 'living', label: PRISMA_NODES.AUTO_UPDATE, x: 220, y: 0, styleType: 'main', clickAble:false },
+        { id: 'manual', label: PRISMA_NODES.MANUAL_UPDATE, x: 440, y: 0, styleType: 'secondary', clickAble:true },
         { id: 'total', label: PRISMA_NODES.TOTAL_IDENTIFIED, x: 150, y: 100, styleType: 'main', clickAble:false },
         { id: 'duplicate', label: PRISMA_NODES.DUPLICATES, x: 400, y: 150, styleType: 'main', clickAble:false },
         { id: 'unique', label: PRISMA_NODES.AFTER_DUPLICATES, x: 150, y: 190, styleType: 'main', clickAble:false },

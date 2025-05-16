@@ -7,8 +7,8 @@ interface ProjectState {
 }
 
 const initialState: ProjectState = {
-  projectId: "8",
-  cqId: "1",
+  projectId: "202",
+  cqId: "116",
 };
 
 const projectSlice = createSlice({

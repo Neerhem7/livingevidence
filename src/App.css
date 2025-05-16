@@ -1,6 +1,8 @@
 :root {
   --primary-color: #205781;
+  --primary-color-light: #e9f6ff;
   --secondary-color: #4F959D;
+  --secondary-color-light: #a9eef6;
   --third-color: #98D2C0;
   --forth-color: #F1EFEC;
   --background-color: #f8f9fa;
@@ -27,6 +29,9 @@ p {
 }
 
 
+
+
+
 .root {
   background-color: var(--background-color) !important;
   color: var(--text-color);
@@ -50,6 +55,18 @@ div{
   transition: background-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .btn-primary {
@@ -89,7 +106,7 @@ div{
 .btn-info:hover,
 .btn-info:hover,
 .btn-close:hover{
-  filter: brightness(1.45);
+  filter: brightness(1.2);
 }
 
 
@@ -129,4 +146,38 @@ div{
 
 .icon-30 {
   font-size: 30px;
+}
+
+
+
+.border-primary{
+  border: 1px solid var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.border-secondary{
+  border: 1px solid var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
+}
+
+.back-primary{
+  background-color: var(--primary-color) !important;
+  color: var(--background-color) !important;
+}
+.back-primary-lg{
+  background-color: var(--primary-color-light) !important;
+  color: var(--background-color) !important;
+}
+
+
+.back-secondary{
+  background-color: var(--secondary-color) !important;
+  color: var(--background-color) !important;
+  
+}
+
+.back-secondary-lg{
+  background-color: var(--secondary-color-light) !important;
+  color: var(--background-color) !important;
+  
 }

@@ -1,10 +1,11 @@
 // components/Tabs.tsx
 import React, { useState, ReactNode } from "react";
 import './Tab.css'
+import { Button, Card } from "react-bootstrap";
 type Tab = {
   label: string;
   content: ReactNode;
-  onClick?: () => void; 
+  onClick?: () => void;
 };
 
 type TabsProps = {
@@ -20,24 +21,22 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
   };
 
   return (
-    <div className="w-full">
-      <div className="tab-header">
+    <>
+      <div className="d-flex">
         {tabs.map((tab, index) => (
-          <button
+          <Button
             key={index}
-            className={`tab-header-btn ${
-                index === activeIndex && "active-btn"
-              }`}
+            className={`btn ${index === activeIndex ? "btn-secondary" : "btn-primary"}`}
             onClick={() => handleTabClick(index)}
           >
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
-      <div className="tab-body p-4 border border-t-0 rounded-b-lg shadow-sm">
+      <Card className="tab-body p-4 rounded-b-lg shadow-sm">
         {tabs[activeIndex].content}
-      </div>
-    </div>
+      </Card>
+    </>
   );
 };
 

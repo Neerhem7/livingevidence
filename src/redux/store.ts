@@ -4,13 +4,15 @@ import projectReducer from './projectSlice';
 import themeReducer from './themeSlice';
 import prismaPaperReducer from './prismaPaperSlice';
 import prismaDiagramReducer from './prismaDiagramSlice';
+import iTableReducer from './itableSlice'
 
 export const store  = configureStore({
     reducer: {
         project: projectReducer,
         theme:  themeReducer,
         prismaPaper: prismaPaperReducer,
-        prismaDiagram : prismaDiagramReducer
+        prismaDiagram : prismaDiagramReducer,
+        itable : iTableReducer
     },
 });
 

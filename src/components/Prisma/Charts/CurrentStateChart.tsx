@@ -211,7 +211,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
           ))}
         </svg>
 
-        <div className="org-chart container text-center">
+        <div className="org-chart text-center">
           <div className="justify-content-center position-relative w-100 h-100">
             {nodeData.map((node) => {
               const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {

@@ -1,8 +1,5 @@
 .tab-header{
     display: flex;
-    gap: 3px;
-    align-items: center;
-    justify-content: center;
 }
 
 .tab-header-btn{
@@ -18,8 +15,8 @@
 
 
 .tab-body{
-    height: 810px;
+    height: 810px !important;
     display: flex;
-    border: 1px solid  var(--primary-color);
-    background-color: var(--background-color);
+    /* border: 1px solid  var(--primary-color); */
+    background-color: var(--background-color) !important;
 }

@@ -13,10 +13,12 @@ import {
   fetchInitialStats,
   fetchLivingStats,
 } from "../redux/prismaDiagramSlice";
+import useMediaQuery from '../hooks/useMediaQuery';
 
 
 
 const Prisma: React.FC = () => {
+  const isMobileView = useMediaQuery
   const dispatch = useAppDispatch();
 
   const currentDate = new Date();
@@ -49,8 +51,8 @@ const Prisma: React.FC = () => {
   return (
     <div>
       <h3 style={{ textAlign: 'center' }}>PRISMA</h3>
-      <Row>
-        <Col className='m-4' sm={6}>
+      <Row className='mt-5 mb-5'> 
+        <Col className='order-2 order-sm-1 w-full h-100' sm={6}>
           <PrismaDiagram onTabChange={handleTabChange} 
            onMonthChange={setSelectedMonth}
            onStateChange={setActiveState}
@@ -59,7 +61,7 @@ const Prisma: React.FC = () => {
            activeTab={activeTab}
            activeState={activeState} />
         </Col>
-        <Col>
+        <Col className='order-1 order-sm-2' sm={6}>
           <PrismaPapers activeTab={activeTab}  selectedMonth={selectedMonth} activeState={activeState} activeStateText={activeStateText} />
         </Col>
       </Row>

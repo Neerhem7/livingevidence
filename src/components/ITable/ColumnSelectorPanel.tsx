@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ExtractionNode } from './type';
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, Card } from 'react-bootstrap';
 
 interface Props {
   nodes: ExtractionNode[];
@@ -61,18 +61,17 @@ const ColumnSelectorPanel: React.FC<Props> = ({
       case 0:
         return 'fw-semibold';
       case 1:
-        return 'fw-normal fst-italic'; 
+        return 'fw-normal fst-italic';
       case 2:
-        return 'fw-light'; 
+        return 'fw-light';
       case 3:
-        return 'fw-bold'; 
+        return 'fw-bold';
       case 4:
-        return 'fw-normal'; 
+        return 'fw-normal';
       default:
         return 'fw-normal';
     }
   };
-
   const renderCheckboxTree = (
     nodes: ExtractionNode[],
     level = 0,
@@ -83,64 +82,112 @@ const ColumnSelectorPanel: React.FC<Props> = ({
       <ul style={{ listStyle: 'none', paddingLeft: level * 16 }}>
         {nodes.map((node) => {
           const isExpanded = expandMap[node.id] ?? true;
-
+          const isParent = node.children && node.children.length > 0;
+  
           const handleToggleExpand = () => {
             setExpandMap((prev) => ({
               ...prev,
               [node.id]: !isExpanded,
             }));
           };
-
-          const isParent = node.children && node.children.length > 0;
-
-          return (
-            <li key={node.id} className="mb-2">
-              <div className={`d-flex align-items-center ps-${Math.min(level + 1, 5)} gap-2`}>
+  
+          const labelContent =
+            level === 0 ? (
+              <div className="form-check form-switch m-0 d-flex align-items-center gap-2">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id={`switch-${node.id}`}
+                  checked={
+                    node.children?.length
+                      ? isParentChecked(node)
+                      : selectedHeaderKeys.has(node.id)
+                  }
+                  onChange={(e) =>
+                    node.children?.length
+                      ? toggleParent(node, e.target.checked)
+                      : toggleHeaderKey(node.id)
+                  }
+                />
                 <label
-                  className={`checkbox-level-${level} d-flex align-items-center gap-2 m-0 ${getFontStylesByLevel(level)}`}
+                  className={`form-check-label mb-0 ${getFontStylesByLevel(level)}`}
+                  htmlFor={`switch-${node.id}`}
+                  style={{ userSelect: 'none', cursor: 'pointer' }}
                 >
-                  <input
-                    type="checkbox"
-                    checked={
-                      node.children?.length ? isParentChecked(node) : selectedHeaderKeys.has(node.id)
-                    }
-                    onChange={(e) =>
-                      node.children?.length
-                        ? toggleParent(node, e.target.checked)
-                        : toggleHeaderKey(node.id)
-                    }
-                  />
                   {node.name}
                 </label>
-
-                {isParent && (
-                  <span
-                    onClick={handleToggleExpand}
-                    style={{ cursor: 'pointer', color: '#666' }}
-                  >
-                    {isExpanded ? (
-                      <i className="fa-solid fa-angle-up"></i>
-                    ) : (
-                      <i className="fa-solid fa-angle-down"></i>
-                    )}
-                  </span>
-                )}
               </div>
-
+            ) : (
+              <label
+                className={`checkbox-level-${level} d-flex align-items-center gap-2 m-0 ${getFontStylesByLevel(level)}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={
+                    node.children?.length
+                      ? isParentChecked(node)
+                      : selectedHeaderKeys.has(node.id)
+                  }
+                  onChange={(e) =>
+                    node.children?.length
+                      ? toggleParent(node, e.target.checked)
+                      : toggleHeaderKey(node.id)
+                  }
+                />
+                {node.name}
+              </label>
+            );
+  
+          return (
+            <li key={node.id} className="">
+              {level === 0 ? (
+                <div className="border-bottom px-2 py-4 back-primary-lg  d-flex align-items-center justify-content-between">
+                  {labelContent}
+  
+                  {isParent && (
+                    <span
+                      onClick={handleToggleExpand}
+                      style={{ cursor: 'pointer', color: '#666' }}
+                      aria-label={isExpanded ? "Collapse" : "Expand"}
+                    >
+                      {isExpanded ? (
+                        <i className="fa-solid fa-angle-up"></i>
+                      ) : (
+                        <i className="fa-solid fa-angle-down"></i>
+                      )}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <div className={`d-flex align-items-center ps-${Math.min(level + 1, 5)} gap-2`}>
+                  {labelContent}
+                </div>
+              )}
+  
               {isParent && isExpanded && renderCheckboxTree(node.children!, level + 1, expandMap, setExpandMap)}
             </li>
-
           );
         })}
       </ul>
     );
   };
+  
+  
 
   return (
-    <div
-      className={`column-selector  ${panelCollapsed ? 'collapsed-panel' : ''}`}
-    >
-      {panelCollapsed ?
+
+    <Card className='h-100' >
+      <Card.Header className='p-3 py-4 back-secondary border-secondary'>
+        <Card.Title>   <i className="fa-solid fa-table-list"></i> COLUMN SELECTOR
+        </Card.Title>
+      </Card.Header>
+      <Card.Body className='mb-2 p-0 pb-3'>
+        {renderCheckboxTree(nodes, 0, expandMap, setExpandMap)}
+
+      </Card.Body>
+
+      {/* {panelCollapsed ?
         <div className="d-flex flex-column gap-4 justify-content-center align-items-center p-2">
           <Button
             variant="secondary"
@@ -152,21 +199,25 @@ const ColumnSelectorPanel: React.FC<Props> = ({
           <i
             className="fa-solid fa-person-military-to-person icon-30"
           ></i>
-          {/* {parentAbbreviations.map((value, index) => (
-            <span key={index}>{value}</span>
-          ))} */}
+         
         </div>
 
-        : < >
+        : 
+        < >
           <div className="d-flex justify-content-between mb-3 border-bottom pb-2">
             <h5> Column Selector</h5>
             <i className="fa-solid fa-angles-left icon-20 cursor-pointer" style={{ cursor: 'pointer', color: '#666' }} onClick={togglePanel}></i>
           </div>
 
           {renderCheckboxTree(nodes, 0, expandMap, setExpandMap)}
-        </>}
+        </>
+        } */}
+    </Card>
 
-    </div>);
+
+
+  )
+    ;
 };
 
 export default ColumnSelectorPanel;
