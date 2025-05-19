@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { BE_Endpoints } from './BEEndpoints';
 
-// Define types
 interface ProjectState {
   projectId: string | null;
   cqId: string | null;

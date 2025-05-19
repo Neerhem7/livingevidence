@@ -82,7 +82,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
 
     setSelectedLeafNode(selectedLeafMap);
     setAllLeafNode(allLeafMap);
-  }, [items, selectedHeaderKeys]);
+  }, [selectedHeaderKeys]);
 
   return (
     <>

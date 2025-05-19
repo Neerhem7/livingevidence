@@ -19,8 +19,7 @@ const ITable = () => {
   const [headerRoots, setHeaderRoots] = useState<ExtractionNode[]>([]);
   const [headerRows, setHeaderRows] = useState<any[][]>([]);
   const [panelCollapsed, setPanelCollapsed] = useState(true);
-  const [parentAbbreviations, setParentAbbreviations] = useState<string[]>([]);
-
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   const buildTree = (nodes: ExtractionNode[]): ExtractionNode[] => {
     const map = new Map<number, ExtractionNode>();
@@ -102,7 +101,20 @@ const ITable = () => {
     const roots = buildTree(items[0].extraction_results);
     setHeaderRoots(roots);
     const allLeafs = roots.flatMap(getLeafNodes);
-    setSelectedHeaderKeys(new Set(allLeafs.map(node => node.id)));
+    const newIds = allLeafs.map((node) => node.id);
+    setSelectedHeaderKeys((prev) => {
+      if (!hasInitialized || prev.size === 0) {
+        setHasInitialized(true);
+        return new Set(newIds);
+      }
+
+      const newSet = new Set<number>();
+      Array.from(prev).forEach((key) => {
+        if (newIds.includes(key)) newSet.add(key);
+      });
+      return newSet;
+    });
+
   }, [items]);
 
   useEffect(() => {
@@ -130,7 +142,6 @@ const ITable = () => {
             setSelectedHeaderKeys={setSelectedHeaderKeys}
             togglePanel={() => setPanelCollapsed(!panelCollapsed)}
             panelCollapsed={panelCollapsed}
-            parentAbbreviations={parentAbbreviations}
           />
         </Col>
         <Col sm={9} className="d-flex flex-column gap-4 overflow-auto" style={{ height: '100%' }}>

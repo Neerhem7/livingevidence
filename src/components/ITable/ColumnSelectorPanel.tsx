@@ -8,7 +8,6 @@ interface Props {
   setSelectedHeaderKeys: React.Dispatch<React.SetStateAction<Set<number>>>;
   togglePanel: () => void;
   panelCollapsed: Boolean;
-  parentAbbreviations: string[];
 }
 
 const ColumnSelectorPanel: React.FC<Props> = ({
@@ -16,7 +15,6 @@ const ColumnSelectorPanel: React.FC<Props> = ({
   selectedHeaderKeys,
   setSelectedHeaderKeys,
   togglePanel, panelCollapsed,
-  parentAbbreviations
 
 }) => {
 
@@ -176,7 +174,6 @@ const ColumnSelectorPanel: React.FC<Props> = ({
   
 
   return (
-
     <Card className='h-100' >
       <Card.Header className='p-3 py-4 back-secondary border-secondary'>
         <Card.Title>   <i className="fa-solid fa-table-list"></i> COLUMN SELECTOR
@@ -186,36 +183,7 @@ const ColumnSelectorPanel: React.FC<Props> = ({
         {renderCheckboxTree(nodes, 0, expandMap, setExpandMap)}
 
       </Card.Body>
-
-      {/* {panelCollapsed ?
-        <div className="d-flex flex-column gap-4 justify-content-center align-items-center p-2">
-          <Button
-            variant="secondary"
-            onClick={togglePanel}
-          >
-            <i className="fa-solid fa-table-list"></i>
-          </Button>
-
-          <i
-            className="fa-solid fa-person-military-to-person icon-30"
-          ></i>
-         
-        </div>
-
-        : 
-        < >
-          <div className="d-flex justify-content-between mb-3 border-bottom pb-2">
-            <h5> Column Selector</h5>
-            <i className="fa-solid fa-angles-left icon-20 cursor-pointer" style={{ cursor: 'pointer', color: '#666' }} onClick={togglePanel}></i>
-          </div>
-
-          {renderCheckboxTree(nodes, 0, expandMap, setExpandMap)}
-        </>
-        } */}
     </Card>
-
-
-
   )
     ;
 };
