@@ -43,7 +43,7 @@ export const fetchITableData = createAsyncThunk(
   async (
     {
       page = 1,
-      size = 5,
+      size = 10,
       filters = [],
     }: { page?: number; size?: number; filters?: any[] },
     thunkAPI

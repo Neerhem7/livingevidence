@@ -114,7 +114,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
             >
               {leafNodes.map((leaf, index) => (
                 <td key={`${item.paper_id}-${leaf.id}-${index}`}>
-                  {leaf.extraction_result?.result?.[0]?.value ?? ''}
+                  {leaf.extraction_result?.result?.[0]?.value.toString() ?? ''}
                 </td>
               ))}
             </tr>
