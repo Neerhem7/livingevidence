@@ -66,7 +66,7 @@ const TableToolBar: React.FC<Props> = ({ filters }) => {
   return (
     <>
       <div className="table-toolbar d-flex justify-content-between align-items-center m-2 p-2">
-        <div className="row g-2">
+        <div className="row w-100 g-2">
           {filters.map((filter) => {
             const searchTerm = searchTerms[filter.node_id] || '';
             const filteredValues = filter.values.filter((value: number) =>
