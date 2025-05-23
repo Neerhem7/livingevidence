@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
@@ -45,7 +45,7 @@ const App: React.FC = () => {
           <Route path="/project/:projectId/cq/:cqId/theme" element={<Theme />} />
           <Route path="/project/:projectId/cq/:cqId/prisma" element={<Prisma />} />
           <Route path="/project/:projectId/cq/:cqId/itable" element={<ITable />} />
-          {/* <Route path="/" element={<Navigate to="/project/1/cq/1" />} /> */}
+          <Route path="/" element={<Navigate to="/project/:projectId/cq/:cqId/itable" />} />
         </Routes>
       </Container>
     </Router>

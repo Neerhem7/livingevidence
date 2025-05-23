@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Col, Row, Card } from 'react-bootstrap';
+import { Col, Row, Card, Alert, Spinner } from 'react-bootstrap';
 import { useAppDispatch, RootState } from "../redux/store";
 import ITableTable from '../components/ITable/ITableTable';
 import { ExtractionNode, Item } from '../components/ITable/type';
@@ -14,7 +14,7 @@ import {
 const ITable = () => {
   const dispatch = useAppDispatch();
 
-  const { items, filters, pageInfo } = useSelector((state: RootState) => state.itable);
+  const { items, filters, pageInfo, loading } = useSelector((state: RootState) => state.itable);
   const [selectedHeaderKeys, setSelectedHeaderKeys] = useState<Set<number>>(new Set());
   const [headerRoots, setHeaderRoots] = useState<ExtractionNode[]>([]);
   const [headerRows, setHeaderRows] = useState<any[][]>([]);
@@ -134,7 +134,7 @@ const ITable = () => {
           <h1>Interactive Table</h1>
         </Col>
       </Row>
-      <Row className="m-4" style={{ height: '800px' }}>
+      {headerRoots.length > 0 ? <Row className="m-4" style={{ height: '800px' }}>
         <Col sm={3} className="overflow-auto" style={{ height: '100%' }}>
           <ColumnSelectorPanel
             nodes={headerRoots}
@@ -144,8 +144,8 @@ const ITable = () => {
             panelCollapsed={panelCollapsed}
           />
         </Col>
-        <Col sm={9} className="d-flex flex-column gap-4 overflow-auto" style={{ height: '100%' }}>
-          <Card><TableToolBar filters={filters} /></Card>
+        <Col className="d-flex flex-column gap-4 overflow-auto" style={{ height: '100%' }}>
+          {filters.length > 0 && <Card><TableToolBar filters={filters} /></Card>}
           <Card className=" flex-grow-1 overflow-auto">
             <ITableTable
               items={items}
@@ -158,7 +158,13 @@ const ITable = () => {
           </Card>
         </Col>
       </Row>
-
+        : <Row className="d-flex justify-content-center text-center m-4">
+          {loading ? <Spinner
+                    animation="border"
+                    style={{ width: '100px', height: '100px', color: '#4F959D' }}
+                  /> : <Alert variant='primary' className="d-flex justify-content-center text-center">There is no data</Alert>
+           }
+        </Row>}
     </>
   );
 }

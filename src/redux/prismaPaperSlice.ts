@@ -1,6 +1,7 @@
 // store/slices/prismaPaperSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { BE_Endpoints } from './BEEndpoints';
 interface Paper {
   id: number;
   title: string;
@@ -77,8 +78,7 @@ const initialState: PrismaPaperState = {
 };
 
 
-
-const BASE_URL = "https://app.lisr.org/backend/api/v1/staging_prisma/prisma/papers?project_id=8";
+const BASE_URL = `${BE_Endpoints.BASE_URL_PRISMA_PAPER}?project_id=202`;
 
 export const fetchCurrentPapers = createAsyncThunk(
   "prisma/fetchCurrent",
