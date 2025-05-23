@@ -1,5 +1,12 @@
 {
   "version": 2,
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "development": true,
+      "testing": true
+    }
+  },
   "github": {
     "enabled": true,
     "silent": true
@@ -19,12 +26,5 @@
   ],
   "env": {
     "REACT_APP_ENV": "development"
-  },
-  "git": {
-    "deploymentEnabled": {
-      "main": true,
-      "development": true,
-      "testing": true
-    }
   }
 } 
