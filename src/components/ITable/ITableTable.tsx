@@ -4,7 +4,7 @@ import { ExtractionNode, Item } from './type';
 import "./itable.css"
 import { useAppDispatch } from '../../redux/store';
 import { fetchITableData } from '../../redux/itableSlice';
-
+import { useSearchParams } from 'react-router-dom';
 
 type Pagination = {
   total: number;
@@ -24,9 +24,9 @@ interface Props {
   headerRoots: ExtractionNode[];
 }
 
-
 const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selectedHeaderKeys, getLeafNodesFromItem, headerRoots }) => {
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
   const [selectedLeafNode, setSelectedLeafNode] = useState<Map<number, any[]>>(new Map());
   const [allLeafNode, setAllLeafNode] = useState<Map<number, any[]>>(new Map());
   const [activePaper, setActivePaper] = useState(Number);
@@ -57,14 +57,16 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
   };
 
   const changePage = (page: number) => {
+    const projectId = searchParams.get('projectId');
+    const cqId = searchParams.get('cqId');
 
-    if (pagination) {
+    if (pagination && projectId && cqId) {
       if (page === 1) {
-        dispatch(fetchITableData({ page: 1, size: pagination.size }));
+        dispatch(fetchITableData({ projectId, cqId, page: 1, size: pagination.size }));
       } else if (page === pagination.total_pages) {
-        dispatch(fetchITableData({ page: pagination.total_pages, size: pagination.size }));
+        dispatch(fetchITableData({ projectId, cqId, page: pagination.total_pages, size: pagination.size }));
       } else {
-        dispatch(fetchITableData({ page, size: pagination.size }));
+        dispatch(fetchITableData({ projectId, cqId, page, size: pagination.size }));
       }
     }
   };
@@ -86,46 +88,44 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
 
   return (
     <>
-<Card.Body className="p-0">
-  <div className="table-wrapper">
-    <table className="table table-bordered table-striped custom-table mb-0">
-      <thead>
-        {headerRows.map((row, idx) => (
-          <tr key={idx}>
-            {row.map((cell) => (
-              <th
-                key={`${idx}-${cell.key}`}
-                colSpan={cell.props.colSpan}
-                rowSpan={cell.props.rowSpan}
-              >
-                {cell.props.children}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {items.map((item, index) => {
-          const leafNodes = selectedLeafNode.get(item.paper_id) || [];
-          return (
-            <tr
-              key={`${item.paper_id}-${index}`}
-              onClick={() => setActivePaper(item.paper_id)}
-            >
-              {leafNodes.map((leaf, index) => (
-                <td key={`${item.paper_id}-${leaf.id}-${index}`}>
-                  {leaf.extraction_result?.result?.[0]?.value.toString() ?? ''}
-                </td>
+      <Card.Body className="p-0">
+        <div className="table-wrapper">
+          <table className="table table-bordered table-striped custom-table mb-0">
+            <thead>
+              {headerRows.map((row, idx) => (
+                <tr key={idx}>
+                  {row.map((cell) => (
+                    <th
+                      key={`${idx}-${cell.key}`}
+                      colSpan={cell.props.colSpan}
+                      rowSpan={cell.props.rowSpan}
+                    >
+                      {cell.props.children}
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  </div>
-</Card.Body>
-
-
+            </thead>
+            <tbody>
+              {items.map((item, index) => {
+                const leafNodes = selectedLeafNode.get(item.paper_id) || [];
+                return (
+                  <tr
+                    key={`${item.paper_id}-${index}`}
+                    onClick={() => setActivePaper(item.paper_id)}
+                  >
+                    {leafNodes.map((leaf, index) => (
+                      <td key={`${item.paper_id}-${leaf.id}-${index}`}>
+                        {leaf.extraction_result?.result?.[0]?.value.toString() ?? ''}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Card.Body>
 
       <Card.Footer>
         {pagination && (

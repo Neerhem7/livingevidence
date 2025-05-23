@@ -1,25 +1,27 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Col, Row, Card, Alert, Spinner } from 'react-bootstrap';
 import { useAppDispatch, RootState } from "../redux/store";
+import { useSearchParams } from 'react-router-dom';
 import ITableTable from '../components/ITable/ITableTable';
 import { ExtractionNode, Item } from '../components/ITable/type';
 import ColumnSelectorPanel from '../components/ITable/ColumnSelectorPanel';
 import TableToolBar from '../components/ITable/TableToolBar';
 import {
-  fetchITableData
+  fetchITableData,
+  resetITableState
 } from "../redux/itableSlice";
 
 const ITable = () => {
   const dispatch = useAppDispatch();
-
+  const [searchParams] = useSearchParams();
   const { items, filters, pageInfo, loading } = useSelector((state: RootState) => state.itable);
   const [selectedHeaderKeys, setSelectedHeaderKeys] = useState<Set<number>>(new Set());
   const [headerRoots, setHeaderRoots] = useState<ExtractionNode[]>([]);
   const [headerRows, setHeaderRows] = useState<any[][]>([]);
   const [panelCollapsed, setPanelCollapsed] = useState(true);
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const [currentFilters, setCurrentFilters] = useState<any[]>([]);
 
   const buildTree = (nodes: ExtractionNode[]): ExtractionNode[] => {
     const map = new Map<number, ExtractionNode>();
@@ -92,31 +94,51 @@ const ITable = () => {
     return tree.flatMap(getLeafNodes);
   };
 
-  useEffect(() => {
-    dispatch(fetchITableData({}));
-  }, []);
+  const fetchData = useCallback((params: { projectId: string; cqId: string; filters?: any[] }) => {
+    dispatch(fetchITableData(params));
+  }, [dispatch]);
 
+  const handleFiltersChange = (newFilters: any[]) => {
+    const projectId = searchParams.get('projectId');
+    const cqId = searchParams.get('cqId');
+    
+    if (projectId && cqId) {
+      setCurrentFilters(newFilters);
+      fetchData({ projectId, cqId, filters: newFilters });
+    }
+  };
+
+  // Single effect to handle URL parameter changes and initial load
+  useEffect(() => {
+    const projectId = searchParams.get('projectId');
+    const cqId = searchParams.get('cqId');
+    
+    if (projectId && cqId) {
+      // Reset states
+      dispatch(resetITableState());
+      setSelectedHeaderKeys(new Set());
+      setHeaderRoots([]);
+      setHeaderRows([]);
+      setCurrentFilters([]);
+      
+      // Initial data fetch
+      fetchData({ projectId, cqId });
+    }
+  }, [searchParams, fetchData, dispatch]);
+
+  // Process items to update header structure
   useEffect(() => {
     if (!items.length) return;
+    
     const roots = buildTree(items[0].extraction_results);
     setHeaderRoots(roots);
     const allLeafs = roots.flatMap(getLeafNodes);
     const newIds = allLeafs.map((node) => node.id);
-    setSelectedHeaderKeys((prev) => {
-      if (!hasInitialized || prev.size === 0) {
-        setHasInitialized(true);
-        return new Set(newIds);
-      }
-
-      const newSet = new Set<number>();
-      Array.from(prev).forEach((key) => {
-        if (newIds.includes(key)) newSet.add(key);
-      });
-      return newSet;
-    });
-
+    
+    setSelectedHeaderKeys(new Set(newIds));
   }, [items]);
 
+  // Update header rows when selection changes
   useEffect(() => {
     if (!headerRoots.length) return;
     const maxDepth = Math.max(...headerRoots.map(getMaxDepth));
@@ -145,7 +167,7 @@ const ITable = () => {
           />
         </Col>
         <Col className="d-flex flex-column gap-4 overflow-auto" style={{ height: '100%' }}>
-          {filters.length > 0 && <Card><TableToolBar filters={filters} /></Card>}
+          {filters.length > 0 && <Card><TableToolBar filters={filters} onFiltersChange={handleFiltersChange} /></Card>}
           <Card className=" flex-grow-1 overflow-auto">
             <ITableTable
               items={items}

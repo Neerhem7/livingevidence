@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { RootState } from '../../redux/store';
 import { toggleTheme } from '../../redux/themeSlice';
@@ -15,6 +15,13 @@ const Navigation: React.FC<Props> = () => {
     const dispatch = useDispatch();
     const { mode, backgroundColor, textColor } = useSelector((state: RootState) => state.theme);
     const { projectId, cqId } = useSelector((state: RootState) => state.project);
+    const [searchParams] = useSearchParams();
+    
+    const getLink = (path: string) => {
+        const currentProjectId = searchParams.get('projectId') || projectId || '202';
+        const currentCqId = searchParams.get('cqId') || cqId || '116';
+        return `${path}?projectId=${currentProjectId}&cqId=${currentCqId}`;
+    };
 
     return (
         <nav className={`navbar  navbar-expand-lg p-3 ${mode === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}`} style={{ backgroundColor, color: textColor }}>
@@ -32,28 +39,27 @@ const Navigation: React.FC<Props> = () => {
                     <div className={`sidebar ${menuOpen ? 'open' : ''}`}>
                         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
                         <i className="fa-solid fa-xmark icon"></i>
-
                         </button>
                         <ul>
-                            <li><Link to={`/project/${projectId}/cq/${cqId}/`} onClick={() => setMenuOpen(false)}>Home</Link></li>
-                            <li><Link to={`/project/${projectId}/cq/${cqId}/concept`} onClick={() => setMenuOpen(false)}>Concept</Link></li>
-                            <li><Link to={`/project/${projectId}/cq/${cqId}/prisma`} onClick={() => setMenuOpen(false)}>Prisma</Link></li>
+                            <li><Link to={getLink('/home')} onClick={() => setMenuOpen(false)}>Home</Link></li>
+                            <li><Link to={getLink('/concept')} onClick={() => setMenuOpen(false)}>Concept</Link></li>
+                            <li><Link to={getLink('/prisma')} onClick={() => setMenuOpen(false)}>Prisma</Link></li>
+                            <li><Link to={getLink('/itable')} onClick={() => setMenuOpen(false)}>ITable</Link></li>
                         </ul>
                     </div>
                 </div> 
                 : <>
                     <ul className="navbar-nav">
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/`}>Home</Link></li> 
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/concept`}>Concept</Link></li>
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/prisma`}>Prisma</Link></li>
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={`/project/${projectId}/cq/${cqId}/itable`}>ITable</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/home')}>Home</Link></li> 
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/concept')}>Concept</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/prisma')}>Prisma</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/itable')}>ITable</Link></li>
                     </ul>
                     <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}
                     </button>
                 </>}
         </nav>
-
     );
 };
 

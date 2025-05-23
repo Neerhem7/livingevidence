@@ -3,9 +3,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { BE_Endpoints } from './BEEndpoints';
 
-interface ProjectState {
-  projectId: string | null;
-  cqId: string | null;
+interface ProjectParams {
+  projectId: string;
+  cqId: string;
 }
 
 interface ITableState {
@@ -42,15 +42,14 @@ export const fetchITableData = createAsyncThunk(
   'iTable/fetchData',
   async (
     {
+      projectId,
+      cqId,
       page = 1,
       size = 10,
       filters = [],
-    }: { page?: number; size?: number; filters?: any[] },
+    }: ProjectParams & { page?: number; size?: number; filters?: any[] },
     thunkAPI
   ) => {
-    const state = thunkAPI.getState() as { project: ProjectState };
-    const { projectId, cqId } = state.project;
-
     if (!projectId || !cqId) {
       return thunkAPI.rejectWithValue('Project ID or CQ ID is missing.');
     }
@@ -81,7 +80,11 @@ export const fetchITableData = createAsyncThunk(
 const iTableSlice = createSlice({
   name: 'iTable',
   initialState,
-  reducers: {},
+  reducers: {
+    resetITableState: (state) => {
+      return initialState;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchITableData.pending, (state) => {
@@ -119,4 +122,5 @@ const iTableSlice = createSlice({
   },
 });
 
+export const { resetITableState } = iTableSlice.actions;
 export default iTableSlice.reducer;

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, Form, Button, Dropdown } from 'react-bootstrap';
-import { useAppDispatch } from '../../redux/store';
-import { fetchITableData } from '../../redux/itableSlice';
 import './itable.css'
 
 interface Props {
-  filters: any[]
+  filters: any[];
+  onFiltersChange: (filters: Filter[]) => void;
 }
 
 interface Filter {
@@ -15,53 +14,60 @@ interface Filter {
   values: number[];
 }
 
-const TableToolBar: React.FC<Props> = ({ filters }) => {
-  const dispatch = useAppDispatch();
+const TableToolBar: React.FC<Props> = ({ filters, onFiltersChange }) => {
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
   const [searchTerms, setSearchTerms] = useState<{ [key: number]: string }>({});
   const [showFiltersPanel, setShowFiltersPanel] = useState(false);
 
   const updateSelectedFilters = (nodeId: number, value: number, isRadio: boolean) => {
     setSelectedFilters(prev => {
-      const existing = prev.find(f => f.node_id === nodeId);
-      if (isRadio) {
-        if (existing) {
-          return prev.map(f =>
-            f.node_id === nodeId
-              ? { ...f, values: [value] }
-              : f
-          );
-        } else {
-          const original = filters.find(f => f.node_id === nodeId)!;
-          return [...prev, { ...original, values: [value] }];
-        }
-      } else {
-        if (existing) {
-          const exists = existing.values.includes(value);
-          const newValues = exists
-            ? existing.values.filter(v => v !== value)
-            : [...existing.values, value];
-
-          if (newValues.length === 0) {
-            return prev.filter(f => f.node_id !== nodeId);
+      const newFilters = (() => {
+        const existing = prev.find(f => f.node_id === nodeId);
+        if (isRadio) {
+          if (existing) {
+            return prev.map(f =>
+              f.node_id === nodeId
+                ? { ...f, values: [value] }
+                : f
+            );
+          } else {
+            const original = filters.find(f => f.node_id === nodeId)!;
+            return [...prev, { ...original, values: [value] }];
           }
-
-          return prev.map(f =>
-            f.node_id === nodeId
-              ? { ...f, values: newValues }
-              : f
-          );
         } else {
-          const original = filters.find(f => f.node_id === nodeId)!;
-          return [...prev, { ...original, values: [value] }];
+          if (existing) {
+            const exists = existing.values.includes(value);
+            const newValues = exists
+              ? existing.values.filter(v => v !== value)
+              : [...existing.values, value];
+
+            if (newValues.length === 0) {
+              return prev.filter(f => f.node_id !== nodeId);
+            }
+
+            return prev.map(f =>
+              f.node_id === nodeId
+                ? { ...f, values: newValues }
+                : f
+            );
+          } else {
+            const original = filters.find(f => f.node_id === nodeId)!;
+            return [...prev, { ...original, values: [value] }];
+          }
         }
-      }
+      })();
+
+      // Call the callback with the new filters
+      onFiltersChange(newFilters);
+      return newFilters;
     });
   };
 
-  useEffect(() => {
-    dispatch(fetchITableData({ filters: selectedFilters }));
-  }, [selectedFilters]);
+  const clearFilters = () => {
+    setSelectedFilters([]);
+    setSearchTerms({});
+    onFiltersChange([]);
+  };
 
   return (
     <>
@@ -144,10 +150,7 @@ const TableToolBar: React.FC<Props> = ({ filters }) => {
           <div className="col-2">
             <Button
               variant="outline-danger"
-              onClick={() => {
-                setSelectedFilters([]);
-                setSearchTerms({});
-              }}
+              onClick={clearFilters}
               className="w-100"
             >
               Clear Filters
