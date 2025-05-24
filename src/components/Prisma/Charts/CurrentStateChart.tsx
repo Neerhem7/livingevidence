@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import './chart.css';
 import { Modal } from 'react-bootstrap';
 import CustomNode from './CustomeNode';
@@ -10,6 +10,7 @@ import {
   fetchLivingPapers,
 } from "../../../redux/prismaPaperSlice";
 import { fetchFullTextExcludeReasons } from '../../../redux/prismaDiagramSlice';
+import { RootState } from '../../../redux/store';
 
 type PrismaStats = {
   total: 0,
@@ -49,7 +50,7 @@ interface CurrentStateChartProps {
 const CurrentStateChart: React.FC<CurrentStateChartProps> = (
   { activeTab, connections, nodeList, stats, onStateChange, onStateTextChange, fullTextExcludeReason }) => {
   const dispatch = useAppDispatch();
-
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
   const [showModal, setShowModal] = useState(false);
 
   const nodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -74,29 +75,27 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
   };
 
   const handleNodeClick = (nodeId: string, nodeLabel: string) => {
+    if (!projectId || !cqId) return;
+
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
       return value !== undefined ? String(value) : `0`;
     });
+    
     if (nodeId === 'excluded_by_fulltext') {
       dispatch(fetchFullTextExcludeReasons());
-
-
       handleOpenModal();
-    }
-    else {
+    } else {
       if (activeTab === "Current State") {
-
-        dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10 }));
+        dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10, projectId, cqId }));
       } else if (activeTab === "Initial Search") {
-        dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10 }));
+        dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10, projectId, cqId }));
       } else if (activeTab === "Living Search") {
-        dispatch(fetchLivingPapers({ stage: nodeId, month: currentYearMonth, page: 1, size: 10 }));
+        dispatch(fetchLivingPapers({ stage: nodeId, month: currentYearMonth, page: 1, size: 10, projectId, cqId }));
       }
     }
     onStateChange?.(nodeId);
     onStateTextChange?.(parsedLabel);
-    console.info("onStateChange", nodeId, nodeLabel, parsedLabel)
   };
 
   const createSVGPath = () => {
@@ -188,9 +187,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
     setPaths(newPaths);
   }
 
-
-
-
   useEffect(() => {
     const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
@@ -203,9 +199,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
   return (
     <>
       <div className="org-chart-wrapper position-relative w-100 h-100">
-        <svg ref={svgRef} className="org-chart-lines position-absolute w-100 h-100" style={{
-
-        }}>
+        <svg ref={svgRef} className="org-chart-lines position-absolute w-100 h-100">
           {paths.map((d, i) => (
             <path key={i} d={d} stroke="#4F959D" strokeWidth="4" fill="none" className="animated-path" />
           ))}
@@ -250,7 +244,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
           </ul>
         </Modal.Body>
       </Modal>
-
     </>
   );
 };

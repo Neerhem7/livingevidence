@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { RootState } from '../../redux/store';
 import { generateCalendarData, CalendarData } from '../../utils/utils';
 import './prisma.css'
@@ -66,7 +65,8 @@ interface LivingProps {
 const Living: React.FC<LivingProps> = ({ 
   activeTab, stats,startDate, selectedMonth, onMonthChange, activeState, onStateChange, onStateTextChange }) => {
   const dispatch = useAppDispatch();
-  const { livingStatsByMonth } = useSelector((state: RootState) => state.prismaDiagram);
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
+  const { livingStatsByMonth } = useAppSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
   const [calendarData, setCalendarData] = useState<CalendarData>({});
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
@@ -101,11 +101,12 @@ const Living: React.FC<LivingProps> = ({
   };
 
   const showStats = (month: string) => {
+    if (!projectId || !cqId) return;
 
     dispatch(fetchLivingStatsByMonth(month));
-    dispatch(fetchLivingPapers({ stage: 'include', month: month, page: 1, size: 10 }))
-    setShowMonthStats(true)
-    onMonthChange?.(month)
+    dispatch(fetchLivingPapers({ stage: 'include', month: month, page: 1, size: 10, projectId, cqId }));
+    setShowMonthStats(true);
+    onMonthChange?.(month);
   };
 
   return (

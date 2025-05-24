@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch } from "../redux/store";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import { Col, Row } from 'react-bootstrap';
 import PrismaDiagram from '../components/Prisma/PrismaDiagram';
 import PrismaPapers from '../components/Prisma/PrismaPapers';
@@ -15,11 +15,10 @@ import {
 } from "../redux/prismaDiagramSlice";
 import useMediaQuery from '../hooks/useMediaQuery';
 
-
-
 const Prisma: React.FC = () => {
   const isMobileView = useMediaQuery
   const dispatch = useAppDispatch();
+  const { projectId, cqId } = useAppSelector((state) => state.project);
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -35,37 +34,51 @@ const Prisma: React.FC = () => {
     setActiveTab(tabName);
   };
 
+  // Load initial data for the current tab only
   useEffect(() => {
-   
+    if (!projectId || !cqId) return;
 
-    dispatch(fetchCurrentPapers({ stage:'total',page: 1, size: 10 }));
-    dispatch(fetchCurrentStats());
-    dispatch(fetchInitialPapers({ stage:'total',page: 1, size: 10 }));
-    dispatch(fetchInitialStats());
-    dispatch(fetchLivingPapers({stage:'total', month: currentYearMonth, page: 1, size: 10 }));
-    dispatch(fetchLivingStats(currentYearMonth));
+    // Load papers and stats based on active tab
+    if (activeTab === 'Current State') {
+      dispatch(fetchCurrentPapers({ stage: 'total', page: 1, size: 10, projectId, cqId }));
+      dispatch(fetchCurrentStats());
+    } else if (activeTab === 'Initial Search') {
+      dispatch(fetchInitialPapers({ stage: 'total', page: 1, size: 10, projectId, cqId }));
+      dispatch(fetchInitialStats());
+    } else if (activeTab === 'Living Search') {
+      dispatch(fetchLivingPapers({ stage: 'total', month: currentYearMonth, page: 1, size: 10, projectId, cqId }));
+      dispatch(fetchLivingStats(currentYearMonth));
+    }
+  }, [projectId, cqId, activeTab, dispatch, currentYearMonth]);
 
-  }, []);
-
+  if (!projectId || !cqId) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <h3 style={{ textAlign: 'center' }}>PRISMA</h3>
       <Row className='mt-5 mb-5'> 
         <Col className='order-2 order-sm-1 w-full h-100' sm={6}>
-          <PrismaDiagram onTabChange={handleTabChange} 
-           onMonthChange={setSelectedMonth}
-           onStateChange={setActiveState}
-           onStateTextChange={setActiveStateText}
-           selectedMonth={selectedMonth} 
-           activeTab={activeTab}
-           activeState={activeState} />
+          <PrismaDiagram 
+            onTabChange={handleTabChange} 
+            onMonthChange={setSelectedMonth}
+            onStateChange={setActiveState}
+            onStateTextChange={setActiveStateText}
+            selectedMonth={selectedMonth} 
+            activeTab={activeTab}
+            activeState={activeState} 
+          />
         </Col>
         <Col className='order-1 order-sm-2' sm={6}>
-          <PrismaPapers activeTab={activeTab}  selectedMonth={selectedMonth} activeState={activeState} activeStateText={activeStateText} />
+          <PrismaPapers 
+            activeTab={activeTab}  
+            selectedMonth={selectedMonth} 
+            activeState={activeState} 
+            activeStateText={activeStateText} 
+          />
         </Col>
       </Row>
-
     </div>
   );
 };

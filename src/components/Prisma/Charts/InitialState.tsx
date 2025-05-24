@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '../../../redux/store';
-import {  Modal} from 'react-bootstrap';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
+import { Modal } from 'react-bootstrap';
 import './chart.css';
 import CustomNode from './CustomeNode';
 import {
@@ -8,6 +8,7 @@ import {
   fetchInitialPapers,
   fetchLivingPapers,
 } from "../../../redux/prismaPaperSlice";
+import { RootState } from '../../../redux/store';
 
 type PrismaStats = {
   total: 0,
@@ -41,6 +42,7 @@ interface InitialStateChartProps {
 
 const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connections, nodeList, stats, activeMonth, activeState, onStateChange, onStateTextChange }) => {
   const dispatch = useAppDispatch();
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
   const [showModal, setShowModal] = useState(false);
 
   const nodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -65,6 +67,8 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
     setShowModal(false);
   };
   const handleNodeClick = (nodeId: string, nodeLabel: string) => {
+    if (!projectId || !cqId) return;
+
     const clickableNodes = ['analysis', 'include', 'manual'];
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
@@ -75,12 +79,11 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
     }
     else {
       if (activeTab === "Current State") {
-
-        dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10 }));
+        dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10, projectId, cqId }));
       } else if (activeTab === "Initial Search") {
-        dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10 }));
+        dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10, projectId, cqId }));
       } else if (activeTab === "Living Search") {
-        dispatch(fetchLivingPapers({ stage: nodeId, month: activeMonth?activeMonth:currentMonth, page: 1, size: 10 }));
+        dispatch(fetchLivingPapers({ stage: nodeId, month: activeMonth || currentMonth, page: 1, size: 10, projectId, cqId }));
       }
     }
     onStateChange?.(nodeId);

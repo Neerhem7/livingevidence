@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Tabs from '../Tabs/Tab';
-import CurrentStateChart from './Charts/CurrentStateChart';
-import InitialStateChart from './Charts/InitialState';
-import Living from './Living';
-import { prisma_data } from './Charts/Prisma_Data';
 import { RootState } from '../../redux/store';
 import { PRISMA_NODES } from './Charts/Constants';
+import { prisma_data } from './Charts/Prisma_Data';
 
 type PrismaLivingStats = {
   month: string;
@@ -51,6 +48,10 @@ const defaultStats: PrismaStats = {
   analysis_n: 0
 };
 
+// Lazy load the chart components
+const CurrentStateChart = lazy(() => import('./Charts/CurrentStateChart'));
+const InitialStateChart = lazy(() => import('./Charts/InitialState'));
+const Living = lazy(() => import('./Living'));
 
 interface PrismaDiagramProps {
   onTabChange?: (activeTab: string) => void;
@@ -71,65 +72,81 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
   const tabData = [
     {
       label: "Current State",
-      content: <CurrentStateChart 
-      activeTab={activeTab}
-      activeState={activeState}
-      onStateChange={onStateChange}
-      onStateTextChange={onStateTextChange}
-      nodeList={prisma_data.current_state_nodes} 
-      connections={prisma_data.current_state_connections}
-      fullTextExcludeReason={fullTextExclusionReasions}
-      stats={stats} />,
+      content: (
+        <Suspense fallback={<div>Loading Current State...</div>}>
+          <CurrentStateChart 
+            activeTab={activeTab}
+            activeState={activeState}
+            onStateChange={onStateChange}
+            onStateTextChange={onStateTextChange}
+            nodeList={prisma_data.current_state_nodes} 
+            connections={prisma_data.current_state_connections}
+            fullTextExcludeReason={fullTextExclusionReasions}
+            stats={stats} 
+          />
+        </Suspense>
+      ),
       onClick: () => onTabChange?.("Current State"),
     },
     {
       label: "Initial Search",
-      content: <InitialStateChart 
-      activeTab={activeTab}
-      activeState={activeState}
-      onStateChange={onStateChange}
-      onStateTextChange={onStateTextChange}
-      nodeList={prisma_data.initial_state_nodes} 
-      connections={prisma_data.initial_state_connections}
-      stats={stats}/>,
+      content: (
+        <Suspense fallback={<div>Loading Initial Search...</div>}>
+          <InitialStateChart 
+            activeTab={activeTab}
+            activeState={activeState}
+            onStateChange={onStateChange}
+            onStateTextChange={onStateTextChange}
+            nodeList={prisma_data.initial_state_nodes} 
+            connections={prisma_data.initial_state_connections}
+            stats={stats}
+          />
+        </Suspense>
+      ),
       onClick: () => onTabChange?.("Initial Search"),
     },
     {
       label: "Living Search",
-      content: <Living  
-      startDate={projectCreationDate}
-      activeState={activeState}
-      onStateChange={onStateChange}
-      onStateTextChange={onStateTextChange}
-      selectedMonth={selectedMonth} onMonthChange={onMonthChange} activeTab={activeTab} stats={living} />,
+      content: (
+        <Suspense fallback={<div>Loading Living Search...</div>}>
+          <Living  
+            startDate={projectCreationDate}
+            activeState={activeState}
+            onStateChange={onStateChange}
+            onStateTextChange={onStateTextChange}
+            selectedMonth={selectedMonth} 
+            onMonthChange={onMonthChange} 
+            activeTab={activeTab} 
+            stats={living} 
+          />
+        </Suspense>
+      ),
       onClick: () => onTabChange?.("Living Search"),
     }
   ];
 
-  useEffect(() => {
-    setStats(currentStats);
-    setLiving(livingStats);
-  }, []);
-
+  // Only update stats when tab changes
   useEffect(() => {
     if (activeTab === "Current State") {
       setStats(currentStats);
     } else if (activeTab === "Initial Search") {
       setStats(initialStats);
-    }
-     else if (activeTab === "Living Search") {
+    } else if (activeTab === "Living Search") {
       setLiving(livingStats);
     }
+  }, [activeTab, currentStats, initialStats, livingStats]);
+
+  // Update state text only when stats change for the active tab
+  useEffect(() => {
     const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
       return value !== undefined ? String(value) : `0`;
     });
     onStateTextChange?.(parsedLabel);
-
-  }, [activeTab, currentStats, initialStats, livingStats])
+  }, [stats, onStateTextChange]);
 
   return (
-      <Tabs tabs={tabData} />
+    <Tabs tabs={tabData} />
   );
 };
 
