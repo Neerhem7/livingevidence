@@ -1,18 +1,26 @@
 import { useState, useEffect } from "react";
 
-const useMediaQuery = (query: string = '(max-width : 780px)'): boolean => {
-    const [matches, setMatches] = useState(window.matchMedia(query).matches);
+const DEFAULT_MEDIA_QUERY = '(max-width: 768px)';
 
-    useEffect(()=>{
-        const mediaQuery = window.matchMedia(query);
+const useMediaQuery = (query: string = DEFAULT_MEDIA_QUERY): boolean => {
+    const [matches, setMatches] = useState(false);
 
-        const handledChange = () =>  setMatches(mediaQuery.matches);
+    useEffect(() => {
+        const media = window.matchMedia(query);
         
-        mediaQuery.addEventListener('change', handledChange);
+        setMatches(media.matches);
 
-        return () => mediaQuery.removeEventListener('change', handledChange);
-        
-    }, [query])
+        const listener = (event: MediaQueryListEvent) => {
+            setMatches(event.matches);
+        };
+
+        media.addEventListener('change', listener);
+
+        return () => {
+            media.removeEventListener('change', listener);
+        };
+    }, [query]);
+
     return matches;
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Card, Row, Col, Spinner, Pagination, InputGroup, Form } from 'react-bootstrap';
 import { usePrismaPapers } from './hooks/usePrismaPapers';
+import useMediaQuery from '../../hooks/useMediaQuery';
 import PaperCard from './components/PaperCard';
 import PaperDetailsModal from './components/PaperDetailsModal';
 import { PrismaPapersProps, Paper } from './types';
@@ -12,6 +13,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({
   activeState,
   activeStateText,
 }) => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const {
     papers,
     pagination,
@@ -47,16 +49,60 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({
 
   return (
     <>
-      <Row className="h-100 g-0">
-        <Col>
+
           <Card className="shadow-sm h-100 d-flex flex-column prisma-card">
             <Card.Header className="d-flex align-items-center py-3 prisma-header">
-              <div className="d-flex align-items-center">
-                <span className="study-list-header">{activeStateText ? 'Study List' : ''}</span>
+              <div className={`d-flex ${isMobile ? 'flex-column justify-content-end' : ''}`}>
+                <span className={`d-flex align-items-center justify-content-between ${!isMobile && 'study-list-header'}`}>{activeStateText ? 'Study List' : ''}
+                {isMobile && (
+                  <div className="position-relative">
+                    <button
+                      className="btn btn-link prisma-text"
+                      onClick={() => setShowSearch(!showSearch)}
+                    >
+                      <i className="fa-solid fa-magnifying-glass" />
+                    </button>
+                    {showSearch && (
+                      <div className="search-dropdown-mobile">
+                        <InputGroup>
+                          <Form.Control
+                            type="text"
+                            placeholder="Search papers..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            className="prisma-input"
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                handleSearch();
+                              }
+                            }}
+                            autoFocus
+                          />
+                          <InputGroup.Text 
+                            role="button" 
+                            onClick={handleSearch}
+                            style={{ cursor: 'pointer' }}
+                            className="prisma-input-text"
+                          >
+                            <i className="fa-solid fa-magnifying-glass" />
+                          </InputGroup.Text>
+                          <InputGroup.Text 
+                            role="button" 
+                            onClick={handleCloseSearch}
+                            style={{ cursor: 'pointer' }}
+                            className="prisma-input-text"
+                          >
+                            <i className="fa-solid fa-xmark" />
+                          </InputGroup.Text>
+                        </InputGroup>
+                      </div>
+                    )}
+                  </div>
+                )}
+                </span>
                 <span className="prisma-text">{activeStateText}</span>
               </div>
-
-              <div className="ms-auto">
+              {!isMobile && <div className="ms-auto">
                 {showSearch ? (
                   <div className="d-flex align-items-center">
                     <InputGroup style={{ width: '250px' }}>
@@ -91,7 +137,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({
                     <i className="fa-solid fa-magnifying-glass" />
                   </button>
                 )}
-              </div>
+              </div>}
             </Card.Header>
 
             <Card.Body className="papers-body flex-grow-1 prisma-body">
@@ -146,9 +192,7 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({
               )}
             </Card.Footer>
           </Card>
-        </Col>
-      </Row>
-
+ 
       <PaperDetailsModal
         paper={selectedPaper}
         show={showModal}
