@@ -8,27 +8,51 @@ import { prisma_data } from './Charts/Prisma_Data';
 type PrismaLivingStats = {
   month: string;
   count: number;
-  total_papers: number
+  total_papers: number;
 }
 
-type PrismaStats = {
-  total: 0,
-  living: 0,
-  initial: 0,
-  manual: 0,
-  duplicate: 0,
-  unique: 0,
-  unscreened: 0,
-  screened: 0,
-  excluded_by_title: 0,
-  excluded_by_abstract: 0,
-  fulltext_review: 0,
-  excluded_by_fulltext: 0,
-  include: 0,
-  analysis: 0,
-  include_n: 0,
-  analysis_n: 0
-};
+interface PrismaStats {
+  total: number;
+  living: number;
+  initial: number;
+  manual: number;
+  duplicate: number;
+  unique: number;
+  unscreened: number;
+  screened: number;
+  excluded_by_title: number;
+  excluded_by_abstract: number;
+  fulltext_review: number;
+  excluded_by_fulltext: number;
+  include: number;
+  analysis: number;
+  include_n: number;
+  analysis_n: number;
+}
+
+interface PrismaDiagramProps {
+  activeTab: string;
+  selectedMonth: string;
+  activeState: string;
+  onMonthChange?: (month: string) => void;
+  onTabChange?: (tab: string) => void;
+  onStateChange?: (state: string) => void;
+  onStateTextChange?: (text: string) => void;
+}
+
+interface TabsProps {
+  tabs: Array<{
+    label: string;
+    content: React.ReactNode;
+    onClick: () => void;
+  }>;
+  activeTab: string;
+}
+
+const CurrentStateChart = lazy(() => import('./Charts/CurrentStateChart'));
+const InitialStateChart = lazy(() => import('./Charts/InitialState'));
+const LivingStateChart = lazy(() => import('./Living'));
+
 const defaultStats: PrismaStats = {
   total: 0,
   living: 0,
@@ -48,26 +72,34 @@ const defaultStats: PrismaStats = {
   analysis_n: 0
 };
 
-// Lazy load the chart components
-const CurrentStateChart = lazy(() => import('./Charts/CurrentStateChart'));
-const InitialStateChart = lazy(() => import('./Charts/InitialState'));
-const Living = lazy(() => import('./Living'));
-
-interface PrismaDiagramProps {
-  onTabChange?: (activeTab: string) => void;
-  onMonthChange?: (selectedMonth: string) => void;
-  onStateChange?: (activeState:string)=> void;
-  onStateTextChange?: (stateText: string)=> void;
-  activeState: string;
-  selectedMonth: string;
-  activeTab: string;
-}
-
-const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth, activeState, onMonthChange,onTabChange,onStateChange, onStateTextChange }) => {
-
-  const { currentStats, initialStats, livingStats, fullTextExclusionReasions, projectCreationDate } = useSelector((state: RootState) => state.prismaDiagram);
+const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ 
+  activeTab, 
+  selectedMonth, 
+  activeState, 
+  onMonthChange,
+  onTabChange,
+  onStateChange, 
+  onStateTextChange 
+}) => {
+  const { projectId, cqId } = useSelector((state: RootState) => state.project);
+  const prismaDiagram = useSelector((state: RootState) => state.prismaDiagram);
   const [stats, setStats] = useState<PrismaStats>(defaultStats);
   const [living, setLiving] = useState<PrismaLivingStats[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (activeTab === 'Current State') {
+      setStats(prismaDiagram.current.stats);
+      setActiveIndex(0);
+    } else if (activeTab === 'Initial Search') {
+      setStats(prismaDiagram.initial.stats);
+      setActiveIndex(1);
+    } else if (activeTab === 'Living Search') {
+      setStats(prismaDiagram.living.stats);
+      setLiving(prismaDiagram.living.monthlyStats);
+      setActiveIndex(2);
+    }
+  }, [activeTab, prismaDiagram]);
 
   const tabData = [
     {
@@ -81,12 +113,12 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
             onStateTextChange={onStateTextChange}
             nodeList={prisma_data.current_state_nodes} 
             connections={prisma_data.current_state_connections}
-            fullTextExcludeReason={fullTextExclusionReasions}
+            fullTextExcludeReason={prismaDiagram.fullTextExclusionReasons}
             stats={stats} 
           />
         </Suspense>
       ),
-      onClick: () => onTabChange?.("Current State"),
+      onClick: () => onTabChange?.("Current State")
     },
     {
       label: "Initial Search",
@@ -103,51 +135,37 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({  activeTab, selectedMonth
           />
         </Suspense>
       ),
-      onClick: () => onTabChange?.("Initial Search"),
+      onClick: () => onTabChange?.("Initial Search")
     },
     {
       label: "Living Search",
       content: (
         <Suspense fallback={<div>Loading Living Search...</div>}>
-          <Living  
-            startDate={projectCreationDate}
+          <LivingStateChart 
+            activeTab={activeTab}
             activeState={activeState}
             onStateChange={onStateChange}
             onStateTextChange={onStateTextChange}
-            selectedMonth={selectedMonth} 
-            onMonthChange={onMonthChange} 
-            activeTab={activeTab} 
-            stats={living} 
+            nodeList={prisma_data.living_state_nodes} 
+            connections={prisma_data.living_state_connections}
+            stats={stats}
+            livingStats={living}
+            projectCreationDate={prismaDiagram.living.projectCreationDate}
+            selectedMonth={selectedMonth}
+            onMonthChange={onMonthChange}
+            startDate={prismaDiagram.living.projectCreationDate}
           />
         </Suspense>
       ),
-      onClick: () => onTabChange?.("Living Search"),
+      onClick: () => onTabChange?.("Living Search")
     }
   ];
 
-  // Only update stats when tab changes
-  useEffect(() => {
-    if (activeTab === "Current State") {
-      setStats(currentStats);
-    } else if (activeTab === "Initial Search") {
-      setStats(initialStats);
-    } else if (activeTab === "Living Search") {
-      setLiving(livingStats);
-    }
-  }, [activeTab, currentStats, initialStats, livingStats]);
-
-  // Update state text only when stats change for the active tab
-  useEffect(() => {
-    const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
-      const value = stats?.[key as keyof PrismaStats];
-      return value !== undefined ? String(value) : `0`;
-    });
-    onStateTextChange?.(parsedLabel);
-  }, [stats, onStateTextChange]);
-
   return (
-    <Tabs tabs={tabData} />
+    <div className="h-100">
+      <Tabs tabs={tabData} />
+    </div>
   );
 };
 
-export default PrismaDiagram;
+export default React.memo(PrismaDiagram);

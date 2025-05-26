@@ -4,32 +4,28 @@ import './chart.css';
 import { Modal } from 'react-bootstrap';
 import CustomNode from './CustomeNode';
 import { PRISMA_NODES } from './Constants';
-import {
-  fetchCurrentPapers,
-  fetchInitialPapers,
-  fetchLivingPapers,
-} from "../../../redux/prismaPaperSlice";
 import { fetchFullTextExcludeReasons } from '../../../redux/prismaDiagramSlice';
 import { RootState } from '../../../redux/store';
+import { usePrismaPapers } from '../hooks/usePrismaPapers';
 
-type PrismaStats = {
-  total: 0,
-  living: 0,
-  initial: 0,
-  manual: 0,
-  duplicate: 0,
-  unique: 0,
-  unscreened: 0,
-  screened: 0,
-  excluded_by_title: 0,
-  excluded_by_abstract: 0,
-  fulltext_review: 0,
-  excluded_by_fulltext: 0,
-  include: 0,
-  analysis: 0,
-  include_n: 0,
-  analysis_n: 0
-};
+interface PrismaStats {
+  total: number;
+  living: number;
+  initial: number;
+  manual: number;
+  duplicate: number;
+  unique: number;
+  unscreened: number;
+  screened: number;
+  excluded_by_title: number;
+  excluded_by_abstract: number;
+  fulltext_review: number;
+  excluded_by_fulltext: number;
+  include: number;
+  analysis: number;
+  include_n: number;
+  analysis_n: number;
+}
 
 type ExcludeReason = {
   reason: string;
@@ -47,15 +43,26 @@ interface CurrentStateChartProps {
   fullTextExcludeReason: ExcludeReason[];
 }
 
-const CurrentStateChart: React.FC<CurrentStateChartProps> = (
-  { activeTab, connections, nodeList, stats, onStateChange, onStateTextChange, fullTextExcludeReason }) => {
+const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
+  activeTab,
+  connections,
+  nodeList,
+  stats,
+  onStateChange,
+  onStateTextChange,
+  fullTextExcludeReason,
+  activeState
+}) => {
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
   const [showModal, setShowModal] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
+  const { searchPapers } = usePrismaPapers(activeTab, '', activeState);
 
   const nodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [paths, setPaths] = useState<string[]>([]);
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
@@ -83,16 +90,10 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
     });
     
     if (nodeId === 'excluded_by_fulltext') {
-      dispatch(fetchFullTextExcludeReasons());
+      dispatch(fetchFullTextExcludeReasons({ projectId, cqId }));
       handleOpenModal();
     } else {
-      if (activeTab === "Current State") {
-        dispatch(fetchCurrentPapers({ stage: nodeId, page: 1, size: 10, projectId, cqId }));
-      } else if (activeTab === "Initial Search") {
-        dispatch(fetchInitialPapers({ stage: nodeId, page: 1, size: 10, projectId, cqId }));
-      } else if (activeTab === "Living Search") {
-        dispatch(fetchLivingPapers({ stage: nodeId, month: currentYearMonth, page: 1, size: 10, projectId, cqId }));
-      }
+      searchPapers('');
     }
     onStateChange?.(nodeId);
     onStateTextChange?.(parsedLabel);
@@ -132,7 +133,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
           const straightLine = `M ${fromX},${fromY} L ${toX},${toY - 20}`;
           newPaths.push(straightLine);
         }
-
         else if (type === 'left-right-bottom') {
           const verticalGap = Math.abs(toY - fromY);
           const verticalPart = verticalGap / 3;
@@ -147,7 +147,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
 
           newPaths.push(leftToRightPath);
         }
-
         else if (type === 'left-to-center-right') {
           const verticalGap = Math.abs(toCenterYAdjusted - fromY);
           const verticalPart = verticalGap / 2;
@@ -159,7 +158,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
           `;
           newPaths.push(leftToCenterRightPath);
         }
-
         else if (type === '2-left-to-center-right') {
           const fromCenterX = (fromBox.left + fromBox.right) / 2;
           const fromBottomY = fromBox.bottom;
@@ -172,7 +170,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
           const toX = toLeftX - svgBox.left;
 
           const midPoint = (fromX + toX) / 2;
-          const toHeightCenter = toCenterY - 20 - svgBox.top
+          const toHeightCenter = toCenterY - 20 - svgBox.top;
           const path = `
             M ${fromX},${fromY + 10} 
             H ${midPoint + 55}   
@@ -185,16 +183,24 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = (
     });
 
     setPaths(newPaths);
-  }
+  };
 
   useEffect(() => {
-    const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
-      const value = stats?.[key as keyof PrismaStats];
-      return value !== undefined ? String(value) : `0`;
-    });
-    onStateTextChange?.(parsedLabel);
-    createSVGPath();
-  }, []);
+    if (projectId && cqId && stats && !hasInitialized) {
+      const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+        const value = stats?.[key as keyof PrismaStats];
+        return value !== undefined ? String(value) : `0`;
+      });
+      onStateTextChange?.(parsedLabel);
+      setHasInitialized(true);
+    }
+  }, [projectId, cqId, stats, hasInitialized, onStateTextChange]);
+
+  useEffect(() => {
+    if (nodeRefs.current && Object.keys(nodeRefs.current).length > 0) {
+      createSVGPath();
+    }
+  }, [nodeRefs.current, connections]);
 
   return (
     <>

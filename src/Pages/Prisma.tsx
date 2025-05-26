@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { Row, Col } from 'react-bootstrap';
 import PrismaDiagram from '../components/Prisma/PrismaDiagram';
 import PrismaPapers from '../components/Prisma/PrismaPapers';
-import {
-  fetchCurrentPapers,
-  fetchInitialPapers,
-  fetchLivingPapers,
-} from "../redux/prismaPaperSlice";
 import {
   fetchCurrentStats,
   fetchInitialStats,
@@ -17,9 +12,10 @@ import useMediaQuery from '../hooks/useMediaQuery';
 import '../components/Prisma/prisma.css';
 
 const Prisma: React.FC = () => {
-  const isMobile = useMediaQuery();
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector((state) => state.project);
+  const hasInitialized = useRef(false);
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -35,22 +31,33 @@ const Prisma: React.FC = () => {
     setActiveTab(tabName);
   };
 
-  // Load initial data for the current tab only
+  // Load initial stats for the current tab only
   useEffect(() => {
-    if (!projectId || !cqId) return;
+    // Skip if we don't have valid IDs or if this is the initial render with empty IDs
+    if (!projectId || !cqId || projectId === '' || cqId === '') return;
 
-    // Load papers and stats based on active tab
+    // Skip the initial render, only run on actual ID updates
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      return;
+    }
+
+    // Load stats based on active tab
     if (activeTab === 'Current State') {
-      dispatch(fetchCurrentPapers({ stage: 'total', page: 1, size: 10, projectId, cqId }));
-      dispatch(fetchCurrentStats());
+      dispatch(fetchCurrentStats({ projectId, cqId }));
     } else if (activeTab === 'Initial Search') {
-      dispatch(fetchInitialPapers({ stage: 'total', page: 1, size: 10, projectId, cqId }));
-      dispatch(fetchInitialStats());
+      dispatch(fetchInitialStats({ projectId, cqId }));
     } else if (activeTab === 'Living Search') {
-      dispatch(fetchLivingPapers({ stage: 'total', month: currentYearMonth, page: 1, size: 10, projectId, cqId }));
-      dispatch(fetchLivingStats(currentYearMonth));
+      dispatch(fetchLivingStats({ projectId, cqId, endDate: currentYearMonth }));
     }
   }, [projectId, cqId, activeTab, dispatch, currentYearMonth]);
+
+  // Reset initialization flag when project or CQ changes
+  useEffect(() => {
+    if (projectId === '' || cqId === '') {
+      hasInitialized.current = false;
+    }
+  }, [projectId, cqId]);
 
   if (!projectId || !cqId) {
     return <div>Loading...</div>;

@@ -11,152 +11,160 @@ import { fetchLivingPapers } from '../../redux/prismaPaperSlice';
 type PrismaLivingStats = {
   month: string;
   count: number;
-  total_papers: number
+  total_papers: number;
 }
 
-type PrismaStats = {
-  total: 0,
-  living: 0,
-  initial: 0,
-  manual: 0,
-  duplicate: 0,
-  unique: 0,
-  unscreened: 0,
-  screened: 0,
-  excluded_by_title: 0,
-  excluded_by_abstract: 0,
-  fulltext_review: 0,
-  excluded_by_fulltext: 0,
-  include: 0,
-  analysis: 0,
-  include_n: 0,
-  analysis_n: 0
-};
-const defaultStats: PrismaStats = {
-  total: 0,
-  living: 0,
-  initial: 0,
-  manual: 0,
-  duplicate: 0,
-  unique: 0,
-  unscreened: 0,
-  screened: 0,
-  excluded_by_title: 0,
-  excluded_by_abstract: 0,
-  fulltext_review: 0,
-  excluded_by_fulltext: 0,
-  include: 0,
-  analysis: 0,
-  include_n: 0,
-  analysis_n: 0
-};
+interface PrismaStats {
+  total: number;
+  living: number;
+  initial: number;
+  manual: number;
+  duplicate: number;
+  unique: number;
+  unscreened: number;
+  screened: number;
+  excluded_by_title: number;
+  excluded_by_abstract: number;
+  fulltext_review: number;
+  excluded_by_fulltext: number;
+  include: number;
+  analysis: number;
+  include_n: number;
+  analysis_n: number;
+}
+
+interface CellData {
+  date: string;
+  count: number;
+  isCurrentMonth: boolean;
+}
+
+interface CalendarYearData {
+  [year: number]: (CellData | null)[];
+}
 
 interface LivingProps {
-  activeTab: string,
-  stats: PrismaLivingStats[];
+  activeTab: string;
+  stats: PrismaStats;
+  livingStats: PrismaLivingStats[];
   onMonthChange?: (selectedMonth: string) => void;
   selectedMonth: string;
   onStateChange?: (activeState: string) => void;
   onStateTextChange?: (stateText: string) => void;
   activeState: string;
-  startDate:string;
+  startDate: string;
+  projectCreationDate: string;
+  nodeList: Array<any>;
+  connections: Array<any>;
 }
 
-const Living: React.FC<LivingProps> = ({ 
-  activeTab, stats,startDate, selectedMonth, onMonthChange, activeState, onStateChange, onStateTextChange }) => {
+const Living: React.FC<LivingProps> = ({
+  activeTab,
+  stats,
+  livingStats,
+  onMonthChange,
+  selectedMonth,
+  onStateChange,
+  onStateTextChange,
+  activeState,
+  startDate,
+  projectCreationDate,
+  nodeList,
+  connections
+}) => {
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
-  const { livingStatsByMonth } = useAppSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
-  const [calendarData, setCalendarData] = useState<CalendarData>({});
+  const [calendarData, setCalendarData] = useState<CalendarYearData>({});
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
   const currentYearMonth = `${currentYear}-${currentMonth}`;
 
   useEffect(() => {
-    const data = generateCalendarData(startDate, new Date());
-    fetchCalendarData(data, stats);
-    onMonthChange?.(currentYearMonth);
-  }, [stats]);
+    if (projectId && cqId && selectedMonth) {
+      dispatch(fetchLivingStatsByMonth({ projectId, cqId, month: selectedMonth }));
+    }
+  }, [projectId, cqId, selectedMonth, dispatch]);
 
-  const fetchCalendarData = async (calendar: CalendarData, stats: PrismaLivingStats[]) => {
-    stats?.forEach(({ month, count, total_papers }) => {
-      const [yearStr, monthStr] = month.split("-");
-      const year = parseInt(yearStr, 10);
-      const monthIndex = parseInt(monthStr, 10) - 1; // Convert to 0-indexed
+  useEffect(() => {
+    if (livingStats && livingStats.length > 0) {
+      const startDateObj = new Date(startDate);
+      const data = generateCalendarData(startDateObj, new Date()) as CalendarYearData;
+      
+      // Update calendar data with stats
+      livingStats.forEach(({ month, count }) => {
+        const [yearStr, monthStr] = month.split("-");
+        const year = parseInt(yearStr);
+        const monthIndex = parseInt(monthStr) - 1;
 
-      if (calendar[year] && calendar[year][monthIndex] !== null) {
-        calendar[year][monthIndex] = {
-          month: month,
-          total_papers: total_papers,
-          count: count,
-        };
-      }
-    });
+        if (data[year] && data[year][monthIndex]) {
+          data[year][monthIndex] = {
+            date: month,
+            count: count,
+            isCurrentMonth: month === selectedMonth
+          };
+        }
+      });
 
-    setCalendarData({ ...calendar });
+      setCalendarData(data);
+    }
+  }, [livingStats, startDate, selectedMonth]);
+
+  const handleMonthClick = (month: string) => {
+    onMonthChange?.(month);
+    setShowMonthStats(true);
   };
 
-  const showStats = (month: string) => {
-    if (!projectId || !cqId) return;
+  const renderCalendar = (year: number) => {
+    const yearData = calendarData[year];
+    if (!yearData) return null;
 
-    dispatch(fetchLivingStatsByMonth(month));
-    dispatch(fetchLivingPapers({ stage: 'include', month: month, page: 1, size: 10, projectId, cqId }));
-    setShowMonthStats(true);
-    onMonthChange?.(month);
+    return yearData.map((cell: CellData | null, idx: number) => {
+      if (!cell) return <div key={idx} className="calendar-cell empty"></div>;
+
+      return (
+        <div
+          key={idx}
+          className={`calendar-cell ${cell.isCurrentMonth ? 'current-month' : ''} ${
+            cell.date === selectedMonth ? 'selected' : ''
+          }`}
+          onClick={() => handleMonthClick(cell.date)}
+        >
+          <div className="cell-content">
+            <div className="month">{monthNames[parseInt(cell.date.split('-')[1]) - 1]}</div>
+            <div className="count">{cell.count}</div>
+          </div>
+        </div>
+      );
+    });
   };
 
   return (
-    <div className="calendar-container">
-      <div>
-        <div className="header-row">
-          <div className="year-cell"></div>
-          {monthNames.map(m => (
-            <div key={m} className="month-cell">{m}</div>
-          ))}
-        </div>
-
-        {Object.keys(calendarData).map(year => (
-          <div className="year-row" key={year}>
-            <div className="year-cell">{year}</div>
-            {calendarData[parseInt(year)].map((cell, idx) => (
-              <>
-                {cell ? (
-                  <div
-                    className={`data-cell ${cell.month === selectedMonth ? 'active-cell' : ''}`}
-                    key={idx}
-                    onClick={() => showStats(cell.month)}
-                  >
-                    <div>
-                      {cell.count > 0 && <>{cell.count}</>}
-                    </div>
-                    <div>{cell.total_papers}</div>
-                  </div>
-                ) : (
-                  <div className="data-cell empty-cell" key={idx}></div>
-                )}
-              </>
-            ))}
+    <div className="living-search-container">
+      <div className="calendar-container">
+        {Object.keys(calendarData).map((year) => (
+          <div key={year} className="calendar-year">
+            <h3>{year}</h3>
+            <div className="calendar-grid">{renderCalendar(parseInt(year))}</div>
           </div>
         ))}
-        <div className='mt-4'>
-          {
-            showMonthStats && <InitialStateChart
-              activeTab={activeTab}
-              activeState={activeState}
-              onStateChange={onStateChange}
-              onStateTextChange={onStateTextChange}
-              nodeList={prisma_data.living_state_nodes}
-              connections={prisma_data.living_state_connections}
-              stats={livingStatsByMonth}
-              activeMonth={selectedMonth} />
-          }
-
-        </div>
       </div>
+      {showMonthStats && (
+        <div className="month-stats">
+          <InitialStateChart
+            activeTab={activeTab}
+            activeState={activeState}
+            onStateChange={onStateChange}
+            onStateTextChange={onStateTextChange}
+            nodeList={nodeList}
+            connections={connections}
+          />
+        </div>
+      )}
     </div>
   );
 };
