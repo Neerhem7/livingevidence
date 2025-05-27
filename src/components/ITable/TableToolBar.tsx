@@ -17,7 +17,6 @@ interface Filter {
 const TableToolBar: React.FC<Props> = ({ filters, onFiltersChange }) => {
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
   const [searchTerms, setSearchTerms] = useState<{ [key: number]: string }>({});
-  const [showFiltersPanel, setShowFiltersPanel] = useState(false);
 
   const updateSelectedFilters = (nodeId: number, value: number, isRadio: boolean) => {
     setSelectedFilters(prev => {
@@ -75,7 +74,9 @@ const TableToolBar: React.FC<Props> = ({ filters, onFiltersChange }) => {
         <div className="row w-100 g-2">
           {filters.map((filter) => {
             const searchTerm = searchTerms[filter.node_id] || '';
-            const filteredValues = filter.values.filter((value: number) =>
+            const filteredValues = filter.type === 'multiple choice dropdown list' ? filter.all_values.filter((value: number) =>
+              value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            ) : filter.values.filter((value: number) =>
               value.toString().toLowerCase().includes(searchTerm.toLowerCase())
             );
 
