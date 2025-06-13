@@ -4,6 +4,7 @@ import Tabs from '../Tabs/Tab';
 import { RootState } from '../../redux/store';
 import { PRISMA_NODES } from './Charts/Constants';
 import { prisma_data } from './Charts/Prisma_Data';
+import { usePrismaPapers } from './hooks/usePrismaPapers';
 
 type PrismaLivingStats = {
   month: string;
@@ -38,6 +39,7 @@ interface PrismaDiagramProps {
   onTabChange?: (tab: string) => void;
   onStateChange?: (state: string) => void;
   onStateTextChange?: (text: string) => void;
+  onStageChange?: (stage: string) => void;
 }
 
 interface TabsProps {
@@ -79,27 +81,44 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
   onMonthChange,
   onTabChange,
   onStateChange, 
-  onStateTextChange 
+  onStateTextChange,
+  onStageChange
 }) => {
-  const { projectId, cqId } = useSelector((state: RootState) => state.project);
   const prismaDiagram = useSelector((state: RootState) => state.prismaDiagram);
   const [stats, setStats] = useState<PrismaStats>(defaultStats);
   const [living, setLiving] = useState<PrismaLivingStats[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-
+  
   useEffect(() => {
     if (activeTab === 'Current State') {
       setStats(prismaDiagram.current.stats);
       setActiveIndex(0);
+      const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+        const value = prismaDiagram.current.stats?.[key as keyof PrismaStats];
+        return value !== undefined ? String(value) : `0`;
+      });
+      onStateTextChange?.(parsedLabel);
     } else if (activeTab === 'Initial Search') {
       setStats(prismaDiagram.initial.stats);
       setActiveIndex(1);
+      const parsedLabel = PRISMA_NODES.INITIAL_SEARCH.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+        const value = prismaDiagram.initial.stats?.[key as keyof PrismaStats];
+        return value !== undefined ? String(value) : `0`;
+      });
+      onStateTextChange?.(parsedLabel);
     } else if (activeTab === 'Living Search') {
       setStats(prismaDiagram.living.stats);
       setLiving(prismaDiagram.living.monthlyStats);
       setActiveIndex(2);
+      const parsedLabel = PRISMA_NODES.AUTO_UPDATE.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+        const value = prismaDiagram.living.stats?.[key as keyof PrismaStats];
+        return value !== undefined ? String(value) : `0`;
+      });
+      onStateTextChange?.(parsedLabel);
+      onStageChange?.('living');
     }
-  }, [activeTab, prismaDiagram]);
+  }, [activeTab, prismaDiagram, onStateTextChange, onStageChange]);
+
 
   const tabData = [
     {

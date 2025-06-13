@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { RootState } from '../../redux/store';
 import { generateCalendarData, CalendarData } from '../../utils/utils';
@@ -37,6 +38,7 @@ interface CellData {
   date: string;
   count: number;
   isCurrentMonth: boolean;
+  total_papers: number;
 }
 
 interface CalendarYearData {
@@ -74,6 +76,7 @@ const Living: React.FC<LivingProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
+  const { living } = useSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
   const [calendarData, setCalendarData] = useState<CalendarYearData>({});
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
@@ -94,9 +97,8 @@ const Living: React.FC<LivingProps> = ({
     if (livingStats && livingStats.length > 0) {
       const startDateObj = new Date(startDate);
       const data = generateCalendarData(startDateObj, new Date()) as CalendarYearData;
-      
-      // Update calendar data with stats
-      livingStats.forEach(({ month, count }) => {
+
+      livingStats.forEach(({ month, count, total_papers }) => {
         const [yearStr, monthStr] = month.split("-");
         const year = parseInt(yearStr);
         const monthIndex = parseInt(monthStr) - 1;
@@ -105,7 +107,8 @@ const Living: React.FC<LivingProps> = ({
           data[year][monthIndex] = {
             date: month,
             count: count,
-            isCurrentMonth: month === selectedMonth
+            isCurrentMonth: month === selectedMonth,
+            total_papers: total_papers
           };
         }
       });
@@ -115,57 +118,72 @@ const Living: React.FC<LivingProps> = ({
   }, [livingStats, startDate, selectedMonth]);
 
   const handleMonthClick = (month: string) => {
-    onMonthChange?.(month);
-    setShowMonthStats(true);
+    if (projectId && cqId) {
+      dispatch(fetchLivingStatsByMonth({projectId, cqId, month}));
+      dispatch(fetchLivingPapers({
+        projectId,
+        cqId,
+        month,
+        stage: 'living',
+        page: 1,
+        size: 10
+      }));
+      onMonthChange?.(month);
+      setShowMonthStats(true);
+    }
   };
 
-  const renderCalendar = (year: number) => {
-    const yearData = calendarData[year];
-    if (!yearData) return null;
-
-    return yearData.map((cell: CellData | null, idx: number) => {
-      if (!cell) return <div key={idx} className="calendar-cell empty"></div>;
-
-      return (
-        <div
-          key={idx}
-          className={`calendar-cell ${cell.isCurrentMonth ? 'current-month' : ''} ${
-            cell.date === selectedMonth ? 'selected' : ''
-          }`}
-          onClick={() => handleMonthClick(cell.date)}
-        >
-          <div className="cell-content">
-            <div className="month">{monthNames[parseInt(cell.date.split('-')[1]) - 1]}</div>
-            <div className="count">{cell.count}</div>
-          </div>
-        </div>
-      );
-    });
-  };
+ 
 
   return (
-    <div className="living-search-container">
       <div className="calendar-container">
-        {Object.keys(calendarData).map((year) => (
-          <div key={year} className="calendar-year">
-            <h3>{year}</h3>
-            <div className="calendar-grid">{renderCalendar(parseInt(year))}</div>
+        <div>
+          <div className="header-row">
+            <div className="year-cell"></div>
+            {monthNames.map(m => (
+              <div key={m} className="month-cell">{m}</div>
+            ))}
+          </div>
+          {Object.keys(calendarData).map(year => (
+          <div className="year-row" key={year}>
+            <div className="year-cell">{year}</div>
+            {calendarData[parseInt(year)].map((cell, idx) => (
+              <>
+                {cell ? (
+                  <div
+                    className={`data-cell ${cell.date === selectedMonth ? 'active-cell' : ''}`}
+                    key={idx}
+                    onClick={() => handleMonthClick(cell.date)}
+                  >
+                    <div>
+                      {cell.total_papers > 0 && <>{cell.total_papers}</>}
+                    </div>
+                    <div>{cell.count}</div>
+                  </div>
+                ) : (
+                  <div className="data-cell empty-cell" key={idx}></div>
+                )}
+              </>
+            ))}
           </div>
         ))}
-      </div>
-      {showMonthStats && (
-        <div className="month-stats">
-          <InitialStateChart
-            activeTab={activeTab}
-            activeState={activeState}
-            onStateChange={onStateChange}
-            onStateTextChange={onStateTextChange}
-            nodeList={nodeList}
-            connections={connections}
-          />
         </div>
+        <div className="mt-4 w-50">
+      {showMonthStats && (
+       
+          <InitialStateChart
+          activeTab={activeTab}
+          activeState={activeState}
+          onStateChange={onStateChange}
+          onStateTextChange={onStateTextChange}
+          nodeList={prisma_data.living_state_nodes}
+          connections={prisma_data.living_state_connections}
+          stats={living.stats}
+          activeMonth={selectedMonth} 
+          />
       )}
-    </div>
+        </div>
+      </div>
   );
 };
 

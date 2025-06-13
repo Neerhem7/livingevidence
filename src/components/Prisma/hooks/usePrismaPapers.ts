@@ -23,32 +23,19 @@ export const usePrismaPapers = (
   const [pagination, setPagination] = useState<Pagination>();
   const prevProjectId = useRef<string | null>(null);
   const prevCqId = useRef<string | null>(null);
+  const isInitialLoad = useRef(true);
 
   const fetchPapers = (params: FetchParams) => {
-    // Skip if we don't have valid IDs
     if (!params.projectId || !params.cqId) {
-      console.log('Skipping fetch - invalid IDs:', { projectId: params.projectId, cqId: params.cqId });
       return;
     }
 
-    // Generate unique key for this fetch
     const fetchKey = `${params.projectId}-${params.cqId}-${params.stage}-${activeTab}`;
     
-    // Skip if this exact fetch was just made
     if (lastFetchKey.has(fetchKey)) {
-      console.log('Skipping duplicate fetch:', fetchKey);
       return;
     }
 
-    console.log('Fetching papers with params:', { 
-      projectId: params.projectId, 
-      cqId: params.cqId, 
-      stage: params.stage,
-      activeTab,
-      fetchKey
-    });
-
-    // Add to tracking set
     lastFetchKey.add(fetchKey);
     
     const fetchAction = {
@@ -109,33 +96,29 @@ export const usePrismaPapers = (
   useEffect(() => {
     const isValidId = (id: string | null) => id && id !== '';
     const hasValidIds = isValidId(projectId) && isValidId(cqId);
-    const isUpdate = (
-      hasValidIds && 
-      (projectId !== prevProjectId.current || cqId !== prevCqId.current) &&
-      (prevProjectId.current !== null || prevCqId.current !== null) // Skip initial load
-    );
     
-    if (isUpdate && projectId && cqId) {
-      console.log('ID update detected:', { projectId, cqId, prevProjectId: prevProjectId.current, prevCqId: prevCqId.current });
+    if (hasValidIds && !isInitialLoad.current) {
       const params: FetchParams = {
         stage: activeState || 'total',
         page: 1,
         size: 10,
-        projectId: projectId,
-        cqId: cqId,
+        projectId: projectId as string,
+        cqId: cqId as string,
       };
       fetchPapers(params);
     }
 
-    // Update previous values
-    prevProjectId.current = projectId;
-    prevCqId.current = cqId;
-  }, [projectId, cqId]);
+    // Update initial load flag
+    if (hasValidIds && isInitialLoad.current) {
+      isInitialLoad.current = false;
+    }
+  }, [projectId, cqId, activeTab, activeState]);
 
   // Clear fetch tracking when IDs change
   useEffect(() => {
     if (!projectId || !cqId) {
       lastFetchKey.clear();
+      isInitialLoad.current = true;
     }
   }, [projectId, cqId]);
 

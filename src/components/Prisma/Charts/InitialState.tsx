@@ -79,7 +79,6 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
     }
     onStateChange?.(nodeId);
     onStateTextChange?.(parsedLabel);
-    console.info("onStateChange", nodeId, nodeLabel, parsedLabel)
   };
 
   useEffect(() => {
