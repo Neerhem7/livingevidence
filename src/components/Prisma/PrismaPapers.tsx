@@ -52,7 +52,6 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({
     <Card className="shadow-sm h-100 d-flex flex-column prisma-card">
       <Card.Header className="d-flex align-items-center py-3 prisma-header">
         <div className="d-flex align-items-center flex-grow-1">
-          <h5 className="mb-0 prisma-title">Papers</h5>
           {activeStateText && (
             <span className="ms-2 prisma-subtitle">{activeStateText}</span>
           )}
