@@ -82,16 +82,13 @@ const Living: React.FC<LivingProps> = ({
   const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-  const currentYearMonth = `${currentYear}-${currentMonth}`;
+
 
   useEffect(() => {
     if (projectId && cqId && selectedMonth) {
       dispatch(fetchLivingStatsByMonth({ projectId, cqId, month: selectedMonth }));
     }
-  }, [projectId, cqId, selectedMonth, dispatch]);
+  }, [selectedMonth]);
 
   useEffect(() => {
     if (livingStats && livingStats.length > 0) {

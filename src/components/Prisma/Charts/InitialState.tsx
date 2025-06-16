@@ -66,20 +66,33 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
   const handleNodeClick = (nodeId: string, nodeLabel: string) => {
     if (!projectId || !cqId) return;
 
-    const clickableNodes = ['analysis', 'include', 'manual'];
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
       return value !== undefined ? String(value) : `0`;
     });
+
     if (nodeId === 'excluded_by_fulltext') {
-      handleOpenModal()
+      handleOpenModal();
     }
-    else {
-      searchPapers('');
-    }
+    
     onStateChange?.(nodeId);
     onStateTextChange?.(parsedLabel);
   };
+
+  useEffect(() => {
+    console.info("hello state chage in initial state chart", activeState)
+    const isValidId = (id: string | null) => {
+      if (!id) return false;
+      if (id === '0') return false;
+      return id !== '';
+    };
+
+    const hasValidIds = isValidId(projectId) && isValidId(cqId);
+    
+    if (activeState && hasValidIds) {
+      searchPapers('');
+    }
+  }, [activeState]);
 
   useEffect(() => {
     const svg = svgRef.current;

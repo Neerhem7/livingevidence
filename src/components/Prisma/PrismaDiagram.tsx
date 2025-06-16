@@ -89,6 +89,11 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
   const [living, setLiving] = useState<PrismaLivingStats[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const currentYearMonth = `${currentYear}-${currentMonth}`;
+
   useEffect(() => {
     if (activeTab === 'Current State') {
       setStats(prismaDiagram.current.stats);
@@ -98,6 +103,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
         return value !== undefined ? String(value) : `0`;
       });
       onStateTextChange?.(parsedLabel);
+      onStateChange?.('initial');
     } else if (activeTab === 'Initial Search') {
       setStats(prismaDiagram.initial.stats);
       setActiveIndex(1);
@@ -106,6 +112,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
         return value !== undefined ? String(value) : `0`;
       });
       onStateTextChange?.(parsedLabel);
+      onStateChange?.('initial');
     } else if (activeTab === 'Living Search') {
       setStats(prismaDiagram.living.stats);
       setLiving(prismaDiagram.living.monthlyStats);
@@ -115,67 +122,80 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
         return value !== undefined ? String(value) : `0`;
       });
       onStateTextChange?.(parsedLabel);
-      onStageChange?.('living');
+      onStateChange?.('living');
+      // onMonthChange?.(currentYearMonth);
     }
-  }, [activeTab, prismaDiagram, onStateTextChange, onStageChange]);
+  }, [activeTab, prismaDiagram, onStateTextChange, onStateChange, onStageChange]);
 
+  const renderActiveChart = () => {
+    switch (activeTab) {
+      case 'Current State':
+        return (
+          <Suspense fallback={<div>Loading Current State...</div>}>
+            <CurrentStateChart 
+              activeTab={activeTab}
+              activeState={activeState}
+              onStateChange={onStateChange}
+              onStateTextChange={onStateTextChange}
+              nodeList={prisma_data.current_state_nodes} 
+              connections={prisma_data.current_state_connections}
+              fullTextExcludeReason={prismaDiagram.fullTextExclusionReasons}
+              stats={stats} 
+            />
+          </Suspense>
+        );
+      case 'Initial Search':
+        return (
+          <Suspense fallback={<div>Loading Initial Search...</div>}>
+            <InitialStateChart 
+              activeTab={activeTab}
+              activeState={activeState}
+              onStateChange={onStateChange}
+              onStateTextChange={onStateTextChange}
+              nodeList={prisma_data.initial_state_nodes} 
+              connections={prisma_data.initial_state_connections}
+              stats={stats}
+            />
+          </Suspense>
+        );
+      case 'Living Search':
+        return (
+          <Suspense fallback={<div>Loading Living Search...</div>}>
+            <LivingStateChart 
+              activeTab={activeTab}
+              activeState={activeState}
+              onStateChange={onStateChange}
+              onStateTextChange={onStateTextChange}
+              nodeList={prisma_data.living_state_nodes} 
+              connections={prisma_data.living_state_connections}
+              stats={stats}
+              livingStats={living}
+              projectCreationDate={prismaDiagram.living.projectCreationDate}
+              selectedMonth={selectedMonth}
+              onMonthChange={onMonthChange}
+              startDate={prismaDiagram.living.projectCreationDate}
+            />
+          </Suspense>
+        );
+      default:
+        return null;
+    }
+  };
 
   const tabData = [
     {
       label: "Current State",
-      content: (
-        <Suspense fallback={<div>Loading Current State...</div>}>
-          <CurrentStateChart 
-            activeTab={activeTab}
-            activeState={activeState}
-            onStateChange={onStateChange}
-            onStateTextChange={onStateTextChange}
-            nodeList={prisma_data.current_state_nodes} 
-            connections={prisma_data.current_state_connections}
-            fullTextExcludeReason={prismaDiagram.fullTextExclusionReasons}
-            stats={stats} 
-          />
-        </Suspense>
-      ),
+      content: renderActiveChart(),
       onClick: () => onTabChange?.("Current State")
     },
     {
       label: "Initial Search",
-      content: (
-        <Suspense fallback={<div>Loading Initial Search...</div>}>
-          <InitialStateChart 
-            activeTab={activeTab}
-            activeState={activeState}
-            onStateChange={onStateChange}
-            onStateTextChange={onStateTextChange}
-            nodeList={prisma_data.initial_state_nodes} 
-            connections={prisma_data.initial_state_connections}
-            stats={stats}
-          />
-        </Suspense>
-      ),
+      content: renderActiveChart(),
       onClick: () => onTabChange?.("Initial Search")
     },
     {
       label: "Living Search",
-      content: (
-        <Suspense fallback={<div>Loading Living Search...</div>}>
-          <LivingStateChart 
-            activeTab={activeTab}
-            activeState={activeState}
-            onStateChange={onStateChange}
-            onStateTextChange={onStateTextChange}
-            nodeList={prisma_data.living_state_nodes} 
-            connections={prisma_data.living_state_connections}
-            stats={stats}
-            livingStats={living}
-            projectCreationDate={prismaDiagram.living.projectCreationDate}
-            selectedMonth={selectedMonth}
-            onMonthChange={onMonthChange}
-            startDate={prismaDiagram.living.projectCreationDate}
-          />
-        </Suspense>
-      ),
+      content: renderActiveChart(),
       onClick: () => onTabChange?.("Living Search")
     }
   ];

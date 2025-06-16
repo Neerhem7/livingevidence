@@ -8,7 +8,6 @@ import {
 } from "../../../redux/prismaPaperSlice";
 import { Paper, Pagination, FetchParams } from '../types';
 
-// Track last successful fetch to prevent duplicates
 const lastFetchKey = new Set<string>();
 
 export const usePrismaPapers = (
@@ -21,8 +20,6 @@ export const usePrismaPapers = (
   const { current, initial, living, loading } = useAppSelector((state: RootState) => state.prismaPaper);
   const [papers, setPapers] = useState<Paper[]>([]);
   const [pagination, setPagination] = useState<Pagination>();
-  const prevProjectId = useRef<string | null>(null);
-  const prevCqId = useRef<string | null>(null);
   const isInitialLoad = useRef(true);
 
   const fetchPapers = (params: FetchParams) => {
@@ -30,13 +27,13 @@ export const usePrismaPapers = (
       return;
     }
 
-    const fetchKey = `${params.projectId}-${params.cqId}-${params.stage}-${activeTab}`;
-    
-    if (lastFetchKey.has(fetchKey)) {
-      return;
+    if (params.searchKey) {
+      const fetchKey = `${params.projectId}-${params.cqId}-${params.stage}-${activeTab}-${params.searchKey}`;
+      if (lastFetchKey.has(fetchKey)) {
+        return;
+      }
+      lastFetchKey.add(fetchKey);
     }
-
-    lastFetchKey.add(fetchKey);
     
     const fetchAction = {
       'Current State': () => fetchCurrentPapers(params),
@@ -94,7 +91,12 @@ export const usePrismaPapers = (
 
   // Fetch when projectId or cqId updates (not on initial load)
   useEffect(() => {
-    const isValidId = (id: string | null) => id && id !== '';
+    const isValidId = (id: string | null) => {
+      if (!id) return false;
+      if (id === '0') return false;
+      return id !== '';
+    };
+    
     const hasValidIds = isValidId(projectId) && isValidId(cqId);
     
     if (hasValidIds && !isInitialLoad.current) {
@@ -112,11 +114,11 @@ export const usePrismaPapers = (
     if (hasValidIds && isInitialLoad.current) {
       isInitialLoad.current = false;
     }
-  }, [projectId, cqId, activeTab, activeState]);
+  }, [projectId, cqId]);
 
   // Clear fetch tracking when IDs change
   useEffect(() => {
-    if (!projectId || !cqId) {
+    if (!projectId || !cqId || projectId === '0' || cqId === '0') {
       lastFetchKey.clear();
       isInitialLoad.current = true;
     }

@@ -63,10 +63,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [paths, setPaths] = useState<string[]>([]);
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-  const currentYearMonth = `${currentYear}-${currentMonth}`;
 
   const nodeData = nodeList.map(node => ({
     ...node,
@@ -83,7 +79,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
 
   const handleNodeClick = (nodeId: string, nodeLabel: string) => {
     if (!projectId || !cqId) return;
-
+    
     const parsedLabel = nodeLabel.replace(/\$(\w+)\$/g, (_: string, key: string) => {
       const value = stats?.[key as keyof PrismaStats];
       return value !== undefined ? String(value) : `0`;
@@ -92,12 +88,26 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
     if (nodeId === 'excluded_by_fulltext') {
       dispatch(fetchFullTextExcludeReasons({ projectId, cqId }));
       handleOpenModal();
-    } else {
-      searchPapers('');
     }
+    
     onStateChange?.(nodeId);
     onStateTextChange?.(parsedLabel);
   };
+
+  useEffect(() => {
+    console.info("hello state chage in current state chart", activeState)
+    const isValidId = (id: string | null) => {
+      if (!id) return false;
+      if (id === '0') return false;
+      return id !== '';
+    };
+
+    const hasValidIds = isValidId(projectId) && isValidId(cqId);
+    
+    if (activeState && hasValidIds) {
+      searchPapers('');
+    }
+  }, [activeState, projectId, cqId]);
 
   const createSVGPath = () => {
     const svg = svgRef.current;
