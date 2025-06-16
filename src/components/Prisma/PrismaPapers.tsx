@@ -119,9 +119,9 @@ const PrismaPapers: React.FC<PrismaPapersProps> = ({
           <div className="text-center py-5">
             <div className="p-4 border rounded prisma-empty-state">
               <h5 className="mb-3">No papers found</h5>
-              <p className="text-muted mb-0">
+              {/* <p className="text-muted mb-0">
                 Try adjusting your search criteria or check back later for updates.
-              </p>
+              </p> */}
             </div>
           </div>
         )}

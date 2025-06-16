@@ -5,8 +5,6 @@ import { BE_Endpoints } from './BEEndpoints';
 
 interface Paper {
   id: number;
-  projectId: string;
-  cqId: string;
   title: string;
   authors: string;
   publish_date: string;
@@ -15,16 +13,9 @@ interface Paper {
   is_duplicate: string;
   upload_source: string;
   journal: string;
-  year: number;
   doi: string;
   pmid: string;
-  included: boolean;
-  excluded: boolean;
   fullText: boolean;
-  duplicate: boolean;
-  notes: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface Pagination {

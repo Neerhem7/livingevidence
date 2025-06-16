@@ -5,6 +5,7 @@ export type Paper = {
   publish_date: string;
   abstract: string;
   decision: string;
+  fullText: boolean;
   is_duplicate: string;
   upload_source: string;
 };
