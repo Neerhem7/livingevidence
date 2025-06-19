@@ -13,6 +13,7 @@ import '../components/Prisma/prisma.css';
 
 const Prisma: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const isNarrow = useMediaQuery('(max-width: 1299px)');
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector((state) => state.project);
   const hasInitialized = useRef(false);
@@ -68,8 +69,7 @@ const Prisma: React.FC = () => {
       <h3 style={{ textAlign: 'center', marginBottom: '1rem' }}>PRISMA</h3>
       <Row className={`${isMobile ? '' : 'mt-5 mb-5'} h-100`}>
         <Col 
-          className={`order-2 order-sm-1 h-100 ${isMobile ? 'd-none d-sm-block' : ''}`} 
-          sm={6}
+          className={`order-2 order-sm-1 h-100 ${isNarrow ? 'col-12 mb-4' : 'col-6'} ${isMobile ? 'd-none d-sm-block' : ''}`}
         >
           <PrismaDiagram 
             onTabChange={handleTabChange} 
@@ -84,7 +84,6 @@ const Prisma: React.FC = () => {
 
         <Col 
           className={`order-1 order-sm-2 ${isMobile ? 'prisma-mobile-body' : ''}`} 
-          sm={6}
         >
           <PrismaPapers 
             activeTab={activeTab}  

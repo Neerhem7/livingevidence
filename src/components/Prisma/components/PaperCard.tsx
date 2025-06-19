@@ -12,7 +12,7 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(({ paper, onViewDetails }
   };
 
   return (
-    <div className="d-flex align-items-center border-bottom py-3 prisma-text">
+    <div className="d-flex align-items-center border-bottom py-3 prisma-text col-12 col-md-12">
       <div className="d-flex justify-content-center">
         <small className="date-circle">{getYear(paper.publish_date)}</small>
       </div>
