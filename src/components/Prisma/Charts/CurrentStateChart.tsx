@@ -63,6 +63,13 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [paths, setPaths] = useState<string[]>([]);
 
+  // Find the max y position among nodes for dynamic height
+  const maxY = Math.max(...nodeList.map(node => node.y));
+  const contentHeight = maxY + 120; // Add padding for node height and spacing
+
+  // Find the max x position among nodes for dynamic width
+  const maxX = Math.max(...nodeList.map(node => node.x));
+  const contentWidth = maxX + 250; // Add padding for node width and spacing
 
   const nodeData = nodeList.map(node => ({
     ...node,
@@ -148,12 +155,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
           const verticalPart = verticalGap / 3;
           const horizontalMoveX = toX;
 
-          const leftToRightPath = `
-            M ${fromX},${fromY} 
-            L ${fromX},${fromY + verticalPart} 
-            H ${horizontalMoveX}  
-            V ${toY}  
-          `;
+          const leftToRightPath = `\n            M ${fromX},${fromY} \n            L ${fromX},${fromY + verticalPart} \n            H ${horizontalMoveX}  \n            V ${toY}  \n          `;
 
           newPaths.push(leftToRightPath);
         }
@@ -161,17 +163,13 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
           const verticalGap = Math.abs(toCenterYAdjusted - fromY);
           const verticalPart = verticalGap / 2;
 
-          const leftToCenterRightPath = `
-            M ${fromX},${fromY} 
-            L ${fromX},${fromY + verticalPart} 
-            H ${toLeftXAdjusted} 
-          `;
+          const leftToCenterRightPath = `\n            M ${fromX},${fromY} \n            L ${fromX},${fromY + verticalPart} \n            H ${toLeftXAdjusted} \n          `;
           newPaths.push(leftToCenterRightPath);
         }
         else if (type === '2-left-to-center-right') {
           const fromCenterX = (fromBox.left + fromBox.right) / 2;
           const fromBottomY = fromBox.bottom;
-
+            console.info("toleft box", toBox)
           const toLeftX = toBox.left;
           const toCenterY = (toBox.top + toBox.bottom) / 2;
 
@@ -181,12 +179,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
 
           const midPoint = (fromX + toX) / 2;
           const toHeightCenter = toCenterY - 20 - svgBox.top;
-          const path = `
-            M ${fromX},${fromY + 10} 
-            H ${midPoint + 55}   
-            V ${toHeightCenter} 
-            H ${toBox.left - 40}    
-          `;
+          const path = `\n            M ${fromX},${fromY + 10} \n            H ${midPoint + 55}   \n            V ${toHeightCenter} \n            H ${toBox.left}    \n          `;
           newPaths.push(path);
         }
       }
@@ -212,36 +205,68 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
     }
   }, [nodeRefs.current, connections]);
 
+  // Add a ref to the org-chart div to track scroll position
+  const chartRef = useRef<HTMLDivElement | null>(null);
+  const [scroll, setScroll] = useState({ left: 0, top: 0 });
+
+  // Update scroll position state on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (chartRef.current) {
+        setScroll({
+          left: chartRef.current.scrollLeft,
+          top: chartRef.current.scrollTop,
+        });
+      }
+    };
+    const chart = chartRef.current;
+    if (chart) {
+      chart.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (chart) {
+        chart.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <>
-      <div className="org-chart-wrapper position-relative w-100 h-100">
-        <svg ref={svgRef} className="org-chart-lines position-absolute w-100 h-100">
-          {paths.map((d, i) => (
-            <path key={i} d={d} stroke="#4F959D" strokeWidth="4" fill="none" className="animated-path" />
-          ))}
-        </svg>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+        <div className="org-chart-wrapper position-relative h-100" style={{ width: contentWidth, margin: '0 auto' }}>
+          <div style={{ position: 'absolute', left: -scroll.left, top: -scroll.top, pointerEvents: 'none', height: contentHeight, width: contentWidth, zIndex: 1 }}>
+            <svg ref={svgRef} className="org-chart-lines" style={{ height: contentHeight, width: contentWidth }}>
+              {paths.map((d, i) => (
+                <path key={i} d={d} stroke="#4F959D" strokeWidth="4" fill="none" className="animated-path" />
+              ))}
+            </svg>
+          </div>
+          <div
+            className="org-chart text-center mx-auto"
+            ref={chartRef}
+            style={{ maxHeight: contentHeight, width: contentWidth-20 }}
+          >
+            <div className="justify-content-center position-relative w-100" style={{ height: contentHeight }}>
+              {nodeData.map((node) => {
+                const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+                  const value = stats?.[key as keyof PrismaStats];
+                  return value !== undefined ? String(value) : `0`;
+                });
 
-        <div className="org-chart text-center">
-          <div className="justify-content-center position-relative w-100 h-100">
-            {nodeData.map((node) => {
-              const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
-                const value = stats?.[key as keyof PrismaStats];
-                return value !== undefined ? String(value) : `0`;
-              });
-
-              return (
-                <CustomNode
-                  key={node.id}
-                  ref={(el) => { nodeRefs.current[node.id] = el }}
-                  nodeId={node.id}
-                  label={parsedLabel}
-                  x={node.x}
-                  y={node.y}
-                  styleType={node.styleType}
-                  onClick={node.onClick}
-                />
-              );
-            })}
+                return (
+                  <CustomNode
+                    key={node.id}
+                    ref={(el) => { nodeRefs.current[node.id] = el }}
+                    nodeId={node.id}
+                    label={parsedLabel}
+                    x={node.x - scroll.left}
+                    y={node.y - scroll.top}
+                    styleType={node.styleType}
+                    onClick={node.onClick}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

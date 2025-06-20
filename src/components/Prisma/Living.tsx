@@ -165,7 +165,7 @@ const Living: React.FC<LivingProps> = ({
           </div>
         ))}
         </div>
-        <div className="mt-4 w-50">
+        <div className="mt-4">
       {showMonthStats && (
        
           <InitialStateChart

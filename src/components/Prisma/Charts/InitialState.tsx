@@ -183,38 +183,72 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
     setPaths(newPaths);
   }, []);
 
+  // Calculate dynamic content height and width
+  const maxY = Math.max(...nodeList.map(node => node.y));
+  const contentHeight = maxY + 120;
+  const maxX = Math.max(...nodeList.map(node => node.x));
+  const contentWidth = maxX + 250;
+
+  // For scroll tracking
+  const chartRef = useRef<HTMLDivElement | null>(null);
+  const [scroll, setScroll] = useState({ left: 0, top: 0 });
+  useEffect(() => {
+    const handleScroll = () => {
+      if (chartRef.current) {
+        setScroll({
+          left: chartRef.current.scrollLeft,
+          top: chartRef.current.scrollTop,
+        });
+      }
+    };
+    const chart = chartRef.current;
+    if (chart) {
+      chart.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (chart) {
+        chart.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <>
-    <div className="org-chart-wrapper position-relative w-100 h-100">
-      <svg ref={svgRef} className="org-chart-lines position-absolute w-100 h-100" style={{
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+      <div className="org-chart-wrapper position-relative h-100" style={{ width: contentWidth, margin: '0 auto' }}>
+        <div style={{ position: 'absolute', left: -scroll.left, top: -scroll.top, pointerEvents: 'none', height: contentHeight, width: contentWidth, zIndex: 1 }}>
+          <svg ref={svgRef} className="org-chart-lines" style={{ height: contentHeight, width: contentWidth }}>
+            {paths.map((d, i) => (
+              <path key={i} d={d} stroke="#4F959D" strokeWidth="4" fill="none" />
+            ))}
+          </svg>
+        </div>
+        <div
+          className="org-chart text-center mx-auto"
+          ref={chartRef}
+          style={{ maxHeight: contentHeight, width: contentWidth }}
+        >
+          <div className="justify-content-center position-relative w-100" style={{ height: contentHeight }}>
+            {nodeData.map((node) => {
+              const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
+                const value = stats?.[key as keyof PrismaStats];
+                return value !== undefined ? String(value) : `0`;
+              });
 
-      }}>
-        {paths.map((d, i) => (
-          <path key={i} d={d} stroke="#4F959D" strokeWidth="4" fill="none" />
-        ))}
-      </svg>
-
-      <div className="org-chart container text-center">
-        <div className="justify-content-center position-relative w-100 h-100">
-          {nodeData.map((node) => {
-            const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
-              const value = stats?.[key as keyof PrismaStats];
-              return value !== undefined ? String(value) : `0`;
-            });
-
-            return (
-              <CustomNode
-                key={node.id}
-                ref={(el) => { nodeRefs.current[node.id] = el }}
-                nodeId={node.id}
-                label={parsedLabel}
-                x={node.x}
-                y={node.y}
-                styleType={node.styleType}
-                onClick={node.onClick}
-              />
-            );
-          })}
+              return (
+                <CustomNode
+                  key={node.id}
+                  ref={(el) => { nodeRefs.current[node.id] = el }}
+                  nodeId={node.id}
+                  label={parsedLabel}
+                  x={node.x - scroll.left}
+                  y={node.y - scroll.top}
+                  styleType={node.styleType}
+                  onClick={node.onClick}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

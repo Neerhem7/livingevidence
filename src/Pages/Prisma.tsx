@@ -69,7 +69,7 @@ const Prisma: React.FC = () => {
       <h3 style={{ textAlign: 'center', marginBottom: '1rem' }}>PRISMA</h3>
       <Row className={`${isMobile ? '' : 'mt-5 mb-5'} h-100`}>
         <Col 
-          className={`order-2 order-sm-1 h-100 ${isNarrow ? 'col-12 mb-4' : 'col-6'} ${isMobile ? 'd-none d-sm-block' : ''}`}
+          className={`order-2 order-sm-1 h-100 ${isNarrow ? 'col-12 mb-4' : 'col-6'} ${isMobile ? '' : ''}`}
         >
           <PrismaDiagram 
             onTabChange={handleTabChange} 
