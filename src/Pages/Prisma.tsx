@@ -77,7 +77,7 @@ const Prisma: React.FC = () => {
       <h3 style={{ textAlign: 'center', marginBottom: '1rem' }}>PRISMA</h3>
       <Row className={`${isMobile ? '' : 'mt-5 mb-5'} h-100`}>
         <Col 
-          className={`order-2 order-sm-1 h-100 ${isNarrow ? 'col-12 mb-4' : 'col-6'} ${isMobile ? '' : ''}`}
+          className={`order-2 order-sm-1 h-100 ${isNarrow ? 'col-12 mb-4' : 'col-6'} ${isMobile ? 'mt-5' : ''}`}
         >
           <div ref={col1Ref} style={{ height: '100%' }}>
             <PrismaDiagram 
@@ -93,7 +93,7 @@ const Prisma: React.FC = () => {
         </Col>
 
         <Col 
-          className={`order-1 order-sm-2 ${isMobile ? 'prisma-mobile-body' : ''}`} 
+          className={`order-1 order-sm-2 ${isMobile ? 'prisma-mobile-body mb-4' : ''}`} 
           style={col1Height ? { maxHeight: col1Height } : {}}
         >
           <PrismaPapers 
