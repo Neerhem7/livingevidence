@@ -163,7 +163,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
           const verticalGap = Math.abs(toCenterYAdjusted - fromY);
           const verticalPart = verticalGap / 2;
 
-          const leftToCenterRightPath = `\n            M ${fromX},${fromY} \n            L ${fromX},${fromY + verticalPart} \n            H ${toLeftXAdjusted} \n          `;
+          const leftToCenterRightPath = `\n            M ${fromX},${fromY} \n            L ${fromX},${fromY + verticalPart} \n            H ${toLeftXAdjusted+20} \n          `;
           newPaths.push(leftToCenterRightPath);
         }
         else if (type === '2-left-to-center-right') {
@@ -244,7 +244,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
           <div
             className="org-chart text-center mx-auto"
             ref={chartRef}
-            style={{ maxHeight: contentHeight, width: contentWidth-20 }}
+            style={{ maxHeight: contentHeight, width: contentWidth-30 }}
           >
             <div className="justify-content-center position-relative w-100" style={{ height: contentHeight }}>
               {nodeData.map((node) => {

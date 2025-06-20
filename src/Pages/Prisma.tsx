@@ -17,6 +17,8 @@ const Prisma: React.FC = () => {
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector((state) => state.project);
   const hasInitialized = useRef(false);
+  const col1Ref = useRef<HTMLDivElement | null>(null);
+  const [col1Height, setCol1Height] = useState<number | undefined>(undefined);
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -60,6 +62,12 @@ const Prisma: React.FC = () => {
     }
   }, [projectId, cqId]);
 
+  useEffect(() => {
+    if (col1Ref.current) {
+      setCol1Height(col1Ref.current.offsetHeight);
+    }
+  }, [isMobile, isNarrow, activeTab, selectedMonth, activeState, activeStateText]);
+
   if (!projectId || !cqId) {
     return <div>Loading...</div>;
   }
@@ -71,19 +79,22 @@ const Prisma: React.FC = () => {
         <Col 
           className={`order-2 order-sm-1 h-100 ${isNarrow ? 'col-12 mb-4' : 'col-6'} ${isMobile ? '' : ''}`}
         >
-          <PrismaDiagram 
-            onTabChange={handleTabChange} 
-            onMonthChange={setSelectedMonth}
-            onStateChange={setActiveState}
-            onStateTextChange={setActiveStateText}
-            selectedMonth={selectedMonth} 
-            activeTab={activeTab}
-            activeState={activeState} 
-          />
+          <div ref={col1Ref} style={{ height: '100%' }}>
+            <PrismaDiagram 
+              onTabChange={handleTabChange} 
+              onMonthChange={setSelectedMonth}
+              onStateChange={setActiveState}
+              onStateTextChange={setActiveStateText}
+              selectedMonth={selectedMonth} 
+              activeTab={activeTab}
+              activeState={activeState} 
+            />
+          </div>
         </Col>
 
         <Col 
           className={`order-1 order-sm-2 ${isMobile ? 'prisma-mobile-body' : ''}`} 
+          style={col1Height ? { maxHeight: col1Height } : {}}
         >
           <PrismaPapers 
             activeTab={activeTab}  

@@ -15,7 +15,7 @@
 
 
 .tab-body{
-    height: 810px !important;
+
     display: flex;
     /* border: 1px solid  var(--primary-color); */
     background-color: var(--background-color) !important;
