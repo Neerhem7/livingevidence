@@ -28,7 +28,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 <ListGroup variant="flush">
                     {project.clinical_questions.map((cq) => (
                         <ListGroup.Item key={cq.id || cq.name}>
-                            <a href={`/prisma?projectId=${project.id}&cqId=${cq.id}`}>
+                            <a href={`/public-web?projectId=${project.id}&cqId=${cq.id}`}>
                                 {cq.name || cq.abbr }
                             </a>
                         </ListGroup.Item>

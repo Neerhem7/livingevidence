@@ -103,3 +103,17 @@
     height: auto;  
     object-fit: contain; 
 }
+
+.project-name{
+    width: 250px;
+    font-weight: 800;
+}
+
+/* Show dropdown on hover for desktop */
+.navbar-nav .dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu {
+  margin-top: 0;
+}

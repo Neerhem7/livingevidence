@@ -2,6 +2,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { BE_Endpoints } from './BEEndpoints';
+import { mcrpc } from '../Pages/data/public_web_mcrpc';
+import { mcspc } from '../Pages/data/public_web_mcspc';
 
 
 interface ProjectsState {
@@ -10,10 +12,13 @@ interface ProjectsState {
     projectId: string | null;
     cqId: string | null;
   },
+  activeProjectWeb: any | null;
   projectsLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
   projectsError: string | null;
   activeProjectLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
   activeProjectError: string | null;
+  activeProjectWebLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  activeProjectWebError: string | null;
 }
 
 const initialState: ProjectsState = {
@@ -22,10 +27,13 @@ const initialState: ProjectsState = {
     projectId: "0",
     cqId: "0"
   },
+  activeProjectWeb: null,
   projectsLoading: 'idle',
   projectsError: null,
   activeProjectLoading: 'idle',
   activeProjectError: null,
+  activeProjectWebLoading: 'idle',
+  activeProjectWebError: null,
 };
 
 export const fetchProjects = createAsyncThunk(
@@ -39,14 +47,14 @@ export const fetchProjects = createAsyncThunk(
         abbr: 'LUNGCA',
         id:'233',
         clinical_questions: [{
-          name: '',
-          abbr: '',
-          id:'',
+          name: 'LL_mNSCLC_d+',
+          abbr: 'LL_mNSCLC_d+',
+          id:'17',
         },
         {
-          name: '',
-          abbr: '',
-          id:'',
+          name: 'LL_mNSCLC_d-',
+          abbr: 'LL_mNSCLC_d-',
+          id:'16',
         }
         ]
       },
@@ -73,6 +81,22 @@ export const fetchProjects = createAsyncThunk(
   }
 );
 
+export const fetchActiveProjectWeb = createAsyncThunk(
+  'projects/fetchActiveProjectWeb',
+  async ({ projectId, cqId }: { projectId: string; cqId: string }) => {
+    try {
+      // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`, { projectId, cqId });
+      // return response.data;
+      let sample_project_web= cqId == '5' ? mcspc :mcrpc ;
+      console.info("hello", sample_project_web)
+      return sample_project_web;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
 const projectSlice = createSlice({
   name: 'projects',
   initialState,
@@ -94,6 +118,18 @@ const projectSlice = createSlice({
       .addCase(fetchProjects.rejected, (state, action) => {
         state.projectsLoading = 'failed';
         state.projectsError = action.error.message || 'Failed to fetch projects';
+      })
+      .addCase(fetchActiveProjectWeb.pending, (state) => {
+        state.activeProjectWebLoading = 'pending';
+        state.activeProjectWebError = null;
+      })
+      .addCase(fetchActiveProjectWeb.fulfilled, (state, action) => {
+        state.activeProjectWebLoading = 'succeeded';
+        state.activeProjectWeb = action.payload;
+      })
+      .addCase(fetchActiveProjectWeb.rejected, (state, action) => {
+        state.activeProjectWebLoading = 'failed';
+        state.activeProjectWebError = action.error.message || 'Failed to fetch active project web';
       });
   },
 });

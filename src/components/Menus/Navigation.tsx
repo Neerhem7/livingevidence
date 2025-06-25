@@ -51,11 +51,9 @@ const Navigation: React.FC<Props> = () => {
                 : <>
                 <img src="/logo.png" alt="Logo" className="logo" />
                     <ul className="navbar-nav justify-content-end">
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/home')}>About us</Link></li> 
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/concept')}>Method</Link></li>
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/our-research')}>Our Research</Link></li>
-                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/prisma')}>Prisma</Link></li>
-                         <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to={getLink('/itable')}>ITable</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to='/home'>About us</Link></li> 
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to='/concept'>Method</Link></li>
+                        <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to='/our-research'>Our Research</Link></li>
                          <button className="theme-toggle" onClick={() => dispatch(toggleTheme())}>
                         {mode === 'dark' ? <i className="fa-solid fa-sun icon"></i> : <i className="fa-solid fa-moon icon"></i>}
                     </button>

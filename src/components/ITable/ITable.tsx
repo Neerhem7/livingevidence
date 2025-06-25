@@ -2,16 +2,16 @@ import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Col, Row, Card, Alert, Spinner } from 'react-bootstrap';
-import { useAppDispatch, RootState } from "../redux/store";
+import { useAppDispatch, RootState } from "../../redux/store";
 import { useSearchParams } from 'react-router-dom';
-import ITableTable from '../components/ITable/ITableTable';
-import { ExtractionNode, Item } from '../components/ITable/type';
-import ColumnSelectorPanel from '../components/ITable/ColumnSelectorPanel';
-import TableToolBar from '../components/ITable/TableToolBar';
+import ITableTable from './ITableTable';
+import { ExtractionNode, Item } from './type';
+import ColumnSelectorPanel from './ColumnSelectorPanel';
+import TableToolBar from './TableToolBar';
 import {
   fetchITableData,
   resetITableState
-} from "../redux/itableSlice";
+} from "../../redux/itableSlice";
 
 const ITable = () => {
   const dispatch = useAppDispatch();
@@ -153,7 +153,7 @@ const ITable = () => {
     <>
       <Row className="justify-content-center align-items-center">
         <Col xs="auto">
-          <h1>Interactive Table</h1>
+          <h2>Interactive Table</h2>
         </Col>
       </Row>
       {headerRoots.length > 0 ? <Row className="m-4" style={{ height: '800px' }}>
