@@ -1,26 +1,100 @@
 // src/redux/projectSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { BE_Endpoints } from './BEEndpoints';
 
-interface ProjectState {
-  projectId: string | null;
-  cqId: string | null;
+
+interface ProjectsState {
+  projects: any[],
+  activeProject: {
+    projectId: string | null;
+    cqId: string | null;
+  },
+  projectsLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  projectsError: string | null;
+  activeProjectLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  activeProjectError: string | null;
 }
 
-const initialState: ProjectState = {
-  // projectId: "8",
-  // cqId: "5",
-  projectId: "0",
-  cqId: "0",
+const initialState: ProjectsState = {
+  projects: [],
+  activeProject: {
+    projectId: "0",
+    cqId: "0"
+  },
+  projectsLoading: 'idle',
+  projectsError: null,
+  activeProjectLoading: 'idle',
+  activeProjectError: null,
 };
 
+export const fetchProjects = createAsyncThunk(
+  'projects/fetchProjects',
+  async () => {
+    try {
+      // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`);
+      // return response.data;
+      let sample_projects=[{
+        name: 'Living Lung Cancer',
+        abbr: 'LUNGCA',
+        id:'233',
+        clinical_questions: [{
+          name: '',
+          abbr: '',
+          id:'',
+        },
+        {
+          name: '',
+          abbr: '',
+          id:'',
+        }
+        ]
+      },
+      {
+        name: 'Living Prostate Cancer',
+        abbr: 'LPR',
+        id:'210',
+        clinical_questions: [{
+          name: 'mcspc',
+          abbr: 'mcspc',
+          id:'5',
+        },
+        {
+          name: 'mcrpc',
+          abbr: 'mcrpc',
+          id:'6',
+        }
+        ]
+      }]
+      return sample_projects;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const projectSlice = createSlice({
-  name: 'project',
+  name: 'projects',
   initialState,
   reducers: {
     setProjectParams: (state, action: PayloadAction<{ projectId: string; cqId: string }>) => {
-      state.projectId = action.payload.projectId;
-      state.cqId = action.payload.cqId;
+      state.activeProject.projectId = action.payload.projectId;
+      state.activeProject.cqId = action.payload.cqId;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProjects.pending, (state) => {
+        state.projectsLoading = 'pending';
+      })
+      .addCase(fetchProjects.fulfilled, (state, action) => {
+        state.projectsLoading = 'succeeded';
+        state.projects = action.payload;
+      })
+      .addCase(fetchProjects.rejected, (state, action) => {
+        state.projectsLoading = 'failed';
+        state.projectsError = action.error.message || 'Failed to fetch projects';
+      });
   },
 });
 

@@ -38,7 +38,7 @@ interface InitialStateChartProps {
 
 const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connections, nodeList, stats, activeMonth, activeState, onStateChange, onStateTextChange }) => {
   const dispatch = useAppDispatch();
-  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.projects.activeProject);
   const [showModal, setShowModal] = useState(false);
   const { searchPapers } = usePrismaPapers(activeTab, activeMonth || '', activeState);
 

@@ -8,7 +8,7 @@ import iTableReducer from './itableSlice'
 
 export const store  = configureStore({
     reducer: {
-        project: projectReducer,
+        projects: projectReducer,
         theme:  themeReducer,
         prismaPaper: prismaPaperReducer,
         prismaDiagram : prismaDiagramReducer,

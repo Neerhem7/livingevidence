@@ -7,6 +7,8 @@ import { RootState} from './redux/store';
 import { setProjectParams } from './redux/projectSlice';
 import Navigation from './components/Menus/Navigation';
 import { Container } from 'react-bootstrap';
+import OurResearch from './Pages/OurResearch';
+import useMediaQuery from './hooks/useMediaQuery';
 
 // Lazy load components
 const Home = React.lazy(() => import('./Pages/Home'));
@@ -47,6 +49,7 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType }> = ({ Component 
 
 const App: React.FC = () => {
   const theme = useSelector((state: RootState) => state.theme);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
     document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
@@ -61,13 +64,14 @@ const App: React.FC = () => {
   return (
     <Router>
       <Navigation />
-      <Container fluid className='mt-4'>
+      <Container fluid className={isMobile?'m-0':'mt-4'}>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Navigate to="/itable?projectId=202&cqId=116" />} />
             <Route path="/home" element={<RouteWrapper Component={Home} />} />
             <Route path="/concept" element={<RouteWrapper Component={Concept} />} />
             <Route path="/theme" element={<RouteWrapper Component={Theme} />} />
+            <Route path="/our-research" element={<RouteWrapper Component={OurResearch} />} />
             <Route path="/prisma" element={<RouteWrapper Component={Prisma} />} />
             <Route path="/itable" element={<RouteWrapper Component={ITable} />} />
           </Routes>

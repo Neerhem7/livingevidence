@@ -15,7 +15,7 @@ const Prisma: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isNarrow = useMediaQuery('(max-width: 1299px)');
   const dispatch = useAppDispatch();
-  const { projectId, cqId } = useAppSelector((state) => state.project);
+  const { projectId, cqId } = useAppSelector((state) => state.projects.activeProject);
   const hasInitialized = useRef(false);
   const col1Ref = useRef<HTMLDivElement | null>(null);
   const [col1Height, setCol1Height] = useState<number | undefined>(undefined);

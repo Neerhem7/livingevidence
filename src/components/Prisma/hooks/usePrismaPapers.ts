@@ -16,7 +16,7 @@ export const usePrismaPapers = (
   activeState: string
 ) => {
   const dispatch = useAppDispatch();
-  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.projects.activeProject);
   const { current, initial, living, loading } = useAppSelector((state: RootState) => state.prismaPaper);
   const [papers, setPapers] = useState<Paper[]>([]);
   const [pagination, setPagination] = useState<Pagination>();

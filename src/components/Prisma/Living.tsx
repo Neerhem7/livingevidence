@@ -75,7 +75,7 @@ const Living: React.FC<LivingProps> = ({
   connections
 }) => {
   const dispatch = useAppDispatch();
-  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.projects.activeProject);
   const { living } = useSelector((state: RootState) => state.prismaDiagram);
   const [showMonthStats, setShowMonthStats] = useState(false);
   const [calendarData, setCalendarData] = useState<CalendarYearData>({});

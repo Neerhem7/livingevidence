@@ -54,7 +54,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
   activeState
 }) => {
   const dispatch = useAppDispatch();
-  const { projectId, cqId } = useAppSelector((state: RootState) => state.project);
+  const { projectId, cqId } = useAppSelector((state: RootState) => state.projects.activeProject);
   const [showModal, setShowModal] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
   const { searchPapers } = usePrismaPapers(activeTab, '', activeState);
