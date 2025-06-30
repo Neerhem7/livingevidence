@@ -14,7 +14,7 @@ const Introduction: React.FC<IntroductionProps> = ({concept_diagram, description
     <>
       <Row className='d-flex  m-5 justify-content-between align-items-center'>
         <Col sm={3} className=''>
-          <img src="/logo.png" alt="Logo" className="logo" />
+          <img src="/pub/logo.png" alt="Logo" className="logo" />
         </Col>
         <Col sm={9} className='left-border-container'>
           <h5>
