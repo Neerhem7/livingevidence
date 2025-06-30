@@ -90,7 +90,7 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => (
-  <Router>
+  <Router basename="/pub"> 
     <AppContent />
   </Router>
 );
