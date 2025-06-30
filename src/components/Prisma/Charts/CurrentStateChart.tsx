@@ -233,7 +233,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
   return (
     <>
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
-        <div className="org-chart-wrapper position-relative h-100" style={{ width: contentWidth, margin: '0 auto' }}>
+        <div className="org-chart-wrapper position-relative h-100" style={{ width: contentWidth }}>
           <div style={{ position: 'absolute', left: -scroll.left, top: -scroll.top, pointerEvents: 'none', height: contentHeight, width: contentWidth, zIndex: 1 }}>
             <svg ref={svgRef} className="org-chart-lines" style={{ height: contentHeight, width: contentWidth }}>
               {paths.map((d, i) => (
@@ -244,7 +244,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
           <div
             className="org-chart text-center mx-auto"
             ref={chartRef}
-            style={{ maxHeight: contentHeight, width: contentWidth-30 }}
+            style={{ maxHeight: contentHeight, width: contentWidth-60 }}
           >
             <div className="justify-content-center position-relative w-100" style={{ height: contentHeight }}>
               {nodeData.map((node) => {
