@@ -1,7 +1,6 @@
 {
   "name": "livingevidence",
   "version": "0.1.0",
-  "homepage": "/pub",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.0",
