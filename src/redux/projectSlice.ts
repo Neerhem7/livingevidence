@@ -87,7 +87,7 @@ export const fetchActiveProjectWeb = createAsyncThunk(
     try {
       // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`, { projectId, cqId });
       // return response.data;
-      let sample_project_web= cqId == '395' ? mcspc :mcrpc ;
+      let sample_project_web= cqId == '395' ? mcrpc :mcspc ;
       console.info("hello", sample_project_web)
       return sample_project_web;
     } catch (error) {
