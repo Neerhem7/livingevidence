@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 interface ProjectSectionProps {
   component?: React.ReactNode;
   title?: string;
-  project: any;
+  project?: { name?: string };
 }
 
 const ProjectSection: React.FC<ProjectSectionProps> = ({ component, title, project }) => {
@@ -12,7 +12,8 @@ const ProjectSection: React.FC<ProjectSectionProps> = ({ component, title, proje
     <>
     <Row className='d-flex  m-5 justify-content-between align-items-center'>
         <Col sm={3} className=''>
-          <span className="project-logo-name">{project?.name}</span>
+        {project?.name && <span className="project-logo-name">{project.name}</span>}
+    
         </Col>
         <Col sm={9} className='left-border-container'>
           <h5>
