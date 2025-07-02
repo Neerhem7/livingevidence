@@ -8,7 +8,7 @@ const Home: React.FC<Props> = () => {
 
     return (
         <div className="container mt-3">
-            {!isMobileView && <img src="/pub/logo.png" alt="Logo" className="logo" />}
+            {!isMobileView && <img src="/logo.png" alt="Logo" className="logo" />}
             <p>Home Page</p>
         </div>
     );

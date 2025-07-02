@@ -29,7 +29,7 @@ const Navigation: React.FC<Props> = () => {
             {isMobileView ?
                 <div className="mobile-navbar">
                     <div className="nav-header">
-                        <img src="/pub/logo.png" alt="Logo" className="logo" />
+                        <img src="/logo.png" alt="Logo" className="logo" />
                         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
                             {menuOpen ? <i className="fa-solid fa-xmark icon"></i> :<i className="fa-solid fa-list icon"></i>}
                         </button>
@@ -49,7 +49,7 @@ const Navigation: React.FC<Props> = () => {
                     </div>
                 </div> 
                 : <>
-                <img src="/pub/logo.png" alt="Logo" className="logo" />
+                <img src="/logo.png" alt="Logo" className="logo" />
                     <ul className="navbar-nav justify-content-end">
                         <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to='/home'>About us</Link></li> 
                         <li className="nav-item"><Link className="nav-link text-decoration-none px-3 py-2 rounded hover-nav" to='/concept'>Method</Link></li>
