@@ -90,9 +90,9 @@ export const mcrpc ={
     "navigation": [
         {
             "isvisible": true,
-            "section": "home",
+            "section": "introduction",
             "sub_nav": [],
-            "title": "Home"
+            "title": "Introduction"
         },
         {
             "isvisible": true,
@@ -119,7 +119,7 @@ export const mcrpc ={
         },
         {
             "isvisible": true,
-            "section": "pairwise",
+            "section": "pairwise_ma",
             "sub_nav": [
                 {
                     "isvisible": true,
@@ -136,7 +136,7 @@ export const mcrpc ={
         },
         {
             "isvisible": true,
-            "section": "softable",
+            "section": "sof_table",
             "sub_nav": [
                 {
                     "isvisible": true,

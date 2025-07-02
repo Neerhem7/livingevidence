@@ -1,24 +1,23 @@
 .project-card {
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    height: 200px !important; /* Set a fixed height */
+    height: 200px !important;
     border: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    overflow: hidden; /* Ensures inner elements conform to the card's rounded corners */
+    overflow: hidden; 
 }
-
 .project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .project-card .card-header {
-    background-color: #0d6efd; /* Primary blue background */
+    background-color: #0d6efd; 
     color: white;
     font-weight: 500;
 }
 
 .project-card .card-body {
-    overflow-y: auto; /* Enable vertical scrolling for long content */
+    overflow-y: auto; 
 }
 
 .project-card .list-group-item {
@@ -34,4 +33,73 @@
 
 .project-card .list-group-item a:hover {
     color: #0d6efd; /* Highlight color on hover */
+}
+
+/* ProjectSectionCard styles */
+.project-section-card {
+  transition: box-shadow 0.3s;
+}
+.project-section-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.card-section-content {
+  margin-bottom: 0;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.card-section-content.clamped {
+  -webkit-line-clamp: 2;
+  max-height: 3.2em;
+}
+.card-section-content.expanded {
+  -webkit-line-clamp: unset;
+  max-height: 100vh;
+}
+.read-more-btn {
+  transition: background 0.2s, color 0.2s;
+}
+
+.project-section-card .card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-bottom: 0.5rem;
+}
+.card-title,
+.card-section-content {
+  text-align: left;
+  width: 100%;
+}
+.card-section-content {
+  margin-bottom: 0.5rem;
+}
+.learn-more-btn {
+  margin-top: auto;
+  align-self: flex-start;
+}
+.d-flex.justify-content-end.mt-3 {
+  width: 100%;
+  margin-top: auto !important;
+  padding-bottom: 0.5rem;
+  justify-content: flex-start !important;
+}
+
+.project-card, .project-card p * {
+  color: white !important;
+  background: transparent !important;
+}
+
+.project-logo-name {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: var(--secondary-color, #6c757d);
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  margin-bottom: 0.5rem;
 } 

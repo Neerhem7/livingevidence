@@ -8,7 +8,15 @@
   --background-color: #f8f9fa;
   --text-color: #212529;
   --body-color: #EEEEEE;
-  --font-family: 'Arial', sans-serif
+  --font-family: 'Arial', sans-serif;
+  --card-1: #748873;
+  --card-2: #a9927d;
+  --card-3: #a4c3b2;
+  --card-4: #b7b7a4;
+  --card-5: #728f9d;
+  --card-6: #cbc0d3;
+  --card-7: #c9a47e;
+  --card-8: #b5838d;
 }
 
 body {
@@ -27,10 +35,6 @@ p {
   color: var(--text-color);
   font-weight: 400;
 }
-
-
-
-
 
 .root {
   background-color: var(--background-color) !important;
@@ -56,26 +60,12 @@ div{
   cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--third-color) !important;
   color: #fff;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
-
 
 .btn-secondary {
   background-color: var(--secondary-color) !important;
@@ -99,8 +89,6 @@ div{
   color: var(--third-color) !important;
 }
 
-
-
 .btn-primary:hover,
 .btn-secondary:hover,
 .btn-info:hover,
@@ -109,13 +97,10 @@ div{
   filter: brightness(1.2);
 }
 
-
-
 .card-header{
   background-color: var(--background-color) !important;
   color: var(--text-color) !important;
 }
-
 
 .card-body{
   background-color: var(--background-color) !important;
@@ -133,12 +118,9 @@ div{
   color: var(--text-color) !important;
 }
 
-
-
 .text-muted{
   color: var(--text-color) !important;
 }
-
 
 .icon-20 {
   font-size: 20px;
@@ -147,8 +129,6 @@ div{
 .icon-30 {
   font-size: 30px;
 }
-
-
 
 .border-primary{
   border: 1px solid var(--primary-color) !important;
@@ -168,7 +148,6 @@ div{
   background-color: var(--primary-color-light) !important;
   color: var(--background-color) !important;
 }
-
 
 .back-secondary{
   background-color: var(--secondary-color) !important;
@@ -190,3 +169,13 @@ div{
   font-size: 1.5rem;
   color: var(--primary-color);
 }
+
+
+.card-1 { background: var(--card-1) !important; color: #fff !important; }
+.card-2 { background: var(--card-2) !important; color: #fff !important; }
+.card-3 { background: var(--card-3) !important; color: #fff !important; }
+.card-4 { background: var(--card-4) !important; color: #fff !important; }
+.card-5 { background: var(--card-5) !important; color: #fff !important; }
+.card-6 { background: var(--card-6) !important; color: #fff !important; }
+.card-7 { background: var(--card-7) !important; color: #fff !important; }
+.card-8 { background: var(--card-8) !important; color: #fff !important; }

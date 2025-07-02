@@ -37,6 +37,7 @@ export const mcspc = {
             "description": "",
             "index": 3,
             "isvisible": true,
+            "title": "Pairwise MA",
             "tables": [
                 {
                     "description": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">Results are summarized as forest plots for primary analysis, sensitivity analysis and subgroup pairwise meta-analysis. Users can choose to view results for their outcome of interest using the dropdown menu (“Select outcome”). </span><strong style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">Pairwise analysis is limited to trials evaluating doublet therapies as compared to ADT and triplet therapies as compared to D+ADT. </strong><span style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">Primary analysis includes overall patient population.</span></p><p><br></p>",
@@ -58,8 +59,8 @@ export const mcspc = {
                     "title": "Subgroup Anaylsis",
                     "type": "subgroup"
                 }
-            ],
-            "title": "Pairwise MA"
+            ]
+           
         },
         "prisma": {
             "description": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">The search strategy has been developed in consultation with an information specialist. The strategy is used to generate “auto” searches every month (from Medline, Embase and Cochrane Central Register of Controlled Trials [CENTRAL]). The numbers in the flowsheet are dynamically updated as new studies are considered for inclusion. Users can click the colored boxes for additional details.</span></p><p><span style=\"color: rgb(51, 51, 51); background-color: rgb(255, 255, 255);\">How to use this flowsheet? </span><a href=\"about:blank\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"color: rgb(0, 123, 255); background-color: rgb(255, 255, 255);\">Video demonstration</a></p>",
@@ -246,7 +247,7 @@ export const mcspc = {
         },
         {
             "isvisible": true,
-            "section": "pairwise",
+            "section": "pairwise_ma",
             "sub_nav": [
                 {
                     "isvisible": true,
@@ -263,7 +264,7 @@ export const mcspc = {
         },
         {
             "isvisible": true,
-            "section": "softable",
+            "section": "sof_table",
             "sub_nav": [
                 {
                     "isvisible": true,
@@ -277,6 +278,29 @@ export const mcspc = {
                 }
             ],
             "title": "SOF Table"
+        },
+        {
+            "isvisible": true,
+            "section": "network_ma",
+            "sub_nav": [
+                {
+                    "isvisible": true,
+                    "section": "pairwise_ma",
+                    "title": "PairWise MA"
+                },
+                {
+                    "isvisible": true,
+                    "section": "networl_ma",
+                    "title": "Network MA"
+                }
+            ],
+            "title": "Network MA"
+        },
+        {
+            "isvisible": true,
+            "section": "evidence_map",
+            "sub_nav": [],
+            "title": "Evidence Map"
         },
         {
             "isvisible": true,

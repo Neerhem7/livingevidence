@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../redux/store';
+import { Row, Col } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector,RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 import { fetchActiveProjectWeb } from '../redux/projectSlice';
 import Prisma from '../components/Prisma/Prisma';
-import ITable from '../components/ITable/ITable';
+import ITable from '../components/SummaryTables/ITable';
 import Introduction from '../components/Introduction/Introduction';
 import '../styles/style.css';
+import ProjectSectionCard from '../components/Projects/ProjectSectionCard';
 
 const sectionComponents: { [key: string]: React.ComponentType<any> } = {
   home: Introduction,
@@ -22,6 +25,11 @@ const PublicWeb: React.FC = () => {
 
   const projectId = searchParams.get('projectId');
   const cqId = searchParams.get('cqId');
+  const projects = useSelector((state: RootState) => state.projects.projects);
+  const project = projects.find((p: any) => String(p.id) === String(projectId));
+  const navigation = activeProjectWeb?.navigation || [];
+  const mainContent = activeProjectWeb?.main_content || {};
+
 
   useEffect(() => {
     if (projectId && cqId) {
@@ -32,36 +40,27 @@ const PublicWeb: React.FC = () => {
   if (!activeProjectWeb || !activeProjectWeb.main_content) {
     return <div>Loading...</div>;
   }
-  const navigation = activeProjectWeb.navigation || [];
-  const mainContent = activeProjectWeb.main_content || {};
 
   return (
 
-    <div className="m-4">
-      {navigation.filter((item: any) => item.isvisible).map((item: any) => (
-        <React.Fragment key={item.section}>
-          <section id={item.section}>
-            {sectionComponents[item.section]
-              ? React.createElement(
-                  sectionComponents[item.section],
-                  item.section === 'introduction' || item.section === 'home'
-                    ? activeProjectWeb?.main_content?.introduction || {}
-                    : mainContent[item.section] || {}
-                )
-              : <h2>{item.title}</h2>
-            }
-          </section>
-          {item.sub_nav && item.sub_nav.length > 0 && item.sub_nav.filter((sub: any) => sub.isvisible).map((sub: any) => (
-            <section id={sub.section} key={sub.section}>
-              {sectionComponents[sub.section]
-                ? React.createElement(sectionComponents[sub.section], mainContent[sub.section] || {})
-                : <h3>{sub.title}</h3>
-              }
-            </section>
-          ))}
-               <div className='bottom-full-line'></div>
-        </React.Fragment>
+    <div className="m-5">
+      <Row className='d-flex  m-5 justify-content-between align-items-center'>
+        <Col sm={3} className=''>
+        <span className="project-logo-name">{project?.name}</span>
+        </Col>
+        <Col sm={9} className='left-border-container'>
+          <h5>
+            {mainContent.introduction.title}
+           </h5>
+        </Col>
+      </Row>
+      <Row  className='d-flex  m-5'>
+      {navigation.filter((item: any) => item.isvisible).map((item: any, idx: number) => (
+        <Col className='mb-5' sm={3} id={item.section} key={item.section}>
+           <ProjectSectionCard projectId={projectId || ''} cqId={cqId || ''} title={item.title} sectionName={item.section} section={mainContent[item.section]} cardNumber={idx + 1} />
+        </Col>
       ))}
+       </Row>
     </div>
   );
 };

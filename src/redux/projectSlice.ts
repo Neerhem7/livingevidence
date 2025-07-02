@@ -65,12 +65,12 @@ export const fetchProjects = createAsyncThunk(
         clinical_questions: [{
           name: 'mcspc',
           abbr: 'mcspc',
-          id:'5',
+          id:'394',
         },
         {
           name: 'mcrpc',
           abbr: 'mcrpc',
-          id:'6',
+          id:'395',
         }
         ]
       }]
@@ -87,7 +87,7 @@ export const fetchActiveProjectWeb = createAsyncThunk(
     try {
       // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`, { projectId, cqId });
       // return response.data;
-      let sample_project_web= cqId == '5' ? mcspc :mcrpc ;
+      let sample_project_web= cqId == '395' ? mcspc :mcrpc ;
       console.info("hello", sample_project_web)
       return sample_project_web;
     } catch (error) {

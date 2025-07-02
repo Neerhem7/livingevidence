@@ -22,7 +22,7 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(({ paper, onViewDetails }
         <div>
           {paper.fullText ?
             <Badge bg="secondary" className="me-2">Full text publications</Badge> :
-            <Badge bg="success">Abstracts presentations</Badge>
+          <Badge bg="success">Abstracts presentations</Badge>
           }
         </div>
       </div>

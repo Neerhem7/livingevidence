@@ -19,7 +19,6 @@ const PublicWebMenu: React.FC<Props> = () => {
     const projectId = searchParams.get('projectId');
     const projects = useSelector((state: RootState) => state.projects.projects);
     const project = projects.find((p: any) => String(p.id) === String(projectId));
-    console.info("project", projects)
     return (
         <nav className={`navbar  navbar-expand-lg p-3 ${mode === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light'}`} style={{ backgroundColor, color: textColor }}>
             <span className="project-name">{project ? project.name : 'Project'}</span>
