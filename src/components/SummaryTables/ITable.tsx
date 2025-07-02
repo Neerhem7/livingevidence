@@ -156,7 +156,7 @@ const ITable = () => {
           <h2>Interactive Table</h2>
         </Col>
       </Row>
-      {headerRoots.length > 0 ? <Row className="m-4" style={{ height: '800px' }}>
+      {headerRoots.length > 0 ? <Row className="m-4" style={{ height: '1030px' }}>
         <Col sm={3} className="overflow-auto" style={{ height: '100%' }}>
           <ColumnSelectorPanel
             nodes={headerRoots}
@@ -166,9 +166,9 @@ const ITable = () => {
             panelCollapsed={panelCollapsed}
           />
         </Col>
-        <Col className="d-flex flex-column gap-4 overflow-auto" style={{ height: '100%' }}>
+        <Col sm={9} className="d-flex flex-column gap-4" >
           {filters.length > 0 && <Card><TableToolBar filters={filters} onFiltersChange={handleFiltersChange} /></Card>}
-          <Card className=" flex-grow-1 overflow-auto">
+          <Card className=" flex-grow-1">
             <ITableTable
               items={items}
               getLeafNodesFromItem={getLeafNodesFromItem}

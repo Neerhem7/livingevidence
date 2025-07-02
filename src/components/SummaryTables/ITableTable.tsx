@@ -88,7 +88,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
 
   return (
     <>
-      <Card.Body className="p-0">
+      <Card.Body className="p-0  overflow-auto" style={{ height: '880px' }}>
         <div className="table-wrapper">
           <table className="table table-bordered table-striped custom-table mb-0">
             <thead>
