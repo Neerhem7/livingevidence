@@ -115,7 +115,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
                     onClick={() => setActivePaper(item.paper_id)}
                   >
                     {leafNodes.map((leaf, index) => (
-                      <td key={`${item.paper_id}-${leaf.id}-${index}`}>
+                      <td key={`${item.paper_id}-${leaf.id}-${index}`} className="nowrap-cell">
                         {leaf.extraction_result?.result?.[0]?.value.toString() ?? ''}
                       </td>
                     ))}

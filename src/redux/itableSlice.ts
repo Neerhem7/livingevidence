@@ -30,7 +30,7 @@ const initialState: ITableState = {
     total: 0,
     page: 1,
     total_pages: 0,
-    size: 10,
+    size: 20,
     has_next: false,
     has_previous: false,
   },
@@ -45,7 +45,7 @@ export const fetchITableData = createAsyncThunk(
       projectId,
       cqId,
       page = 1,
-      size = 10,
+      size = 20,
       filters = [],
     }: ProjectParams & { page?: number; size?: number; filters?: any[] },
     thunkAPI

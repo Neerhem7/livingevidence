@@ -1,4 +1,22 @@
+.nowrap-cell {
+  white-space: nowrap;
+  max-width: none;
+}
 
+table {
+  table-layout: auto;
+}
+
+th, td {
+  white-space: nowrap;
+  width: auto;
+  max-width: none;
+}
+
+.table-scroll-x {
+  overflow-x: auto;
+  width: 100%;
+} 
 
 .custom-table {
   /* border: 1px solid var(--secondary-color) !important; */
@@ -28,6 +46,9 @@
   vertical-align: bottom;
   background-color: #8fa0ac!important;
   border: 1px solid #c8c8c8 !important;
+  white-space: nowrap;
+  width: auto;
+  max-width: none;
 }
 
 
@@ -36,6 +57,9 @@
     text-align: center;
     color: var(--text-color) !important;
     background-color: var(--background-color) !important;
+    white-space: nowrap inherit !important;
+    width: auto !important;
+    max-width: none !important;
     /* border: 1px solid var(--secondary-color) !important; */
   }
   
