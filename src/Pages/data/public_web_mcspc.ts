@@ -304,7 +304,7 @@ export const mcspc = {
         },
         {
             "isvisible": true,
-            "section": "publication",
+            "section": "publications",
             "sub_nav": [],
             "title": "Publications"
         }

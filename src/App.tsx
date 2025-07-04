@@ -65,7 +65,7 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
   if (!searchParams.get('projectId') || !searchParams.get('cqId')) {
     return <Navigate to="/our-research" />;
   }
-
+  console.info("section name", sectionName)
   if (sectionName) {
     const sectionData = mainContent[sectionName];
     if (!sectionData) {
@@ -126,7 +126,7 @@ const AppContent: React.FC = () => {
             <Route path="/public-web/sof_table" element={<RouteWrapper Component={SofTable} />} />
             <Route path="/public-web/network_ma" element={<RouteWrapper Component={NetworkMa} />} />
             <Route path="/public-web/evidence_map" element={<RouteWrapper Component={EvidenceMap} />} />
-            <Route path="/public-web/publication" element={<RouteWrapper Component={Publications} />} />
+            <Route path="/public-web/publications" element={<RouteWrapper Component={Publications} />} />
             <Route path="/prisma" element={<RouteWrapper Component={Prisma} />} />
             <Route path="/itable" element={<RouteWrapper Component={ITable} />} />
           </Routes>

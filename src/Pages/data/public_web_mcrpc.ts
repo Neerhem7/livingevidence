@@ -153,7 +153,7 @@ export const mcrpc ={
         },
         {
             "isvisible": true,
-            "section": "publication",
+            "section": "publications",
             "sub_nav": [],
             "title": "Publications"
         }

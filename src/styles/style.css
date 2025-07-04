@@ -44,3 +44,19 @@
     flex-direction: column;
 
 }
+
+.semi-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.3rem;
+  border-radius: 30px 0 0 30px;
+  min-height: 80px;
+  margin-right: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  letter-spacing: 0.5px;
+  padding: 0 1.5rem;
+}
