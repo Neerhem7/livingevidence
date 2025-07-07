@@ -81,7 +81,7 @@ const TableToolBar: React.FC<Props> = ({ filters, onFiltersChange }) => {
             );
 
             return (
-              <div className="col-2" key={filter.node_id}>
+              <div style={{ width: 'auto', minWidth: 0 }} key={filter.node_id}>
                 <Dropdown className="w-100 dropdown-hover">
                   <Dropdown.Toggle
                     className="w-100 text-truncate"
