@@ -44,16 +44,13 @@ const Prisma: React.FC<PrismaProps> = ({ description, title }) => {
 
   // Load initial stats for the current tab only
   useEffect(() => {
-    console.info("useEffec", projectId, cqId)
     // Skip if we don't have valid IDs or if this is the initial render with empty IDs
     if (!projectId || !cqId || projectId === '' || cqId === '') return;
-    console.info("useEffec 1", projectId, cqId)
     // Skip the initial render, only run on actual ID updates
     // if (!hasInitialized.current) {
     //   hasInitialized.current = true;
     //   return;
     // }
-    console.info("useEffec 2", projectId, cqId)
     // Load stats based on active tab
     if (activeTab === 'Current State') {
       dispatch(fetchCurrentStats({ projectId, cqId }));

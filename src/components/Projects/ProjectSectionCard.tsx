@@ -33,7 +33,6 @@ const ProjectSectionCard: React.FC<ProjectSectionCardProps> = ({sectionName, sec
     const contentRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
-        console.info("useeffect", title, section)
         const el = contentRef.current;
         if (el) {
             setIsClamped(el.scrollHeight > el.clientHeight);

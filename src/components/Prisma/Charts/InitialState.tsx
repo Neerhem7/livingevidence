@@ -80,7 +80,6 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({activeTab, connect
   };
 
   useEffect(() => {
-    console.info("hello state chage in initial state chart", activeState)
     const isValidId = (id: string | null) => {
       if (!id) return false;
       if (id === '0') return false;

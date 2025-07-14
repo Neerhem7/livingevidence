@@ -26,7 +26,7 @@ const PublicWeb: React.FC = () => {
   const projectId = searchParams.get('projectId');
   const cqId = searchParams.get('cqId');
   const projects = useSelector((state: RootState) => state.projects.projects);
-  const project = projects.find((p: any) => String(p.id) === String(projectId));
+  const project = projects.find((p: any) => String(p.project_id) === String(projectId));
   const navigation = activeProjectWeb?.navigation || [];
   const mainContent = activeProjectWeb?.main_content || {};
 
@@ -46,7 +46,7 @@ const PublicWeb: React.FC = () => {
     <div className="m-5">
       <Row className='d-flex  m-5 justify-content-between align-items-center'>
         <Col sm={3} className=''>
-        <span className="project-logo-name">{project?.name}</span>
+        <span className="project-logo-name">{project?.project_title}</span>
         </Col>
         <Col sm={9} className='left-border-container'>
           <h5>

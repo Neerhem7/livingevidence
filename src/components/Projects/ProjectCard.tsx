@@ -5,32 +5,34 @@ import './ProjectCard.css'; // Import the new styles
 
 // Define the types based on your projectSlice structure
 interface ClinicalQuestion {
-    name: string;
-    abbr: string;
-    id: string;
+    clinical_question_title: string;
+    clinical_unique_abbr: string;
+    clinical_question_id: string;
 }
 
 interface Project {
-    name: string;
+    project_title: string;
     abbr: string;
-    id: string;
+    project_id: string;
     clinical_questions: ClinicalQuestion[];
 }
 
 interface ProjectCardProps {
     project: Project;
+    live?: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, live }) => {
     return (
         <Card className="project-card">
-            <Card.Header as="h5">{project.name}</Card.Header>
+            <Card.Header as="h5">{project.project_title}</Card.Header>
             <Card.Body>
                 <ListGroup variant="flush">
                     {project.clinical_questions.map((cq) => (
-                        <ListGroup.Item key={cq.id || cq.name}>
-                            <Link to={`/public-web?projectId=${project.id}&cqId=${cq.id}`}>
-                                {cq.name || cq.abbr }
+                        <ListGroup.Item key={cq.clinical_question_id || cq.clinical_question_title}>
+                            <Link
+                                to={`/public-web?projectId=${project.project_id}&cqId=${cq.clinical_question_id}${live ? '&live=true' : ''}`}
+                            >    {cq.clinical_question_title || cq.clinical_unique_abbr}
                             </Link>
                         </ListGroup.Item>
                     ))}

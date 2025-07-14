@@ -8,6 +8,7 @@ import { mcspc } from '../Pages/data/public_web_mcspc';
 
 interface ProjectsState {
   projects: any[],
+  userProjects: any[],
   activeProject: {
     projectId: string | null;
     cqId: string | null;
@@ -15,6 +16,8 @@ interface ProjectsState {
   activeProjectWeb: any | null;
   projectsLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
   projectsError: string | null;
+  userProjectsLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  userProjectsError: string | null;
   activeProjectLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
   activeProjectError: string | null;
   activeProjectWebLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -23,6 +26,7 @@ interface ProjectsState {
 
 const initialState: ProjectsState = {
   projects: [],
+  userProjects: [],
   activeProject: {
     projectId: "0",
     cqId: "0"
@@ -30,11 +34,33 @@ const initialState: ProjectsState = {
   activeProjectWeb: null,
   projectsLoading: 'idle',
   projectsError: null,
+  userProjectsLoading: 'idle',
+  userProjectsError: null,
   activeProjectLoading: 'idle',
   activeProjectError: null,
   activeProjectWebLoading: 'idle',
   activeProjectWebError: null,
 };
+
+export const fetchUserProjects = createAsyncThunk(
+  'projects/fetchUserProjects',
+  async (_, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.auth.token;
+      const headers = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}` 
+      }
+      const response = await axios.get(`${BE_Endpoints.USER_PROJECTS}`, {headers:headers});
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
@@ -42,38 +68,55 @@ export const fetchProjects = createAsyncThunk(
     try {
       // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`);
       // return response.data;
-      let sample_projects=[{
-        name: 'Living Lung Cancer',
-        abbr: 'LUNGCA',
-        id:'233',
-        clinical_questions: [{
-          name: 'LL_mNSCLC_d+',
-          abbr: 'LL_mNSCLC_d+',
-          id:'17',
+      let sample_projects=[
+        {
+            "project_id": 210,
+            "project_title": "Living Prostate Cancer",
+            "clinical_questions": [
+                {
+                    "clinical_question_id": 329,
+                    "clinical_question_title": "Living Prostate Cancer (Default)",
+                    "clinical_unique_abbr": "Living Prostate Cancer"
+                },
+                {
+                    "clinical_question_id": 394,
+                    "clinical_question_title": "mCSPC",
+                    "clinical_unique_abbr": "mcspc"
+                },
+                {
+                    "clinical_question_id": 395,
+                    "clinical_question_title": "mCRPC",
+                    "clinical_unique_abbr": "mcrpc"
+                },
+                {
+                    "clinical_question_id": 396,
+                    "clinical_question_title": "M0_CRPC",
+                    "clinical_unique_abbr": "m0crpc"
+                },
+                {
+                    "clinical_question_id": 397,
+                    "clinical_question_title": "Toxicity_PCa",
+                    "clinical_unique_abbr": "tox_pca"
+                },
+                {
+                    "clinical_question_id": 398,
+                    "clinical_question_title": "PARP_mCRPC",
+                    "clinical_unique_abbr": "parp_mcrpc"
+                }
+            ]
         },
         {
-          name: 'LL_mNSCLC_d-',
-          abbr: 'LL_mNSCLC_d-',
-          id:'16',
+            "project_id": 233,
+            "project_title": "Living Lung Cancer",
+            "clinical_questions": [
+                {
+                    "clinical_question_id": 356,
+                    "clinical_question_title": "Default",
+                    "clinical_unique_abbr": "Default"
+                }
+            ]
         }
-        ]
-      },
-      {
-        name: 'Living Prostate Cancer',
-        abbr: 'LPR',
-        id:'210',
-        clinical_questions: [{
-          name: 'mcspc',
-          abbr: 'mcspc',
-          id:'394',
-        },
-        {
-          name: 'mcrpc',
-          abbr: 'mcrpc',
-          id:'395',
-        }
-        ]
-      }]
+    ]
       return sample_projects;
     } catch (error) {
       throw error;
@@ -88,7 +131,7 @@ export const fetchActiveProjectWeb = createAsyncThunk(
       // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`, { projectId, cqId });
       // return response.data;
       let sample_project_web= cqId == '395' ? mcrpc :mcspc ;
-      console.info("hello", sample_project_web)
+      
       return sample_project_web;
     } catch (error) {
       throw error;
@@ -118,6 +161,17 @@ const projectSlice = createSlice({
       .addCase(fetchProjects.rejected, (state, action) => {
         state.projectsLoading = 'failed';
         state.projectsError = action.error.message || 'Failed to fetch projects';
+      })
+      .addCase(fetchUserProjects.pending, (state) => {
+        state.userProjectsLoading = 'pending';
+      })
+      .addCase(fetchUserProjects.fulfilled, (state, action) => {
+        state.userProjectsLoading = 'succeeded';
+        state.userProjects = action.payload;
+      })
+      .addCase(fetchUserProjects.rejected, (state, action) => {
+        state.userProjectsLoading = 'failed';
+        state.userProjectsError = action.error.message || 'Failed to fetch projects';
       })
       .addCase(fetchActiveProjectWeb.pending, (state) => {
         state.activeProjectWebLoading = 'pending';

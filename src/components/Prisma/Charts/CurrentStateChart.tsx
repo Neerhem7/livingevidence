@@ -102,7 +102,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
   };
 
   useEffect(() => {
-    console.info("hello state chage in current state chart", activeState)
     const isValidId = (id: string | null) => {
       if (!id) return false;
       if (id === '0') return false;
@@ -169,7 +168,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
         else if (type === '2-left-to-center-right') {
           const fromCenterX = (fromBox.left + fromBox.right) / 2;
           const fromBottomY = fromBox.bottom;
-            console.info("toleft box", toBox)
           const toLeftX = toBox.left;
           const toCenterY = (toBox.top + toBox.bottom) / 2;
 

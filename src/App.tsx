@@ -2,6 +2,7 @@ import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './App.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { RootState, useAppDispatch, useAppSelector } from './redux/store';
 import { setProjectParams, fetchProjects,fetchActiveProjectWeb } from './redux/projectSlice';
 import Navigation from './components/Menus/Navigation';
@@ -17,6 +18,8 @@ import SofTable from './components/SofTable/SofTable';
 import NetworkMa from './components/NetworkMA/NetworkMa';
 import EvidenceMap from './components/EvidenceMap/EvidenceMap';
 import Publications from './components/Publications/Publications';
+import Login from './Pages/Login';
+import Dashboard from './Pages/Dashboard';
 
 const Home = React.lazy(() => import('./Pages/Home'));
 const Concept = React.lazy(() => import('./Pages/Concept'));
@@ -38,10 +41,11 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
   const sectionName = location.pathname.replace('/public-web/', '').split('/')[0];
   const mainContent = activeProjectWeb?.main_content || {};
   const projectId = searchParams.get('projectId');
-  const cqId = searchParams.get('cqId');
   const projects = useSelector((state: RootState) => state.projects.projects);
-  const project = projects.find((p: any) => String(p.id) === String(projectId));
+  const project = projects.find((p: any) => String(p.project_id) === String(projectId));
   const isPublicWeb = location.pathname.startsWith('/public-web/');
+  const isProtected = searchParams.get('live');
+  const token = localStorage.getItem('token');
 
 
   useEffect(() => {
@@ -60,12 +64,12 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
     }
   }, [isPublicWeb, dispatch, projects]);
 
-  
-
+  if (isProtected && (!token || token === 'null' || token === 'undefined')) {
+    return <Navigate to="/login" replace />;
+  }
   if (!searchParams.get('projectId') || !searchParams.get('cqId')) {
     return <Navigate to="/our-research" />;
   }
-  console.info("section name", sectionName)
   if (sectionName) {
     const sectionData = mainContent[sectionName];
     if (!sectionData) {
@@ -73,14 +77,23 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
     }
     return (
       <ProjectSection
-      project={project}
+        project={project}
         title={mainContent.introduction.title}
         component={<Component {...sectionData} />}
       />
     );
+    
   }
 
   return <Component />;
+};
+
+const ProtectedRoute: React.FC<{ Component: React.ComponentType<any> }> = ({ Component }) => {
+  const token = useAppSelector(state => state.auth.token);
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Component/>;
 };
 
 const AppContent: React.FC = () => {
@@ -88,6 +101,7 @@ const AppContent: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const location = useLocation();
   const isPublicWeb = location.pathname === '/public-web';
+  const isProtectedMenu = location.pathname === '/login' || location.pathname.startsWith('/dashboard');
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -108,11 +122,14 @@ const AppContent: React.FC = () => {
 
   return (
     <>
-       <Navigation />
-      <Container fluid className={isMobile?'m-0':'mt-4'}>
+      {!isProtectedMenu &&  <Navigation />}
+      <Container fluid={!isProtectedMenu} className={isMobile || isProtectedMenu?'m-0 p-0':'mt-4'}
+      style={{ minHeight: "100vh", minWidth:"100vw"}}>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
-            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" Component={Login} />
+            <Route path="/dashboard/*" element={<ProtectedRoute Component={Dashboard}/>} />
             <Route path="/home" Component={Home} />
             <Route path="/concept" Component={Concept} />
             <Route path="/theme" Component={Theme} />
@@ -139,7 +156,7 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => (
   <Router basename="/pub"> 
     <AppContent />
-  </Router>
-);
+    </Router>
+  );
 
 export default App;
