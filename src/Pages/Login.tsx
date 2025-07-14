@@ -31,7 +31,7 @@ const Login: React.FC<Props> = () => {
     return (
         <div className="animated-bg">
             <Card className="login-card align-items-center">
-            <img src="/logo.png" alt="Logo" className="logo" />
+            <img src="/pub/logo.png" alt="Logo" className="logo" />
                 <Form className="w-100 mt-5" onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formUsername">
                         <InputGroup>
