@@ -39,13 +39,17 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
   const dispatch = useAppDispatch();
   const location = useLocation();
   const sectionName = location.pathname.replace('/public-web/', '').split('/')[0];
-  const mainContent = activeProjectWeb?.main_content || {};
-  const projectId = searchParams.get('projectId');
-  const projects = useSelector((state: RootState) => state.projects.projects);
-  const project = projects.find((p: any) => String(p.project_id) === String(projectId));
   const isPublicWeb = location.pathname.startsWith('/public-web/');
   const isProtected = searchParams.get('live');
   const token = localStorage.getItem('token');
+
+  const mainContent = activeProjectWeb?.main_content || {};
+  const projectId = searchParams.get('projectId');
+  const projects = useSelector((state: RootState) =>
+    isProtected ? state.projects.userProjects : state.projects.projects
+  );
+  const project = projects.find((p: any) => String(p.project_id) === String(projectId));
+
 
 
   useEffect(() => {
