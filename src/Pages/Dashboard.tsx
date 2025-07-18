@@ -46,7 +46,7 @@ const Dashboard: React.FC<Props> = () => {
                     variant="pills"
                     className="flex-column vh-100 p-3 dashboard-nav-pills"
                 >
-                    <img src="/logo.png" alt="Logo" className="logo mb-5" />
+                    <img src="/pub/logo.png" alt="Logo" className="logo mb-5" />
                     {/* User Info Nav Item */}
                     {user && (
                         <Nav.Item className="mb-4">
