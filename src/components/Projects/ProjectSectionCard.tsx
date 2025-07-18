@@ -25,9 +25,10 @@ interface ProjectSectionCardProps {
     projectId: string;
     cqId: string;
     extraComponent?: React.ReactNode;
+    isProtected?: string;
 }
 
-const ProjectSectionCard: React.FC<ProjectSectionCardProps> = ({sectionName, section, title, cardNumber = 1, projectId, cqId, extraComponent }) => {
+const ProjectSectionCard: React.FC<ProjectSectionCardProps> = ({isProtected, sectionName, section, title, cardNumber = 1, projectId, cqId, extraComponent }) => {
     const [expanded, setExpanded] = useState(false);
     const [isClamped, setIsClamped] = useState(false);
     const contentRef = useRef<HTMLParagraphElement>(null);
@@ -54,7 +55,7 @@ const ProjectSectionCard: React.FC<ProjectSectionCardProps> = ({sectionName, sec
 
                 <div className="d-flex justify-content-end mt-3">
                     <Link
-                        to={`/public-web/${sectionName}?projectId=${projectId}&cqId=${cqId}`}
+                        to={`/public-web/${sectionName}?projectId=${projectId}&cqId=${cqId}${isProtected === 'true' && '&live=true'}`}
                         className={`btn btn-primary btn-sm learn-more-btn card-${cardNumber}`}
                     >
                         Learn More

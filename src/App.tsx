@@ -51,7 +51,6 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
   const project = projects.find((p: any) => String(p.project_id) === String(projectId));
 
 
-
   useEffect(() => {
     const projectId = searchParams.get('projectId');
     const cqId = searchParams.get('cqId');

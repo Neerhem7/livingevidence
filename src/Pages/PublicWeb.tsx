@@ -25,7 +25,10 @@ const PublicWeb: React.FC = () => {
 
   const projectId = searchParams.get('projectId');
   const cqId = searchParams.get('cqId');
-  const projects = useSelector((state: RootState) => state.projects.projects);
+  const isProtected = searchParams.get('live');
+  const projects = useSelector((state: RootState) =>
+    isProtected ? state.projects.userProjects : state.projects.projects
+  );
   const project = projects.find((p: any) => String(p.project_id) === String(projectId));
   const navigation = activeProjectWeb?.navigation || [];
   const mainContent = activeProjectWeb?.main_content || {};
@@ -57,7 +60,7 @@ const PublicWeb: React.FC = () => {
       <Row  className='d-flex  m-5'>
       {navigation.filter((item: any) => item.isvisible).map((item: any, idx: number) => (
         <Col className='mb-5' sm={3} id={item.section} key={item.section}>
-           <ProjectSectionCard projectId={projectId || ''} cqId={cqId || ''} title={item.title} sectionName={item.section} section={mainContent[item.section]} cardNumber={idx + 1} />
+           <ProjectSectionCard projectId={projectId || ''} cqId={cqId || ''} title={item.title} sectionName={item.section} section={mainContent[item.section]} cardNumber={idx + 1} isProtected={isProtected || ''} />
         </Col>
       ))}
        </Row>
