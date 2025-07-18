@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BE_Endpoints } from './BEEndpoints';
 import { mcrpc } from '../Pages/data/public_web_mcrpc';
 import { mcspc } from '../Pages/data/public_web_mcspc';
-
+import { web } from '../Pages/data/public_web';
 
 interface ProjectsState {
   projects: any[],
@@ -130,8 +130,10 @@ export const fetchActiveProjectWeb = createAsyncThunk(
     try {
       // const response = await axios.put(`${BE_Endpoints.PRISMA_PAPERS}`, { projectId, cqId });
       // return response.data;
-      let sample_project_web= cqId == '395' ? mcrpc :mcspc ;
-      
+      let sample_project_web=( projectId === '210'  && cqId === '395') ?
+                                     mcrpc: 
+                                    ( projectId === '210'  && cqId === '394' )? 
+                                     mcspc :web ;
       return sample_project_web;
     } catch (error) {
       throw error;

@@ -29,7 +29,7 @@ const PublicWebMenu: React.FC<Props> = () => {
                         item.sub_nav && item.sub_nav.length > 0 ? (
                             <NavDropdown
                                 key={item.section}
-                                title={item.title}
+                                title={item?.title}
                                 id={`dropdown-${item.section}`}
                                 className="px-3 py-2 rounded hover-nav"
                             >

@@ -81,7 +81,7 @@ const RouteWrapper: React.FC<{ Component: React.ComponentType<any> }> = ({ Compo
     return (
       <ProjectSection
         project={project}
-        title={mainContent.introduction.title}
+        title={mainContent.introduction?.title}
         component={<Component {...sectionData} />}
       />
     );
