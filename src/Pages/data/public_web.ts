@@ -14,6 +14,28 @@ export const web = {
             "isvisible": true,
             "title": ""
         },
+        "summary_tables": {
+            "description": "",
+            "index": 2,
+            "isvisible": true,
+            "tables": [
+                {
+                    "description": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">The interactive table summarizes study characteristics, population characteristics and results from the clinical trials included in this systematic review and meta-analysis. This table is dynamically updated as new studies are included in the living review. Users can select filter options to view only studies with certain characteristics or interactively construct the results table from the available menu.</span></p><p><span style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">How to use this table? </span><a href=\"about:blank\" rel=\"noopener noreferrer\" target=\"_blank\" style=\"background-color: transparent; color: rgb(0, 123, 255);\">Video demonstration</a></p><p><br></p>",
+                    "is_selected": true,
+                    "isvisible": true,
+                    "title": "INTERACTIVE TABLE",
+                    "type": "itable"
+                },
+                {
+                    "description": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);\">Result Table Findings.</span></p>",
+                    "is_selected": true,
+                    "isvisible": true,
+                    "title": "RESULT TABLE",
+                    "type": "rtable"
+                }
+            ],
+            "title": "Summary Tables"
+        }
       
     },
     "navigation": [
@@ -23,6 +45,23 @@ export const web = {
             "section": "prisma",
             "sub_nav": [],
             "title": "Prisma"
+        },
+        {
+            "isvisible": true,
+            "section": "summary_tables",
+            "sub_nav": [
+                {
+                    "isvisible": true,
+                    "section": "itable",
+                    "title": "Interactive Table"
+                },
+                {
+                    "isvisible": true,
+                    "section": "rtable",
+                    "title": "Result Table"
+                }
+            ],
+            "title": "Summary Tables"
         },
        
     ],
