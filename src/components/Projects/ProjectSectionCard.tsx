@@ -55,7 +55,7 @@ const ProjectSectionCard: React.FC<ProjectSectionCardProps> = ({isProtected, sec
 
                 <div className="d-flex justify-content-end mt-3">
                     <Link
-                        to={`/public-web/${sectionName}?projectId=${projectId}&cqId=${cqId}${isProtected === 'true' && '&live=true'}`}
+                        to={`/public-web/${sectionName}?projectId=${projectId}&cqId=${cqId}${isProtected === 'true' ? '&live=true' : '&false'}`}
                         className={`btn btn-primary btn-sm learn-more-btn card-${cardNumber}`}
                     >
                         Learn More
