@@ -10,6 +10,7 @@ export type Paper = {
   upload_source: string;
   paper_id_type?: string;
   paper_id?: string;
+  nct_number?: string;
 };
 
 export type Pagination = {
