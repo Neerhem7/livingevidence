@@ -8,6 +8,8 @@ export type Paper = {
   fullText: boolean;
   is_duplicate: string;
   upload_source: string;
+  paper_id_type?: string;
+  paper_id?: string;
 };
 
 export type Pagination = {
