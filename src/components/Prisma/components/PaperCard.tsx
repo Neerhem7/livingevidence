@@ -35,22 +35,22 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(({ paper, onViewDetails }
   return (
     <div className="d-flex align-items-center border-bottom py-3 prisma-text col-12 col-md-12">
       <div className="d-flex justify-content-center">
-        <small className="date-circle">{getYear(paper.publish_date)}</small>
+        <small className="date-circle">{getYear(paper?.publish_date)}</small>
       </div>
 
       <div className="flex-grow-1 px-3">
-        <div className="text-truncate-2 paper-title">{paper.title}</div>
+        <div className="text-truncate-2 paper-title">{paper?.title}</div>
         <div className="paper-type mt-2">
           <span>
-          {paper.paper_id_type && getPaperType(paper.paper_id_type)}:{" "}
+          {paper?.paper_id_type && getPaperType(paper?.paper_id_type)}:{" "}
           </span>
-          {paper.paper_id_type && (
+          {paper?.paper_id_type && (
             <a
-              href={getPaperLink(paper.paper_id_type)}
+              href={getPaperLink(paper?.paper_id_type)}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {paper.id}
+              {paper?.id}
             </a>
           )}
         </div>
