@@ -40,7 +40,7 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(
           <div className="paper-type d-flex align-items-start mt-2">
             <span className="doi-pm">
               <span>
-                {paper?.paper_id_type && getPaperType(paper?.paper_id_type)}{" "}
+                {paper?.paper_id_type && getPaperType(paper?.paper_id_type)}:{" "}
               </span>
               {paper?.paper_id_type && (
                 <a

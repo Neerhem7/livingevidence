@@ -34,6 +34,14 @@ const PaperDetailsModal: React.FC<PaperDetailsModalProps> = React.memo(({ paper,
             </p>
           </div>
         </div>
+        <div className="row g-3">
+          <div className="col-md-6">
+            <p className="mb-2">
+              <strong className="text-secondary">PMID:</strong>
+              <span className="ms-2">{paper.paper_id}</span>
+            </p>
+          </div>
+        </div>
         <div className="mt-4">
           <h6 className="text-secondary mb-3">Abstract</h6>
           <p className="mb-0 text-justify">{paper.abstract}</p>
