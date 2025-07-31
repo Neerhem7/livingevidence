@@ -39,3 +39,19 @@ export const generateCalendarData = (startDate: string | Date, endDate: Date): C
 };
 
 
+export const getPaperLink = (paper_id_type: string, paper_id: string) => {
+  if (paper_id_type === "pubmed" && paper_id) {
+    return `https://pubmed.ncbi.nlm.nih.gov/${paper_id}`;
+  } else if (paper_id_type === "DOI" && paper_id) {
+    return `https://doi.org/${paper_id}`;
+  }
+};
+
+export const getPaperType = (paper_id_type: string) => {
+  if (paper_id_type?.toLowerCase() === "pubmed") {
+    return "PMID";
+  } else if (paper_id_type?.toLowerCase() === "doi") {
+    return "DOI";
+  }
+  return "";
+};

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { PaperDetailsModalProps } from '../types';
+import { getPaperType } from '../../../utils/utils';
 
 const PaperDetailsModal: React.FC<PaperDetailsModalProps> = React.memo(({ paper, show, onClose }) => {
   if (!paper) return null;
@@ -37,16 +38,20 @@ const PaperDetailsModal: React.FC<PaperDetailsModalProps> = React.memo(({ paper,
         <div className="row g-3">
           <div className="col-md-6">
             <p className="mb-2">
-              <strong className="text-secondary">PMID:</strong>
+              <strong className="text-secondary">
+                {paper?.paper_id_type ? `${getPaperType(paper?.paper_id_type)}:` : ""}
+              </strong>
               <span className="ms-2">{paper.paper_id}</span>
             </p>
           </div>
-          {paper?.nct_number ? <div className="col-md-6">
-            <p className="mb-2">
-              <strong className="text-secondary">NCT :</strong>
-              <span className="ms-2">{paper.nct_number}</span>
-            </p>
-          </div> : null}
+          {paper?.nct_number ? (
+            <div className="col-md-6">
+              <p className="mb-2">
+                <strong className="text-secondary">NCT:</strong>
+                <span className="ms-2">{paper.nct_number}</span>
+              </p>
+            </div>
+          ) : null}
         </div>
         <div className="mt-4">
           <h6 className="text-secondary mb-3">Abstract</h6>

@@ -2,6 +2,7 @@ import React from "react";
 import { Badge } from "react-bootstrap";
 import { PaperCardProps } from "../types";
 import "../prisma.css";
+import { getPaperLink, getPaperType } from "../../../utils/utils";
 
 const PaperCard: React.FC<PaperCardProps> = React.memo(
   ({ paper, onViewDetails }) => {
@@ -15,23 +16,6 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(
         return yearFromDate?.getFullYear()?.toString();
       }
       return dateStr;
-    };
-
-    const getPaperLink = (paper_id_type: string) => {
-      if (paper_id_type === "pubmed" && paper?.paper_id) {
-        return `https://pubmed.ncbi.nlm.nih.gov/${paper.paper_id}`;
-      } else if (paper_id_type === "DOI" && paper?.paper_id) {
-        return `https://doi.org/${paper.paper_id}`;
-      }
-    };
-
-    const getPaperType = (paper_id_type: string) => {
-      if (paper_id_type?.toLowerCase() === "pubmed") {
-        return "PMID";
-      } else if (paper_id_type?.toLowerCase() === "doi") {
-        return "DOI";
-      }
-      return "";
     };
 
     return (
@@ -49,7 +33,10 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(
               </span>
               {paper?.paper_id_type && (
                 <a
-                  href={getPaperLink(paper?.paper_id_type)}
+                  href={
+                    paper?.paper_id &&
+                    getPaperLink(paper?.paper_id_type, paper?.paper_id)
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                 >
