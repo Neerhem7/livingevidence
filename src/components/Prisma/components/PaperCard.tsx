@@ -6,10 +6,15 @@ import "../prisma.css";
 const PaperCard: React.FC<PaperCardProps> = React.memo(
   ({ paper, onViewDetails }) => {
     const getYear = (dateStr: string) => {
-      // Split by space and get the first part that's a 4-digit number
-      const parts = dateStr.split(" ");
-      const year = parts.find((part) => /^\d{4}$/.test(part));
-      return year || dateStr; // Return the year if found, otherwise return original string
+      const yearFromDate = new Date(dateStr);
+      if (
+        yearFromDate &&
+        yearFromDate?.getFullYear() &&
+        !isNaN(yearFromDate.getFullYear())
+      ) {
+        return yearFromDate?.getFullYear()?.toString();
+      }
+      return dateStr;
     };
 
     const getPaperLink = (paper_id_type: string) => {
