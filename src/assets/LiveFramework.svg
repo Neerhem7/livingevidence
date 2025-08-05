@@ -88,7 +88,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 14px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                AI-powered<br>pathway</div>
+                                AI-powered<br />pathway</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -161,7 +161,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(0, 0, 153); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
-                                NLP-based<br>term extraction</div>
+                                NLP-based<br />term extraction</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -186,7 +186,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 14px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                AI-powered<br>pathway</div>
+                                AI-powered<br />pathway</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -291,7 +291,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(77, 77, 77); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Automated
-                                pairwise<br>meta-analysis</div>
+                                pairwise<br />meta-analysis</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -363,7 +363,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Interactive
-                                NMA summary of findings<br>table</div>
+                                NMA summary of findings<br />table</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -386,7 +386,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Interactive
-                                PWMA summary of findings<br>table</div>
+                                PWMA summary of findings<br />table</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -445,7 +445,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
-                                <font face="Oswald">Search engines<br>Ovid<br></font>
+                                <font face="Oswald">Search engines<br />Ovid<br /></font>
                             </div>
                         </div>
                     </div>
@@ -742,7 +742,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
-                                <font face="Oswald">Search engines<br>PubMed<br></font>
+                                <font face="Oswald">Search engines<br />PubMed<br /></font>
                             </div>
                         </div>
                     </div>
@@ -882,7 +882,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(153, 76, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Summary
-                                PRISMA result&nbsp;upload</div>
+                                PRISMA result upload</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -905,7 +905,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(153, 76, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
-                                ML-based<br>RCT identification</div>
+                                ML-based<br />RCT identification</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -974,7 +974,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 16px; font-family: Oswald; color: rgb(153, 76, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
-                                ML-based<br>study classification</div>
+                                ML-based<br />study classification</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -1044,7 +1044,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 14px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                Conventional<br>pathway</div>
+                                Conventional<br />pathway</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -1069,7 +1069,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 14px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                Conventional<br>pathway</div>
+                                Conventional<br />pathway</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -1299,7 +1299,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 14px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Python
-                                data analysis and <br>machine learning packages</div>
+                                data analysis and <br />machine learning packages</div>
                         </div>
                     </div>
                 </foreignObject>
@@ -1389,7 +1389,7 @@
                             style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div
                                 style="display: inline-block; font-size: 14px; font-family: Oswald; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Python
-                                network and <br>data collection packages</div>
+                                network and <br />data collection packages</div>
                         </div>
                     </div>
                 </foreignObject>
