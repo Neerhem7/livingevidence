@@ -107,7 +107,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
                 </tr>
               ))}
             </thead>
-           {loading ? <Spinner animation="border" style={{ width: '300px', height: '300px', color: '#4F959D', display: 'block', marginTop: '60%', marginLeft: '100%' }} /> : <tbody>
+           {loading ? <Spinner animation="border" style={{ width: '50px', height: '50px', color: '#4F959D', display: 'block', marginTop: '100%', marginLeft: '150%' }} /> : <tbody>
               {items.map((item, index) => {
                 const leafNodes = selectedLeafNode.get(item.paper_id) || [];
                 return (
