@@ -89,6 +89,7 @@ const ITable = () => {
     return node.children.flatMap(getLeafNodes);
   };
 
+  // This is called while mapping the table data 
   const getLeafNodesFromItem = (item: Item): ExtractionNode[] => {
     const tree = buildTree(item.extraction_results);
     return tree.flatMap(getLeafNodes);
@@ -127,6 +128,7 @@ const ITable = () => {
   }, [searchParams, fetchData, dispatch]);
 
   // Process items to update header structure
+  //Getting the columns here, that's why we are only using the first item
   useEffect(() => {
     if (!items.length) return;
     
@@ -176,6 +178,7 @@ const ITable = () => {
               headerRows={headerRows}
               headerRoots={headerRoots}
               pagination={pageInfo}
+              loading={loading}
             />
           </Card>
         </Col>

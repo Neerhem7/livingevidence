@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Modal, Card, Pagination } from 'react-bootstrap';
+import { Table, Modal, Card, Pagination, Spinner } from 'react-bootstrap';
 import { ExtractionNode, Item } from './type';
 import "./itable.css"
 import { useAppDispatch } from '../../redux/store';
@@ -22,9 +22,10 @@ interface Props {
   selectedHeaderKeys: Set<number>;
   getLeafNodesFromItem: (item: Item) => ExtractionNode[];
   headerRoots: ExtractionNode[];
+  loading: boolean;
 }
 
-const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selectedHeaderKeys, getLeafNodesFromItem, headerRoots }) => {
+const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selectedHeaderKeys, getLeafNodesFromItem, headerRoots, loading }) => {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const [selectedLeafNode, setSelectedLeafNode] = useState<Map<number, any[]>>(new Map());
@@ -106,7 +107,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
                 </tr>
               ))}
             </thead>
-            <tbody>
+           {loading ? <Spinner animation="border" style={{ width: '400px', height: '400px', color: '#4F959D', display: 'block', marginTop: '40%', marginLeft: '100%' }} /> : <tbody>
               {items.map((item, index) => {
                 const leafNodes = selectedLeafNode.get(item.paper_id) || [];
                 return (
@@ -122,7 +123,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
                   </tr>
                 );
               })}
-            </tbody>
+            </tbody>}
           </table>
         </div>
       </Card.Body>
@@ -130,14 +131,14 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
       <Card.Footer>
         {pagination && (
           <Pagination className='mb-0'>
-            <Pagination.First disabled={!pagination.has_previous} onClick={() => changePage(1)} />
-            <Pagination.Prev disabled={!pagination.has_previous} onClick={() => changePage(pagination.page - 1)} />
+            <Pagination.First disabled={!pagination.has_previous || loading} onClick={() => changePage(1)} />
+            <Pagination.Prev disabled={!pagination.has_previous || loading} onClick={() => changePage(pagination.page - 1)} />
             <Pagination.Item disabled>Page</Pagination.Item>
             <Pagination.Item disabled>{pagination.total_pages > 0 ? pagination.page : 0}</Pagination.Item>
             <Pagination.Item disabled> of</Pagination.Item>
             <Pagination.Item disabled>{pagination.total_pages}</Pagination.Item>
-            <Pagination.Next disabled={!pagination.has_next} onClick={() => changePage(pagination.page + 1)} />
-            <Pagination.Last disabled={!pagination.has_next} onClick={() => changePage(pagination.total_pages)} />
+            <Pagination.Next disabled={!pagination.has_next || loading} onClick={() => changePage(pagination.page + 1)} />
+            <Pagination.Last disabled={!pagination.has_next || loading} onClick={() => changePage(pagination.total_pages)} />
           </Pagination>)}
       </Card.Footer>
       <Modal
