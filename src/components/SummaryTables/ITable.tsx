@@ -158,38 +158,62 @@ const ITable = () => {
           <h2>Interactive Table</h2>
         </Col>
       </Row>
-      {headerRoots.length > 0 ? <Row className="m-4" style={{ height: '1030px' }}>
-        <Col sm={3} className="overflow-auto" style={{ height: '100%' }}>
-          <ColumnSelectorPanel
-            nodes={headerRoots}
-            selectedHeaderKeys={selectedHeaderKeys}
-            setSelectedHeaderKeys={setSelectedHeaderKeys}
-            togglePanel={() => setPanelCollapsed(!panelCollapsed)}
-            panelCollapsed={panelCollapsed}
-          />
-        </Col>
-        <Col sm={9} className="d-flex flex-column gap-4" >
-          {filters.length > 0 && <Card><TableToolBar filters={filters} onFiltersChange={handleFiltersChange} /></Card>}
-          <Card className=" flex-grow-1">
-            <ITableTable
-              items={items}
-              getLeafNodesFromItem={getLeafNodesFromItem}
+      {headerRoots.length > 0 ? (
+        <Row className="m-4" style={{ height: "1030px" }}>
+          <Col sm={3} className="overflow-auto" style={{ height: "100%" }}>
+            <ColumnSelectorPanel
+              nodes={headerRoots}
               selectedHeaderKeys={selectedHeaderKeys}
-              headerRows={headerRows}
-              headerRoots={headerRoots}
-              pagination={pageInfo}
-              loading={loading}
+              setSelectedHeaderKeys={setSelectedHeaderKeys}
+              togglePanel={() => setPanelCollapsed(!panelCollapsed)}
+              panelCollapsed={panelCollapsed}
             />
-          </Card>
-        </Col>
-      </Row>
-        : <Row className="d-flex justify-content-center text-center m-4">
-          {loading ? <Spinner
-                    animation="border"
-                    style={{ width: '100px', height: '100px', color: '#4F959D' }}
-                  /> : <Alert variant='primary' className="d-flex justify-content-center text-center">There is no data</Alert>
-           }
-        </Row>}
+          </Col>
+          <Col sm={9} className="d-flex flex-column gap-4">
+            {filters.length > 0 && (
+              <Card>
+                <TableToolBar
+                  filters={filters}
+                  onFiltersChange={handleFiltersChange}
+                />
+              </Card>
+            )}
+            <Card className=" flex-grow-1">
+              <div className="d-flex justify-content-between align-items-center p-3">
+                <p style={{ marginTop: "auto", marginBottom: "auto" }}>
+                  {" "}
+                  &nbsp; Data of Studies | {pageInfo?.total} citations
+                </p>
+              </div>
+              <ITableTable
+                items={items}
+                getLeafNodesFromItem={getLeafNodesFromItem}
+                selectedHeaderKeys={selectedHeaderKeys}
+                headerRows={headerRows}
+                headerRoots={headerRoots}
+                pagination={pageInfo}
+                loading={loading}
+              />
+            </Card>
+          </Col>
+        </Row>
+      ) : (
+        <Row className="d-flex justify-content-center text-center m-4">
+          {loading ? (
+            <Spinner
+              animation="border"
+              style={{ width: "100px", height: "100px", color: "#4F959D" }}
+            />
+          ) : (
+            <Alert
+              variant="primary"
+              className="d-flex justify-content-center text-center"
+            >
+              There is no data
+            </Alert>
+          )}
+        </Row>
+      )}
     </>
   );
 }
