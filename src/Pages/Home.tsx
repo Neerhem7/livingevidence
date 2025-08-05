@@ -7,8 +7,9 @@ const Home: React.FC<Props> = () => {
   const isMobileView = useMediaQuery();
 
   return (
-    <div className="container mt-3 concept">
-      <p>
+    <div className="container mt-3 ">
+      <h2>About Us</h2>
+      <p className="text-start">
         Systematic reviews (SR) and meta-analyses (MA) are tools to synthesize
         evidence and provide decision makers with estimates of effect that are
         more precise than those provided by individual studies. SRMAs inform
@@ -52,11 +53,19 @@ const Home: React.FC<Props> = () => {
         framework as an approach to create Living interactive Systematic Reviews
         (LISRs).
       </p>
-      <img
-        src="https://workspace.network-meta-analysis.com/static/img/LISR_WORKFLOW.svg"
-        alt="Concept"
-        className="concept-img"
-      />
+      <br />
+      <br />
+      <div className="text-center">
+        <img
+          src="https://workspace.network-meta-analysis.com/static/img/LISR_WORKFLOW.svg"
+          alt="Concept"
+          width={"auto"}
+          className="text-center"
+        />
+        <br />
+        <br />
+        <br />
+      </div>
     </div>
   );
 };
