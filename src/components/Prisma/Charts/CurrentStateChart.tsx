@@ -97,6 +97,7 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
       handleOpenModal();
     }
     
+    console.log('state changed')
     onStateChange?.(nodeId);
     onStateTextChange?.(parsedLabel);
   };

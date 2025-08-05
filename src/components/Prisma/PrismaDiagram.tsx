@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import React, { act, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Tabs from '../Tabs/Tab';
 import { RootState } from '../../redux/store';
@@ -102,8 +102,10 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
         const value = prismaDiagram.current.stats?.[key as keyof PrismaStats];
         return value !== undefined ? String(value) : `0`;
       });
-      onStateTextChange?.(parsedLabel);
-      onStateChange?.('initial');
+      if (activeState === "initial") {
+        onStateChange?.("initial");
+        onStateTextChange?.(parsedLabel);
+      }
     } else if (activeTab === 'Initial Search') {
       setStats(prismaDiagram.initial.stats);
       setActiveIndex(1);
