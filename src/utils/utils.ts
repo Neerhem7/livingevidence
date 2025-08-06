@@ -43,8 +43,8 @@ export const generateCalendarData = (
   return calendar;
 };
 
-const checkPubMedArticle = async (paperId: string) => {
-  const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${paperId}&retmode=json`;
+const checkJournalDB = async (paperId: string, paper_id_type: string) => {
+  const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=${paper_id_type}&id=${paperId}&retmode=json`;
 
   try {
     const response = await axios.get(url);
@@ -61,8 +61,8 @@ const checkPubMedArticle = async (paperId: string) => {
 };
 
 const verifyPaperLink = async (
-  paper_id_type: string,
-  paper_id: string
+  paper_id: string,
+  paper_id_type: string
 ): Promise<string | null> => {
   let url = null;
 
@@ -70,11 +70,13 @@ const verifyPaperLink = async (
     url = `https://pubmed.ncbi.nlm.nih.gov/${paper_id}`;
   } else if (paper_id_type === "DOI" && paper_id) {
     url = `https://doi.org/${paper_id}`;
+  } else if (paper_id_type === "NCT" && paper_id) {
+    url = `https://clinicaltrials.gov/ct2/show/${paper_id}`;
   }
 
   if (url) {
     try {
-      const response = await checkPubMedArticle(paper_id); // Perform a GET request to fetch the page content
+      const response = await checkJournalDB(paper_id, paper_id_type); // Perform a GET request to fetch the page content
       if (response && response !== null && response?.length > 0) {
         return response;
       }
@@ -88,14 +90,19 @@ const verifyPaperLink = async (
 
 export const getPaperLink = async (paper_id_type: string, paper_id: string) => {
   if (paper_id_type === "pubmed" && paper_id) {
-    const paperLink = await verifyPaperLink("PMID", paper_id);
+    const paperLink = await verifyPaperLink(paper_id, "pubmed");
     if (paperLink) {
       return paperLink; // Redirect to the article
     } else {
       return "";
     }
   } else if (paper_id_type === "DOI" && paper_id) {
-    return `https://doi.org/${paper_id}`;
+    const paperLink = await verifyPaperLink(paper_id, "doi");
+    if (paperLink) {
+      return paperLink; // Redirect to the article
+    } else {
+      return "";
+    }
   }
 };
 
