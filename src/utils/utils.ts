@@ -95,12 +95,7 @@ export const getPaperLink = async (paper_id_type: string, paper_id: string) => {
       return "";
     }
   } else if (paper_id_type === "DOI" && paper_id) {
-    const paperLink = await verifyPaperLink("DOI", paper_id);
-    if (paperLink) {
-      return paperLink; // Redirect to the article
-    } else {
-      return "";
-    }
+    return `https://doi.org/${paper_id}`;
   }
 };
 
