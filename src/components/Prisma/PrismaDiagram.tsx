@@ -113,8 +113,10 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
         const value = prismaDiagram.initial.stats?.[key as keyof PrismaStats];
         return value !== undefined ? String(value) : `0`;
       });
-      onStateTextChange?.(parsedLabel);
-      onStateChange?.('initial');
+      if (activeState === "initial") {
+        onStateTextChange?.(parsedLabel);
+        onStateChange?.('initial');
+      }
     } else if (activeTab === 'Living Search') {
       setStats(prismaDiagram.living.stats);
       setLiving(prismaDiagram.living.monthlyStats);
@@ -156,6 +158,7 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
               onStateTextChange={onStateTextChange}
               nodeList={prisma_data.initial_state_nodes} 
               connections={prisma_data.initial_state_connections}
+              fullTextExcludeReasons={prismaDiagram.fullTextExclusionReasons}
               stats={stats}
             />
           </Suspense>
