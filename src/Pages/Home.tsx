@@ -55,7 +55,7 @@ const Home: React.FC<Props> = () => {
       </p>
       <br />
       <br />
-      <div className="text-center">
+      <div className="text-center lisr-workflow">
         <img
           src="https://workspace.network-meta-analysis.com/static/img/LISR_WORKFLOW.svg"
           alt="Concept"

@@ -129,3 +129,44 @@
   border-radius: 15px !important;
   color: #fff !important;
 }
+
+.framework-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.framework-img {
+    width: 80%;
+    height: auto;
+    margin: 10px auto;
+}
+
+.architecture-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.architecture-img {
+    width: 80%;
+    height: auto;
+    margin: 10px auto;
+}
+/* ==================================== 
+                    HOME
+=========================================== */
+.lisr-workflow {
+  /* fade-in animation with transition that shows left to right */
+  opacity: 0;
+  transform: translateX(-40px);
+  animation: fadeInLeft 2.5s ease-in-out forwards;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
