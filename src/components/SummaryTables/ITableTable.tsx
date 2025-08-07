@@ -13,7 +13,6 @@ import "./itable.css";
 import { useAppDispatch } from "../../redux/store";
 import { fetchITableData } from "../../redux/itableSlice";
 import { useSearchParams } from "react-router-dom";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 type Pagination = {
   total: number;
