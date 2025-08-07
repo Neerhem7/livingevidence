@@ -7,6 +7,11 @@
   animation: ease-in-out forwards 1s fadeInLeft, ease-in-out forwards 1s revealLeftToRight;
 }
 
+.project-card:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
 /* Add these to control scrollbar appearance in webkit browsers (Chrome, Safari, etc.) */
 .project-card .card-body::-webkit-scrollbar {
   width: 6px;
@@ -135,11 +140,6 @@
   border-left: none !important; 
   font-size: 14px;
   font-weight: lighter;
-  
-  :hover {
-    a{
-    background-color: #f8f9fa !important; /* Light gray on hover */
-    }
-  }
-  
+  margin-top: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
