@@ -14,7 +14,7 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(
       if (paper && paper?.paper_id_type && paper?.paper_id) {
         setVerifyingLink(true);
         getPaperLink(paper?.paper_id_type, paper?.paper_id).then((link) => {
-          if (link) {
+          if (link && link.length > 0) {
             window.open(link, "_blank");
           } else {
             setVerificationFailed(!link);
@@ -71,7 +71,9 @@ const PaperCard: React.FC<PaperCardProps> = React.memo(
                   <span
                     style={{ cursor: "pointer", color: "#007bff" }}
                     onClick={() => {
-                      !verifyingLink && fetchPaperLink();
+                      !verifyingLink &&
+                        paper?.paper_id_type?.toLowerCase() !== "doi" &&
+                        fetchPaperLink();
                     }}
                   >
                     {verifyingLink ? (

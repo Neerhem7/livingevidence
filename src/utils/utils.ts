@@ -60,18 +60,14 @@ const checkJournalDB = async (paperId: string, paper_id_type: string) => {
   }
 };
 
-const verifyPaperLink = async (
+export const verifyPaperLink = async (
   paper_id: string,
   paper_id_type: string
 ): Promise<string | null> => {
   let url = null;
 
-  if (paper_id_type === "PMID" && paper_id) {
+  if (paper_id_type === "pubmed" && paper_id) {
     url = `https://pubmed.ncbi.nlm.nih.gov/${paper_id}`;
-  } else if (paper_id_type === "DOI" && paper_id) {
-    url = `https://doi.org/${paper_id}`;
-  } else if (paper_id_type === "NCT" && paper_id) {
-    url = `https://clinicaltrials.gov/ct2/show/${paper_id}`;
   }
 
   if (url) {
@@ -94,7 +90,7 @@ export const getPaperLink = async (paper_id_type: string, paper_id: string) => {
     if (paperLink) {
       return paperLink; // Redirect to the article
     } else {
-      return "";
+      return paperLink;
     }
   } else if (paper_id_type === "DOI" && paper_id) {
     const paperLink = await verifyPaperLink(paper_id, "doi");
