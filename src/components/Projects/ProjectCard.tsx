@@ -26,10 +26,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, live }) => {
     return (
         <Card className="project-card">
             <Card.Header as="h5">{project.project_title}</Card.Header>
-            <Card.Body>
-                <ListGroup variant="flush">
+            <Card.Body className='project-card-body'>
+                <ListGroup>
                     {project.clinical_questions.map((cq) => (
-                        <ListGroup.Item key={cq.clinical_question_id || cq.clinical_question_title}>
+                        <ListGroup.Item className='project-card-item' key={cq.clinical_question_id || cq.clinical_question_title}>
                             <Link
                                 to={`/public-web?projectId=${project.project_id}&cqId=${cq.clinical_question_id}${live ? '&live=true' : ''}`}
                             >    {cq.clinical_question_title || cq.clinical_unique_abbr}

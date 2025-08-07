@@ -1,9 +1,25 @@
 .project-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    height: 200px !important;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    overflow: hidden; 
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  height: 240px !important;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden; 
+  animation: ease-in-out forwards 1s fadeInLeft, ease-in-out forwards 1s revealLeftToRight;
+}
+
+/* Add these to control scrollbar appearance in webkit browsers (Chrome, Safari, etc.) */
+.project-card .card-body::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.project-card .card-body::-webkit-scrollbar-thumb {
+  background: #205781;
+  border-radius: 3px;
+}
+
+.project-card .card-body::-webkit-scrollbar-button {
+  display: none !important;  /* Remove scrollbar arrows */
 }
 .project-card:hover {
     transform: translateY(-5px);
@@ -11,13 +27,17 @@
 }
 
 .project-card .card-header {
-    background-color: #0d6efd; 
-    color: white;
+    background-color: #205781 !important; 
+    color: white !important;
     font-weight: 500;
+    font-size: medium;
 }
 
 .project-card .card-body {
-    overflow-y: auto; 
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #205781 transparent;
+    scroll-behavior: smooth;
 }
 
 .project-card .list-group-item {
@@ -103,3 +123,23 @@
   font-family: 'Segoe UI', 'Arial', sans-serif;
   margin-bottom: 0.5rem;
 } 
+
+.project-card-body {
+  background-color: #fff !important;
+  padding: 0.5rem !important;
+}
+
+.project-card-item{
+  border-top: none !important; 
+  border-right: none !important; 
+  border-left: none !important; 
+  font-size: 14px;
+  font-weight: lighter;
+  
+  :hover {
+    a{
+    background-color: #f8f9fa !important; /* Light gray on hover */
+    }
+  }
+  
+}

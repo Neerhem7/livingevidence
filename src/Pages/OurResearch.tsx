@@ -45,7 +45,8 @@ const OurResearch = () => {
                     </p>
                 </Col>
                 <Col sm={12} className='mb-4'>
-                    <h5>Major Projects</h5>
+                    <h4>Major Projects</h4>
+                    <div className='bottom-line'></div>
                 </Col>
                 {projectsLoading === 'pending' && <p>Loading projects...</p>}
                 {projectsError && <p>Error: {projectsError}</p>}
