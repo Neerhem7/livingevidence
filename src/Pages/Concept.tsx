@@ -55,7 +55,7 @@ const Concept: React.FC<Props> = () => {
             <img
               src={LiveFramework}
               alt="Live Framework"
-              className="live-framework-img"
+              className="image-animation"
             />
           </div>
         </div>
@@ -106,7 +106,7 @@ const Concept: React.FC<Props> = () => {
             <img
               src={SystemArchitecture}
               alt="System Architecture"
-              className="architecture-img"
+              className="image-animation"
             />
           </div>
         </div>

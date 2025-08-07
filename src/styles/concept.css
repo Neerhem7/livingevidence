@@ -6,13 +6,53 @@
     gap: 5px;
 }
 
-.concept-img{
+.concept-img {
     width: 50%;
     height: 50%;
     background-color: var(--background-color);
 
 }
 
-.live-framework-img{
-    
+.live-framework-img {
+    width: 80%;
+    max-width: 700px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .live-framework-img {
+        width: 98%;
+        max-width: 100vw;
+    }
+}
+
+.image-animation {
+    position: relative;
+    overflow: hidden;
+    /* fade-in and left-to-right reveal */
+    animation: fadeInLeft 2.5s ease-in-out forwards, revealLeftToRight 2.5s ease-in-out forwards;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes revealLeftToRight {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
 }
