@@ -11,7 +11,7 @@ const Concept: React.FC<Props> = () => {
       <section className="framework-section align-center">
         <div className="row align-items-top">
           <h2 className="text-start">Live Framework</h2>
-          <div className="col-md-4">
+          <div className="col-md-12">
             <p className="text-start">
               To create living, interactive systematic reviews (LISRs), we built
               a living interactive evidence synthesis (LIvE) platform, which is
@@ -51,11 +51,11 @@ const Concept: React.FC<Props> = () => {
               LIvE platform.
             </p>
           </div>
-          <div className="col-md-8">
+          <div className="col-md-12" style={{ textAlign: "center" }}>
             <img
               src={LiveFramework}
               alt="Live Framework"
-              className="framework-img"
+              className="live-framework-img"
             />
           </div>
         </div>
@@ -67,7 +67,7 @@ const Concept: React.FC<Props> = () => {
       <section className="architecture-section">
         <div className="row align-items-top ">
           <h2 className="text-start">System Architecture</h2>
-          <div className="col-md-4">
+          <div className="col-md-12">
             <p className="text-start">
               To implement our proposed LIvE framework, we built the LIvE
               platform in a five-layer architecture, which includes: application
@@ -102,7 +102,7 @@ const Concept: React.FC<Props> = () => {
               in different place according to its characteristics.
             </p>
           </div>
-          <div className="col-md-8">
+          <div className="col-md-12">
             <img
               src={SystemArchitecture}
               alt="System Architecture"
