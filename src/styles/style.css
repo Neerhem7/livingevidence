@@ -155,18 +155,30 @@
                     HOME
 =========================================== */
 .lisr-workflow {
-  /* fade-in animation with transition that shows left to right */
-  opacity: 0;
-  transform: translateX(-40px);
-  animation: fadeInLeft 2.5s ease-in-out forwards;
+  position: relative;
+  overflow: hidden;
+  /* fade-in and left-to-right reveal */
+  animation: fadeInLeft 2.5s ease-in-out forwards, revealLeftToRight 2.5s ease-in-out forwards;
 }
 
 @keyframes fadeInLeft {
   from {
     opacity: 0;
+    transform: translateX(-40px);
   }
 
   to {
     opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes revealLeftToRight {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
