@@ -2,6 +2,63 @@
   white-space: nowrap;
   max-width: none;
 }
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-card {
+  /* ... basic styling for the card container ... */
+}
+
+.skeleton-avatar {
+  /* background-color: #e0e0e0; */
+  border-radius: 50%;
+  /* ... dimensions ... */
+}
+
+.skeleton-text-line {
+  /* background-color: #e0e0e0; */
+  visibility: hidden;
+  /* ... dimensions, border-radius, etc. ... */
+}
+.table-cell-loading {
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  background: linear-gradient(to right, #EBECED 8%, #f0f0f0 28%,#EBECED 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.table-cell-loading-alt {
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  background: linear-gradient(to right, #EBECED 8%, #f0f0f0 28%, #EBECED 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
 
 table {
   table-layout: auto;

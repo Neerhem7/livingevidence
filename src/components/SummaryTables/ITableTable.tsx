@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Modal, Card, Pagination, Spinner } from 'react-bootstrap';
-import { ExtractionNode, Item } from './type';
-import "./itable.css"
-import { useAppDispatch } from '../../redux/store';
-import { fetchITableData } from '../../redux/itableSlice';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  Modal,
+  Card,
+  Pagination,
+  Spinner,
+  Row,
+  Col,
+} from "react-bootstrap";
+import { ExtractionNode, Item } from "./type";
+import "./itable.css";
+import { useAppDispatch } from "../../redux/store";
+import { fetchITableData } from "../../redux/itableSlice";
+import { useSearchParams } from "react-router-dom";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 type Pagination = {
   total: number;
@@ -25,10 +34,20 @@ interface Props {
   loading: boolean;
 }
 
-const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selectedHeaderKeys, getLeafNodesFromItem, headerRoots, loading }) => {
+const ITableFromItems: React.FC<Props> = ({
+  pagination,
+  items,
+  headerRows,
+  selectedHeaderKeys,
+  getLeafNodesFromItem,
+  headerRoots,
+  loading,
+}) => {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
-  const [selectedLeafNode, setSelectedLeafNode] = useState<Map<number, any[]>>(new Map());
+  const [selectedLeafNode, setSelectedLeafNode] = useState<Map<number, any[]>>(
+    new Map()
+  );
   const [allLeafNode, setAllLeafNode] = useState<Map<number, any[]>>(new Map());
   const [activePaper, setActivePaper] = useState(Number);
 
@@ -41,10 +60,14 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
       <ul style={{ paddingLeft: `${level * 26}px` }}>
         {headers.map((header) => {
           const value =
-            leafNode.find((leaf) => leaf.id === header.id)?.extraction_result?.result?.[0]?.value ?? '';
+            leafNode.find((leaf) => leaf.id === header.id)?.extraction_result
+              ?.result?.[0]?.value ?? "";
 
           return (
-            <li key={header.id} className={`mb-2 d-flex align-items-center gap-2 list-level-${level}`}>
+            <li
+              key={header.id}
+              className={`mb-2 d-flex align-items-center gap-2 list-level-${level}`}
+            >
               <div className="d-flex align-items-center justify-content-between">
                 <strong>{header.name}:</strong> {value}
               </div>
@@ -58,16 +81,27 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
   };
 
   const changePage = (page: number) => {
-    const projectId = searchParams.get('projectId');
-    const cqId = searchParams.get('cqId');
+    const projectId = searchParams.get("projectId");
+    const cqId = searchParams.get("cqId");
 
     if (pagination && projectId && cqId) {
       if (page === 1) {
-        dispatch(fetchITableData({ projectId, cqId, page: 1, size: pagination.size }));
+        dispatch(
+          fetchITableData({ projectId, cqId, page: 1, size: pagination.size })
+        );
       } else if (page === pagination.total_pages) {
-        dispatch(fetchITableData({ projectId, cqId, page: pagination.total_pages, size: pagination.size }));
+        dispatch(
+          fetchITableData({
+            projectId,
+            cqId,
+            page: pagination.total_pages,
+            size: pagination.size,
+          })
+        );
       } else {
-        dispatch(fetchITableData({ projectId, cqId, page, size: pagination.size }));
+        dispatch(
+          fetchITableData({ projectId, cqId, page, size: pagination.size })
+        );
       }
     }
   };
@@ -78,7 +112,9 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
 
     items.forEach((item) => {
       const allLeafs = getLeafNodesFromItem(item);
-      const filteredLeafs = allLeafs.filter((node) => selectedHeaderKeys.has(node.id));
+      const filteredLeafs = allLeafs.filter((node) =>
+        selectedHeaderKeys.has(node.id)
+      );
       selectedLeafMap.set(item.paper_id, filteredLeafs);
       allLeafMap.set(item.paper_id, allLeafs);
     });
@@ -89,7 +125,7 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
 
   return (
     <>
-      <Card.Body className="p-0  overflow-auto" style={{ height: '880px' }}>
+      <Card.Body className="p-0  overflow-auto" style={{ height: "880px" }}>
         <div className="table-wrapper">
           <table className="table table-bordered table-striped custom-table mb-0">
             <thead>
@@ -107,39 +143,67 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
                 </tr>
               ))}
             </thead>
-           {loading ? <Spinner animation="border" style={{ width: '50px', height: '50px', color: '#4F959D', display: 'block', marginTop: '100%', marginLeft: '150%' }} /> : <tbody>
-              {items.map((item, index) => {
+            <tbody>
+              {items.map((item, rowIndex) => {
                 const leafNodes = selectedLeafNode.get(item.paper_id) || [];
                 return (
                   <tr
-                    key={`${item.paper_id}-${index}`}
+                    key={`${item.paper_id}-${rowIndex}`}
                     onClick={() => setActivePaper(item.paper_id)}
                   >
-                    {leafNodes.map((leaf, index) => (
-                      <td key={`${item.paper_id}-${leaf.id}-${index}`} className="nowrap-cell">
-                        {leaf.extraction_result?.result?.[0]?.value.toString() ?? ''}
+                    {leafNodes.map((leaf, colIndex) => (
+                      <td
+                        key={`${item.paper_id}-${leaf.id}-${colIndex}`}
+                        className="nowrap-cell"
+                      >
+                        {loading ? (
+                          <h5 className={rowIndex % 2 === 0 ? "table-cell-loading" : "table-cell-loading-alt"}>
+                            <div className="skeleton-card">
+                              <div className="skeleton-avatar"></div>
+                              <div className="skeleton-text-line short">...</div>
+                              <div className="skeleton-text-line long"></div>
+                            </div>
+                          </h5>
+                        ) : (
+                          leaf.extraction_result?.result?.[0]?.value.toString() ?? ""
+                        )}
                       </td>
                     ))}
                   </tr>
                 );
               })}
-            </tbody>}
+            </tbody>
           </table>
         </div>
       </Card.Body>
 
       <Card.Footer>
         {pagination && (
-          <Pagination className='mb-0'>
-            <Pagination.First disabled={!pagination.has_previous || loading} onClick={() => changePage(1)} />
-            <Pagination.Prev disabled={!pagination.has_previous || loading} onClick={() => changePage(pagination.page - 1)} />
+          <Pagination className="mb-0">
+            <Pagination.First
+              disabled={!pagination.has_previous || loading}
+              onClick={() => changePage(1)}
+            />
+            <Pagination.Prev
+              disabled={!pagination.has_previous || loading}
+              onClick={() => changePage(pagination.page - 1)}
+            />
             <Pagination.Item disabled>Page</Pagination.Item>
-            <Pagination.Item disabled>{pagination.total_pages > 0 ? pagination.page : 0}</Pagination.Item>
+            <Pagination.Item disabled>
+              {pagination.total_pages > 0 ? pagination.page : 0}
+            </Pagination.Item>
             <Pagination.Item disabled> of</Pagination.Item>
             <Pagination.Item disabled>{pagination.total_pages}</Pagination.Item>
-            <Pagination.Next disabled={!pagination.has_next || loading} onClick={() => changePage(pagination.page + 1)} />
-            <Pagination.Last disabled={!pagination.has_next || loading} onClick={() => changePage(pagination.total_pages)} />
-          </Pagination>)}
+            <Pagination.Next
+              disabled={!pagination.has_next || loading}
+              onClick={() => changePage(pagination.page + 1)}
+            />
+            <Pagination.Last
+              disabled={!pagination.has_next || loading}
+              onClick={() => changePage(pagination.total_pages)}
+            />
+          </Pagination>
+        )}
       </Card.Footer>
       <Modal
         show={!!activePaper}
@@ -149,12 +213,11 @@ const ITableFromItems: React.FC<Props> = ({ pagination, items, headerRows, selec
         <Modal.Header closeButton>
           <Modal.Title>Paper ID: {activePaper}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ maxHeight: '70vh', overflowY: 'auto', padding: '1rem' }}>
+        <Modal.Body
+          style={{ maxHeight: "70vh", overflowY: "auto", padding: "1rem" }}
+        >
           {activePaper ? (
-            renderHeaderTree(
-              headerRoots,
-              allLeafNode.get(activePaper) || []
-            )
+            renderHeaderTree(headerRoots, allLeafNode.get(activePaper) || [])
           ) : (
             <p>No paper selected.</p>
           )}
