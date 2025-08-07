@@ -9,7 +9,7 @@ const Concept: React.FC<Props> = () => {
   return (
     <div className="container mt-5">
       <section className="framework-section align-center">
-        <div className="row align-items-center">
+        <div className="row align-items-top">
           <h2 className="text-start">Live Framework</h2>
           <div className="col-md-4">
             <p className="text-start">
@@ -65,7 +65,7 @@ const Concept: React.FC<Props> = () => {
       <br />
       <br />
       <section className="architecture-section">
-        <div className="row align-items-center ">
+        <div className="row align-items-top ">
           <h2 className="text-start">System Architecture</h2>
           <div className="col-md-4">
             <p className="text-start">
