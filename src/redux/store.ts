@@ -1,21 +1,23 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import projectReducer from './projectSlice';
-import themeReducer from './themeSlice';
-import prismaPaperReducer from './prismaPaperSlice';
-import prismaDiagramReducer from './prismaDiagramSlice';
-import iTableReducer from './itableSlice'
-import authReducer from './authSlice';
+import projectReducer from "./projectSlice";
+import themeReducer from "./themeSlice";
+import prismaPaperReducer from "./prismaPaperSlice";
+import prismaDiagramReducer from "./prismaDiagramSlice";
+import iTableReducer from "./itableSlice";
+import authReducer from "./authSlice";
+import outcomeCategoriesReducer from "./outcomeCategoriesSlice";
 
-export const store  = configureStore({
-    reducer: {
-        projects: projectReducer,
-        theme:  themeReducer,
-        prismaPaper: prismaPaperReducer,
-        prismaDiagram : prismaDiagramReducer,
-        itable : iTableReducer,
-        auth: authReducer
-    },
+export const store = configureStore({
+  reducer: {
+    projects: projectReducer,
+    theme: themeReducer,
+    prismaPaper: prismaPaperReducer,
+    prismaDiagram: prismaDiagramReducer,
+    itable: iTableReducer,
+    auth: authReducer,
+    outcomeCategories: outcomeCategoriesReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
