@@ -325,7 +325,9 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({
               Object.entries(stats.excluded_reason_counts).map(
                 ([reason, count], index) => (
                   <li key={index}>
-                    <strong>{reason}</strong>: {count}
+                    <strong>{reason?.split('_')
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                      .join(' ')}</strong>: {count}
                   </li>
                 )
               )}
