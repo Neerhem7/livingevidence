@@ -20,6 +20,9 @@ type PrismaStats = {
   analysis: number;
   include_n: number;
   analysis_n: number;
+  excluded_reason_counts: {
+    [key: string]: number;
+  }
 };
 
 type ExcludeReason = {
@@ -70,7 +73,8 @@ const emptyStats: PrismaStats = {
   include: 0,
   analysis: 0,
   include_n: 0,
-  analysis_n: 0
+  analysis_n: 0,
+  excluded_reason_counts: {}
 };
 
 const initialState: PrismaStatsState = {

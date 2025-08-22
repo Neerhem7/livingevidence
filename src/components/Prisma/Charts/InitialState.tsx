@@ -24,6 +24,9 @@ interface PrismaStats {
   analysis: number;
   include_n: number;
   analysis_n: number;
+  excluded_reason_counts: {
+    [key: string]: number;
+  }
 }
 
 type ExcludeReason = {
@@ -40,7 +43,6 @@ interface InitialStateChartProps {
   onStateChange?: (activeState: string) => void;
   onStateTextChange?: (stateText: string) => void;
   activeState: string;
-  fullTextExcludeReasons?: ExcludeReason[];
 }
 
 const InitialStateChart: React.FC<InitialStateChartProps> = ({
@@ -52,7 +54,6 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({
   activeState,
   onStateChange,
   onStateTextChange,
-  fullTextExcludeReasons,
 }) => {
   const dispatch = useAppDispatch();
   const { projectId, cqId } = useAppSelector(
@@ -97,7 +98,6 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({
     );
 
     if (nodeId === "excluded_by_fulltext") {
-      dispatch(fetchFullTextExcludeReasons({ projectId, cqId }));
       handleOpenModal();
     }
 
@@ -321,13 +321,14 @@ const InitialStateChart: React.FC<InitialStateChartProps> = ({
         <Modal.Body>
           <p>Full-text articles were excluded by the following reasons:</p>
           <ul style={{ paddingLeft: "20px" }}>
-            {fullTextExcludeReasons &&
-              fullTextExcludeReasons?.length > 0 &&
-              fullTextExcludeReasons.map((item, index) => (
-                <li key={index}>
-                  <strong>{item.reason}</strong>: {item.count}
-                </li>
-              ))}
+            {stats?.excluded_reason_counts &&
+              Object.entries(stats.excluded_reason_counts).map(
+                ([reason, count], index) => (
+                  <li key={index}>
+                    <strong>{reason}</strong>: {count}
+                  </li>
+                )
+              )}
           </ul>
         </Modal.Body>
       </Modal>

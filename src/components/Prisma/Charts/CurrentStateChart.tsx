@@ -25,6 +25,9 @@ interface PrismaStats {
   analysis: number;
   include_n: number;
   analysis_n: number;
+  excluded_reason_counts: {
+    [key: string]: number;
+  }
 }
 
 type ExcludeReason = {
@@ -40,7 +43,6 @@ interface CurrentStateChartProps {
   onStateTextChange?: (stateText: string) => void;
   activeState: string;
   stats?: PrismaStats;
-  fullTextExcludeReason: ExcludeReason[];
 }
 
 const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
@@ -50,7 +52,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
   stats,
   onStateChange,
   onStateTextChange,
-  fullTextExcludeReason,
   activeState
 }) => {
   const dispatch = useAppDispatch();
@@ -93,7 +94,6 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
     });
     
     if (nodeId === 'excluded_by_fulltext') {
-      dispatch(fetchFullTextExcludeReasons({ projectId, cqId }));
       handleOpenModal();
     }
     
@@ -230,31 +230,70 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
 
   return (
     <>
-      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
-        <div className="org-chart-wrapper position-relative h-100" style={{ width: contentWidth }}>
-          <div style={{ position: 'absolute', left: -scroll.left, top: -scroll.top, pointerEvents: 'none', height: contentHeight, width: contentWidth, zIndex: 1 }}>
-            <svg ref={svgRef} className="org-chart-lines" style={{ height: contentHeight, width: contentWidth }}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          overflowX: "auto",
+        }}
+      >
+        <div
+          className="org-chart-wrapper position-relative h-100"
+          style={{ width: contentWidth }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: -scroll.left,
+              top: -scroll.top,
+              pointerEvents: "none",
+              height: contentHeight,
+              width: contentWidth,
+              zIndex: 1,
+            }}
+          >
+            <svg
+              ref={svgRef}
+              className="org-chart-lines"
+              style={{ height: contentHeight, width: contentWidth }}
+            >
               {paths.map((d, i) => (
-                <path key={i} d={d} stroke="#4F959D" strokeWidth="4" fill="none" className="animated-path" />
+                <path
+                  key={i}
+                  d={d}
+                  stroke="#4F959D"
+                  strokeWidth="4"
+                  fill="none"
+                  className="animated-path"
+                />
               ))}
             </svg>
           </div>
           <div
             className="org-chart text-center mx-auto"
             ref={chartRef}
-            style={{ maxHeight: contentHeight, width: contentWidth-60 }}
+            style={{ maxHeight: contentHeight, width: contentWidth - 60 }}
           >
-            <div className="justify-content-center position-relative w-100" style={{ height: contentHeight }}>
+            <div
+              className="justify-content-center position-relative w-100"
+              style={{ height: contentHeight }}
+            >
               {nodeData.map((node) => {
-                const parsedLabel = node.label.replace(/\$(\w+)\$/g, (_: string, key: string) => {
-                  const value = stats?.[key as keyof PrismaStats];
-                  return value !== undefined ? String(value) : `0`;
-                });
+                const parsedLabel = node.label.replace(
+                  /\$(\w+)\$/g,
+                  (_: string, key: string) => {
+                    const value = stats?.[key as keyof PrismaStats];
+                    return value !== undefined ? String(value) : `0`;
+                  }
+                );
 
                 return (
                   <CustomNode
                     key={node.id}
-                    ref={(el) => { nodeRefs.current[node.id] = el }}
+                    ref={(el) => {
+                      nodeRefs.current[node.id] = el;
+                    }}
                     nodeId={node.id}
                     label={parsedLabel}
                     x={node.x - scroll.left}
@@ -268,18 +307,25 @@ const CurrentStateChart: React.FC<CurrentStateChartProps> = ({
           </div>
         </div>
       </div>
-      <Modal show={showModal} onHide={handleCloseModal} dialogClassName="custom-modal-width">
+      <Modal
+        show={showModal}
+        onHide={handleCloseModal}
+        dialogClassName="custom-modal-width"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Excluded by full text review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Full-text articles were excluded by the following reasons:</p>
-          <ul style={{ paddingLeft: '20px' }}>
-            {fullTextExcludeReason.map((item, index) => (
-              <li key={index}>
-                <strong>{item.reason}</strong>: {item.count}
-              </li>
-            ))}
+          <ul style={{ paddingLeft: "20px" }}>
+            {stats?.excluded_reason_counts &&
+              Object.entries(stats.excluded_reason_counts).map(
+                ([reason, count], index) => (
+                  <li key={index}>
+                    <strong>{reason}</strong>: {count}
+                  </li>
+                )
+              )}
           </ul>
         </Modal.Body>
       </Modal>

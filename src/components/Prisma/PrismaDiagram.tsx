@@ -29,6 +29,9 @@ interface PrismaStats {
   analysis: number;
   include_n: number;
   analysis_n: number;
+  excluded_reason_counts: {
+    [key: string]: number;
+  }
 }
 
 interface PrismaDiagramProps {
@@ -71,7 +74,8 @@ const defaultStats: PrismaStats = {
   include: 0,
   analysis: 0,
   include_n: 0,
-  analysis_n: 0
+  analysis_n: 0,
+  excluded_reason_counts: {}
 };
 
 const PrismaDiagram: React.FC<PrismaDiagramProps> = ({ 
@@ -143,7 +147,6 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
               onStateTextChange={onStateTextChange}
               nodeList={prisma_data.current_state_nodes} 
               connections={prisma_data.current_state_connections}
-              fullTextExcludeReason={prismaDiagram.fullTextExclusionReasons}
               stats={stats} 
             />
           </Suspense>
@@ -158,7 +161,6 @@ const PrismaDiagram: React.FC<PrismaDiagramProps> = ({
               onStateTextChange={onStateTextChange}
               nodeList={prisma_data.initial_state_nodes} 
               connections={prisma_data.initial_state_connections}
-              fullTextExcludeReasons={prismaDiagram.fullTextExclusionReasons}
               stats={stats}
             />
           </Suspense>

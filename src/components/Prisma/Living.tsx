@@ -32,6 +32,9 @@ interface PrismaStats {
   analysis: number;
   include_n: number;
   analysis_n: number;
+  excluded_reason_counts: {
+    [key: string]: number;
+  }
 }
 
 interface CellData {
